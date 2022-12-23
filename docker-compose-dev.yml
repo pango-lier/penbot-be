@@ -1,0 +1,64 @@
+version: '3.4'
+
+services:
+  adminer:
+    container_name: adminer_pen
+    image: adminer:latest
+    ports:
+      - 8082:8080
+    restart: unless-stopped
+    networks:
+      - pendbot
+    depends_on:
+      - db
+
+  db:
+    container_name: mysql_pen
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_DATABASE: 'penbot'
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - pendbot
+    ports:
+      - 3303:3306
+
+  redis:
+    container_name: pens_redis
+    image: redis:7-alpine
+    restart: always
+    volumes:
+      - redisdata:/data
+    networks:
+      - pendbot
+
+  app:
+    container_name: app_pen
+    restart: unless-stopped
+    depends_on:
+      - db
+      - redis
+    build:
+      context: .
+      dockerfile: ./Dockerfile.dev
+    ports:
+      - 3023:3000
+      - 9228:9228
+    env_file:
+      - .env
+    networks:
+      - pendbot
+    volumes:
+      - ./:/home/node/app
+    command: yarn start:debug
+volumes:
+  dbdata:
+  redisdata:
+
+networks:
+  pendbot:
+    name: pendbot
