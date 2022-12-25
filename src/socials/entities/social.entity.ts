@@ -1,5 +1,4 @@
 import { Article } from 'src/articles/entities/article.entity';
-import { Account } from 'src/users/accounts/entities/account.entity';
 import {
   Column,
   CreateDateColumn,
@@ -11,6 +10,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { SocialEnum } from './social.enum';
+import { Account } from 'src/users/accounts/entities/account.entity';
+import { CrawlerLink } from 'src/crawlers/crawler-links/entities/crawler-link.entity';
 
 @Entity()
 export class Social {
@@ -45,9 +46,12 @@ export class Social {
     nullable: true,
   })
   account?: Account;
-  
+
   @OneToMany(() => Article, (article) => article.social, {
     nullable: true,
   })
   articles?: Article[];
+
+  @ManyToOne(() => CrawlerLink, (s) => s.social, { nullable: true })
+  crawlerLinks?: CrawlerLink[];
 }
