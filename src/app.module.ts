@@ -17,6 +17,13 @@ import {
 import { Queue } from 'bullmq';
 import { PaginateModule } from './paginate/paginate.module';
 import { AppGateway } from './app/app.gateway';
+import { ArticlesModule } from './articles/articles.module';
+import { SocialsModule } from './socials/socials.module';
+import { PuppeteersModule } from './puppeteers/puppeteers.module';
+import { LinksModule } from './links/links.module';
+import { SettingsModule } from './settings/settings.module';
+import { PaymentsModule } from './payments/payments.module';
+import { CrawlersModule } from './crawlers/crawlers.module';
 
 @Module({
   imports: [
@@ -48,6 +55,13 @@ import { AppGateway } from './app/app.gateway';
     UsersModule,
     AuthModule,
     PaginateModule,
+    ArticlesModule,
+    SocialsModule,
+    PuppeteersModule,
+    LinksModule,
+    SettingsModule,
+    PaymentsModule,
+    CrawlersModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppGateway],

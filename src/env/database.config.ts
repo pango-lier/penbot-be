@@ -30,6 +30,7 @@ export default registerAs(
       entities: ['dist/**/*.entity{.js,.ts}'],
       subscribers: ['dist/**/*.subscriber{.js,.ts}'],
       migrations: ['dist/database/migrations/*{.js,.ts}'],
+      //migrations: ['src/database/migrations/*{.js,.ts}'],
       seeds: ['src/database/seeds/**/*{.ts,.js}'],
       autoLoadEntities: true,
       keepConnectionAlive: true,

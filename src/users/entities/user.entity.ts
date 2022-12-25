@@ -3,9 +3,17 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Group } from '../groups/entities/group.entity';
+import { Role } from '../roles/entities/role.entity';
+import { Notification } from 'src/notifications/entities/notification.entity';
+import { Permission } from '../permissions/entities/permission.entity';
 
 @Entity('users')
 export class User {
@@ -34,12 +42,6 @@ export class User {
   active?: boolean;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  omz_user_id?: string;
-
-  @Column({ type: 'bigint', nullable: true, unsigned: true })
-  company_id?: number;
-
-  @Column({ type: 'varchar', length: 255, nullable: true })
   role_name?: string;
 
   @Column({ type: 'varchar', length: 2083, nullable: true })
@@ -53,4 +55,30 @@ export class User {
 
   @DeleteDateColumn({ type: 'timestamp' })
   deleted_at?: Date;
+
+  @OneToMany(() => Notification, (notification) => notification.user, {
+    nullable: true,
+  })
+  notifications?: Notification[];
+
+  @ManyToMany(() => Role, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinTable()
+  roles: Role[];
+
+  @OneToMany(() => Group, (group) => group.user, {
+    nullable: true,
+  })
+  groups?: Group[];
+
+  @ManyToMany(() => Permission, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinTable()
+  permissions?: Permission[];
 }
