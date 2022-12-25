@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { downloadFileAxios } from 'src/utils/file/downloadFileAxios';
 import { random } from 'src/utils/random/random';
-import { downloadFile } from 'src/utils/file/downloadFile';
 import youtubeDl from 'youtube-dl-exec';
 
 @Injectable()
 export class YoutubeDlService {
-  getCurrentLinks = async (
+  getFile = async (
     options: { url?: string; isDownload?: boolean } = { isDownload: false },
   ) => {
     let path = undefined;
@@ -27,7 +27,7 @@ export class YoutubeDlService {
     }
     if (options.isDownload === true) {
       const d = new Date();
-      path = await downloadFile(
+      path = await downloadFileAxios(
         maxFile.url,
         'vi' + d.getTime() + '_' + random(1000, 1000000000) + '.' + maxFile.ext,
       );
