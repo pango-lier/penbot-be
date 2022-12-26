@@ -13,6 +13,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { jwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
+@UseGuards(jwtAuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -22,7 +23,6 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @UseGuards(jwtAuthGuard)
   @Get()
   findAll() {
     return this.usersService.findAll();

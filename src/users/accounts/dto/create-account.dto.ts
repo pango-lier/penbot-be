@@ -38,4 +38,7 @@ export class CreateAccountDto {
 
   @IsInt()
   groupId?: number;
+
+  @IsInt()
+  userId?: number;
 }

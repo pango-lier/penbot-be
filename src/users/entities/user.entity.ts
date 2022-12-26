@@ -14,6 +14,7 @@ import { Group } from '../groups/entities/group.entity';
 import { Role } from '../roles/entities/role.entity';
 import { Notification } from 'src/notifications/entities/notification.entity';
 import { Permission } from '../permissions/entities/permission.entity';
+import { Account } from '../accounts/entities/account.entity';
 
 @Entity('users')
 export class User {
@@ -73,6 +74,11 @@ export class User {
     nullable: true,
   })
   groups?: Group[];
+
+  @OneToMany(() => Account, (a) => a.user, {
+    nullable: true,
+  })
+  accounts?: Account[];
 
   @ManyToMany(() => Permission, {
     cascade: true,

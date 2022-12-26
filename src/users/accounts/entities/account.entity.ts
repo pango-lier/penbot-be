@@ -1,10 +1,12 @@
 import { Social } from 'src/socials/entities/social.entity';
+import { User } from 'src/users/entities/user.entity';
 import { Group } from 'src/users/groups/entities/group.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -43,8 +45,15 @@ export class Account {
   @Column({ type: 'bigint', nullable: true })
   groupId: number;
 
-  @ManyToOne(() => Group, (group) => group.accounts)
+  @ManyToOne(() => Group, (group) => group.accounts, { cascade: true })
+  @JoinColumn()
   group?: Group;
+
+  @Column({ type: 'bigint', nullable: true })
+  userId: number;
+
+  @ManyToOne(() => User, (u) => u.accounts)
+  user?: User;
 
   @OneToMany(() => Social, (social) => social.account, {
     nullable: true,
