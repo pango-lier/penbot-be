@@ -1,15 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Group } from './entities/group.entity';
+import { Repository } from 'typeorm';
+import { PaginateService } from 'src/paginate/paginate.service';
+import { IPaginate } from 'src/paginate/interface/paginate.interface';
 
 @Injectable()
 export class GroupsService {
+  constructor(
+    @InjectRepository(Group) private readonly group: Repository<Group>,
+    private readonly paginateService: PaginateService,
+  ) {}
   create(createGroupDto: CreateGroupDto) {
     return 'This action adds a new group';
   }
 
-  findAll() {
-    return `This action returns all groups`;
+  async findAll(paginate: IPaginate, userId: number) {
+    const q = this.group.createQueryBuilder();
+    // q.select('group.*');
+    return await this.paginateService.queryFilter<Group>(q, paginate, [], {
+      defaultTable: 'group',
+      getQuery: 'getMany',
+    });
   }
 
   findOne(id: number) {

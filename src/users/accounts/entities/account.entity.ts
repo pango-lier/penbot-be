@@ -1,3 +1,4 @@
+import { CrawlerLink } from 'src/crawlers/crawler-links/entities/crawler-link.entity';
 import { Social } from 'src/socials/entities/social.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Group } from 'src/users/groups/entities/group.entity';
@@ -59,4 +60,9 @@ export class Account {
     nullable: true,
   })
   socials?: Social[];
+
+  @OneToMany(() => CrawlerLink, (s) => s.account, {
+    nullable: true,
+  })
+  crawlers?: CrawlerLink[];
 }

@@ -1,15 +1,19 @@
+import { CrawlerConfig } from 'src/crawlers/crawler-configs/entities/crawler-config.entity';
 import { Crawler } from 'src/crawlers/entities/crawler.entity';
 import { Social } from 'src/socials/entities/social.entity';
+import { Account } from 'src/users/accounts/entities/account.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { CrawlerLinkEnum } from './crawler-link.enum';
 
 @Entity()
 export class CrawlerLink {
@@ -22,6 +26,20 @@ export class CrawlerLink {
   @Column({ type: 'varchar', nullable: true })
   description: string;
 
+  @Column({ type: 'varchar', nullable: true })
+  status?: string;
+
+  @Column({
+    type: 'enum',
+    default: CrawlerLinkEnum.None,
+    enum: CrawlerLinkEnum,
+    nullable: true,
+  })
+  type?: CrawlerLinkEnum;
+
+  @Column({ type: 'varchar', nullable: true })
+  target?: string;
+
   @DeleteDateColumn({ type: 'timestamp' })
   deletedAt?: Date;
 
@@ -31,9 +49,23 @@ export class CrawlerLink {
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 
+  @Column({ type: 'timestamp', nullable: true })
+  runStartAt?: Date;
+
+  @Column({ type: 'timestamp', nullable: true })
+  runEndAt?: Date;
+
   @OneToMany(() => Social, (s) => s.crawlerLinks, { nullable: true })
   social?: Social;
 
   @ManyToOne(() => Crawler, (s) => s.crawlerLinks, { nullable: true })
   crawler?: Crawler;
+
+  @ManyToOne(() => Account, (account) => account.crawlers, {
+    nullable: true,
+  })
+  account?: Account;
+
+  @ManyToMany(() => CrawlerConfig)
+  crawlerConfigs?: CrawlerConfig[];
 }

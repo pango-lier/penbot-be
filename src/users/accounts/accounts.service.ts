@@ -36,11 +36,16 @@ export class AccountsService {
     return `This action returns a #${id} account`;
   }
 
-  update(id: number, updateAccountDto: UpdateAccountDto) {
-    return this.repo.update(
-      { id, userId: updateAccountDto.userId },
-      updateAccountDto,
-    );
+  async update(id: number, updateAccountDto: UpdateAccountDto) {
+    const update = await this.repo.findOne({
+      where: { id, userId: updateAccountDto.userId },
+    });
+    update.active = updateAccountDto.active;
+    update.proxyId = updateAccountDto.proxyId;
+    update.proxyType = updateAccountDto.proxyType;
+    update.name = updateAccountDto.name;
+    update.groupId = updateAccountDto.groupId;
+    return await this.repo.save(update);
   }
 
   remove(id: number, userId: number) {
