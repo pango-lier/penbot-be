@@ -9,7 +9,7 @@ export class CreateCrawlerLinkDto {
 
   type?: CrawlerLinkEnum;
 
-  target?: string;
+  target: string;
 
   socialId?: number | string;
 

@@ -14,6 +14,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { CrawlerLinkEnum } from './crawler-link.enum';
+import { User } from 'src/users/entities/user.entity';
 
 @Entity()
 export class CrawlerLink {
@@ -58,7 +59,7 @@ export class CrawlerLink {
   @OneToMany(() => Social, (s) => s.crawlerLinks, { nullable: true })
   social?: Social;
 
-  @ManyToOne(() => Crawler, (s) => s.crawlerLinks, { nullable: true })
+  @OneToMany(() => Crawler, (s) => s.crawlerLinks, { nullable: true })
   crawler?: Crawler;
 
   @ManyToOne(() => Account, (account) => account.crawlers, {
@@ -68,4 +69,10 @@ export class CrawlerLink {
 
   @ManyToMany(() => CrawlerConfig)
   crawlerConfigs?: CrawlerConfig[];
+
+  @Column({ type: 'bigint', nullable: true })
+  userId?: number;
+
+  @OneToMany(() => User, (s) => s.crawlerLinks, { nullable: true })
+  user?: User;
 }

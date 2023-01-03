@@ -14,8 +14,9 @@ export class CrawlerLinksService {
     private readonly crawlerLink: Repository<CrawlerLink>,
     private readonly paginateService: PaginateService,
   ) {}
-  create(createCrawlerLinkDto: CreateCrawlerLinkDto) {
+  create(createCrawlerLinkDto: CreateCrawlerLinkDto, userId: number) {
     const create = this.crawlerLink.create(createCrawlerLinkDto);
+    create.userId = userId;
     return this.crawlerLink.save(create);
   }
 
@@ -40,7 +41,7 @@ export class CrawlerLinksService {
     return await this.crawlerLink.save(update);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} crawlerLink`;
+  remove(id: number, userId: number) {
+    return this.crawlerLink.delete({ id, userId });
   }
 }

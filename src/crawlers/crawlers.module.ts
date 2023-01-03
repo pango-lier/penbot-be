@@ -10,6 +10,10 @@ import { CrawlerConfigsModule } from './crawler-configs/crawler-configs.module';
 @Module({
   controllers: [CrawlersController],
   providers: [CrawlersService, YoutubeDlService],
-  imports: [CrawlerLinksModule, TypeOrmModule.forFeature([Crawler]), CrawlerConfigsModule],
+  imports: [
+    CrawlerLinksModule,
+    TypeOrmModule.forFeature([Crawler]),
+    CrawlerConfigsModule,
+  ],
 })
 export class CrawlersModule {}

@@ -15,6 +15,8 @@ import { Role } from '../roles/entities/role.entity';
 import { Notification } from 'src/notifications/entities/notification.entity';
 import { Permission } from '../permissions/entities/permission.entity';
 import { Account } from '../accounts/entities/account.entity';
+import { CrawlerLink } from 'src/crawlers/crawler-links/entities/crawler-link.entity';
+import { Crawler } from 'src/crawlers/entities/crawler.entity';
 
 @Entity('users')
 export class User {
@@ -87,4 +89,14 @@ export class User {
   })
   @JoinTable()
   permissions?: Permission[];
+
+  @OneToMany(() => CrawlerLink, (a) => a.user, {
+    nullable: true,
+  })
+  crawlerLinks?: CrawlerLink[];
+
+  @OneToMany(() => Crawler, (a) => a.user, {
+    nullable: true,
+  })
+  crawlers?: Crawler[];
 }

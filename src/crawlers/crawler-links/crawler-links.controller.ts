@@ -23,8 +23,11 @@ export class CrawlerLinksController {
   constructor(private readonly crawlerLinksService: CrawlerLinksService) {}
 
   @Post()
-  create(@Body() createCrawlerLinkDto: CreateCrawlerLinkDto) {
-    return this.crawlerLinksService.create(createCrawlerLinkDto);
+  create(
+    @Body() createCrawlerLinkDto: CreateCrawlerLinkDto,
+    @CurrentUser() user: ICurrentUser,
+  ) {
+    return this.crawlerLinksService.create(createCrawlerLinkDto, +user.id);
   }
 
   @Get()
@@ -56,7 +59,7 @@ export class CrawlerLinksController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.crawlerLinksService.remove(+id);
+  remove(@Param('id') id: string, @CurrentUser() user: ICurrentUser) {
+    return this.crawlerLinksService.remove(+id, +user.id);
   }
 }
