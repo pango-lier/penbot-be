@@ -7,4 +7,10 @@ export interface IYoutubeDLServiceResponse {
   size?: number;
   linkDownloaded: string;
   source: any;
+  maxVideo?: any;
+  maxAudio?: any;
+  title?: string;
+  width?: number;
+  height?: number;
+  duration?: number;
 }

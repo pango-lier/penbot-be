@@ -63,7 +63,11 @@ export class CrawlersService {
       runCrawler.id,
       userId,
     );
-    crawlerLinks.forEach((crawlerLink) => {
+    // await this.crawlerVideoYoutubeLinkDirect(
+    //   crawlerLinks[0],
+    //   runCrawler.options,
+    // );
+    await crawlerLinks.forEach(async (crawlerLink) => {
       if (crawlerLink.type)
         this.crawlerQueue.add(crawlerLink.type, {
           crawlerLink,
@@ -80,14 +84,16 @@ export class CrawlersService {
       crawlerLink = await this.crawlerLinkService.updateEntity(crawlerLink);
       const file = await this.youtubeDlService.downloadFile(crawlerLink.target);
       const createCrawler: CreateCrawlerDto = {
-        name: 'download file',
+        name: file.title,
         userId: crawlerLink.userId,
-        tags: file.tags,
+        tags: JSON.stringify(file.tags),
         description: file.description,
         size: file.size,
         linkDownloaded: file.linkDownloaded,
         links: crawlerLink.target,
+        meta: JSON.stringify(file.source),
       };
+      console.log(createCrawler, file);
       await this.create(createCrawler, crawlerLink.userId);
       crawlerLink.status = CrawlerLinkStatusEnum.Success;
       crawlerLink = await this.crawlerLinkService.updateEntity(crawlerLink);

@@ -1,7 +1,9 @@
 import * as stream from 'stream';
 import { promisify } from 'util';
-import fs from 'fs';
-import path from 'path';
+/* eslint-disable */
+const fs = require('fs');
+/* eslint-disable */
+const path = require('path');
 import axios from 'axios';
 
 export const downloadFileAxios = async (fileUrl, fileName) => {
@@ -10,7 +12,7 @@ export const downloadFileAxios = async (fileUrl, fileName) => {
   const localFilePath = path.resolve(__dirname, fileName);
   const finished = promisify(stream.finished);
   const writer = fs.createWriteStream(localFilePath);
-  return axios({
+  await axios({
     method: 'get',
     url: fileUrl,
     responseType: 'stream',
@@ -20,4 +22,5 @@ export const downloadFileAxios = async (fileUrl, fileName) => {
     response.data.pipe(writer);
     return finished(writer); //this is a Promise
   });
+  return localFilePath;
 };
