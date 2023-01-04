@@ -1,9 +1,11 @@
+import { CrawlerStatusEnum } from '../enum/crawler-link.enum';
+
 export class CreateCrawlerDto {
   name: string;
 
   type?: string;
 
-  status?: string;
+  status?: CrawlerStatusEnum;
 
   meta?: string;
 
@@ -16,4 +18,8 @@ export class CreateCrawlerDto {
   linkDownloaded?: string;
 
   crawlerLinkId?: number;
+
+  size?: number;
+
+  userId?: number;
 }

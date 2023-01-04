@@ -13,7 +13,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { CrawlerLinkEnum } from './crawler-link.enum';
+import { CrawlerLinkEnum, CrawlerLinkStatusEnum } from './crawler-link.enum';
 import { User } from 'src/users/entities/user.entity';
 
 @Entity()
@@ -27,12 +27,19 @@ export class CrawlerLink {
   @Column({ type: 'varchar', nullable: true })
   description: string;
 
-  @Column({ type: 'varchar', nullable: true })
-  status?: string;
+  @Column({ type: 'text', nullable: true })
+  message?: string;
 
   @Column({
     type: 'enum',
-    default: CrawlerLinkEnum.None,
+    default: CrawlerLinkStatusEnum.None,
+    enum: CrawlerLinkStatusEnum,
+    nullable: true,
+  })
+  status?: CrawlerLinkStatusEnum;
+
+  @Column({
+    type: 'enum',
     enum: CrawlerLinkEnum,
     nullable: true,
   })

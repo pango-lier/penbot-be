@@ -2,13 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { downloadFileAxios } from 'src/utils/file/downloadFileAxios';
 import { random } from 'src/utils/random/random';
 import youtubeDl from 'youtube-dl-exec';
+import { IYoutubeDLServiceResponse } from './youtube-dl.interface';
+import { url } from 'inspector';
 
 @Injectable()
 export class YoutubeDlService {
-  getFile = async (
+  command = async (
     options: { url?: string; isDownload?: boolean } = { isDownload: false },
-  ) => {
+  ): Promise<IYoutubeDLServiceResponse> => {
     let path = undefined;
+    console.log(options.url);
     const output = await youtubeDl(options.url + "'", {
       dumpSingleJson: true,
       noWarnings: true,
@@ -35,9 +38,13 @@ export class YoutubeDlService {
     return {
       tags: output.tags,
       description: output.description,
-      ext: maxFile.ext,
-      file: maxFile,
-      path,
+      type: maxFile.ext,
+      source: maxFile,
+      linkDownloaded: path,
+      size: maxFile.filesize,
     };
   };
+  async downloadFile(url: string) {
+    return await this.command({ url, isDownload: true });
+  }
 }

@@ -1,11 +1,14 @@
-import { CrawlerLinkEnum } from '../entities/crawler-link.enum';
+import {
+  CrawlerLinkEnum,
+  CrawlerLinkStatusEnum,
+} from '../entities/crawler-link.enum';
 
 export class CreateCrawlerLinkDto {
   name: string;
 
   description?: string;
 
-  status?: string;
+  status?: CrawlerLinkStatusEnum;
 
   type?: CrawlerLinkEnum;
 

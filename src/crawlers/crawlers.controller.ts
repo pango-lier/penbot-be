@@ -17,11 +17,20 @@ import { CurrentUser } from 'src/users/users.decorator';
 import { ICurrentUser } from 'src/auth/interface/authenticated-user.interface';
 import { use } from 'passport';
 import { jwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { RunCrawlerQueueDto } from './dto/run-crawler-queue.dto';
 
 @Controller('crawlers')
 @UseGuards(jwtAuthGuard)
 export class CrawlersController {
   constructor(private readonly crawlersService: CrawlersService) {}
+
+  @Post('run')
+  runQueueCrawler(
+    @Body() options: RunCrawlerQueueDto,
+    @CurrentUser() user: ICurrentUser,
+  ) {
+    return this.crawlersService.runQueueCrawler(options, +user.id);
+  }
 
   @Post()
   create(

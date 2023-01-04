@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { CrawlerLink } from '../crawler-links/entities/crawler-link.entity';
 import { User } from 'src/users/entities/user.entity';
+import { CrawlerStatusEnum } from '../enum/crawler-link.enum';
 
 @Entity()
 export class Crawler {
@@ -20,13 +21,23 @@ export class Crawler {
   name: string;
 
   @Column({ type: 'varchar', nullable: true })
-  type: string;
+  type?: string;
+
+  @Column({ type: 'bigint', nullable: true })
+  size?: number;
 
   @Column({ type: 'varchar', nullable: true })
   tags?: string;
 
-  @Column({ type: 'varchar', nullable: true })
-  status: string;
+  @Column({
+    type: 'enum',
+    enum: CrawlerStatusEnum,
+    nullable: true,
+  })
+  status?: CrawlerStatusEnum;
+
+  @Column({ type: 'text', nullable: true })
+  message?: string;
 
   @Column({ type: 'text', nullable: true })
   description?: string;

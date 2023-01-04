@@ -10,6 +10,21 @@ import {
 } from '@bull-board/express';
 import { Queue } from 'bullmq';
 
+const BullMQQueueRegisterModule = [
+  BullModule.registerQueue({
+    name: 'demo',
+    // processors: [join(__dirname, 'queue-bull-mq/demo.processor.js')],
+  }),
+  BullModule.registerQueue({
+    name: 'write-log',
+  }),
+  BullModule.registerQueue({
+    name: 'browser',
+  }),
+  BullModule.registerQueue({
+    name: 'crawler',
+  }),
+];
 @Module({
   imports: [
     BullModule.forRootAsync({
@@ -25,26 +40,10 @@ import { Queue } from 'bullmq';
         },
       }),
     }),
-    BullModule.registerQueue({
-      name: 'demo',
-      // processors: [join(__dirname, 'queue-bull-mq/demo.processor.js')],
-    }),
-    BullModule.registerQueue({
-      name: 'write-log',
-    }),
-    BullModule.registerQueue({
-      name: 'browser',
-    }),
-    BullModule.registerQueue({
-      name: 'crawler',
-    }),
+    ...BullMQQueueRegisterModule,
   ],
   providers: [DemoProcessor, WriteLogProcessor],
-  exports: [
-    BullModule.registerQueue({
-      name: 'write-log',
-    }),
-  ],
+  exports: [...BullMQQueueRegisterModule],
 })
 export class BullmqModule {
   serverAdapter = new ExpressAdapter();
@@ -54,7 +53,7 @@ export class BullmqModule {
     @InjectQueue('browser') private browserQueue: Queue,
     @InjectQueue('crawler') private crawlerQueue: Queue,
   ) {
-    this.serverAdapter.setBasePath('/api/admin/queues');
+    this.serverAdapter.setBasePath('/api/admin/queues'); //http://localhost:3023/api/admin/queues/
     createBullBoard({
       queues: [
         new BullMQAdapter(demoQueue),

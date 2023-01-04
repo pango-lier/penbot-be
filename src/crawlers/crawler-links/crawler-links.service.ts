@@ -3,7 +3,7 @@ import { CreateCrawlerLinkDto } from './dto/create-crawler-link.dto';
 import { UpdateCrawlerLinkDto } from './dto/update-crawler-link.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CrawlerLink } from './entities/crawler-link.entity';
-import { Repository } from 'typeorm';
+import { Raw, Repository } from 'typeorm';
 import { IPaginate } from 'src/paginate/interface/paginate.interface';
 import { PaginateService } from 'src/paginate/paginate.service';
 
@@ -43,5 +43,20 @@ export class CrawlerLinksService {
 
   remove(id: number, userId: number) {
     return this.crawlerLink.delete({ id, userId });
+  }
+
+  async findArray(id: Array<number | string>, userId: number) {
+    return await this.crawlerLink.find({
+      where: {
+        id: Raw((alias) => `${alias} IN (:...id)`, {
+          id,
+        }),
+        userId,
+      },
+    });
+  }
+
+  async updateEntity(crawlerLink: CrawlerLink) {
+    return await this.crawlerLink.save(crawlerLink);
   }
 }

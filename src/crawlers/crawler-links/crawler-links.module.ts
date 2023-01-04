@@ -8,6 +8,6 @@ import { CrawlerLink } from './entities/crawler-link.entity';
   imports: [TypeOrmModule.forFeature([CrawlerLink])],
   controllers: [CrawlerLinksController],
   providers: [CrawlerLinksService],
-  exports: [TypeOrmModule.forFeature([CrawlerLink]), CrawlerLinksModule],
+  exports: [TypeOrmModule.forFeature([CrawlerLink]), CrawlerLinksService],
 })
 export class CrawlerLinksModule {}
