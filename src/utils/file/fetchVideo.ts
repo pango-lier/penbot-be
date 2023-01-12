@@ -1,3 +1,5 @@
+import { existsSync, mkdirSync } from 'fs';
+
 /* eslint-disable */
 const { download } = require('fetch-video');
 
@@ -5,7 +7,7 @@ const { download } = require('fetch-video');
 const path = require('path');
 
 export const fetchVideo = async (url, filename, requestOptions = undefined) => {
-  const localFilePath = path.resolve(__dirname, filename);
+  const localFilePath = createLocalFile(filename);
   const downloader = download(url, localFilePath, requestOptions);
   downloader.on('progress', (progress) =>
     console.log(`Current progress ${progress}`),
@@ -20,4 +22,24 @@ export const fetchVideo = async (url, filename, requestOptions = undefined) => {
       ),
     );
   return localFilePath;
+};
+
+export const createLocalFile = (
+  path: string,
+  dirLocal: string = '/home/node/app/tmp/penbot',
+): string => {
+  let fileName = path;
+  const folderArray = path.split('/');
+  if (folderArray.length > 1) {
+    fileName = folderArray[folderArray.length - 1];
+    delete folderArray[folderArray.length - 1];
+    dirLocal = dirLocal + '/' + folderArray.join('/');
+    dirLocal = dirLocal.slice(0, -1);
+  }
+  if (!existsSync(`${dirLocal}`)) {
+    mkdirSync(`${dirLocal}`);
+  }
+
+  const fileLocal = `${dirLocal}/${fileName}`;
+  return fileLocal;
 };

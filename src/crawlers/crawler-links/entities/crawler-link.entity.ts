@@ -13,7 +13,12 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { CrawlerLinkEnum, CrawlerLinkStatusEnum } from './crawler-link.enum';
+import {
+  CrawlerLinkEnum,
+  CrawlerLinkStatusEnum,
+  QualityEnum,
+  TypeFileEnum,
+} from './crawler-link.enum';
 import { User } from 'src/users/entities/user.entity';
 
 @Entity()
@@ -44,6 +49,22 @@ export class CrawlerLink {
     nullable: true,
   })
   type?: CrawlerLinkEnum;
+
+  @Column({
+    type: 'enum',
+    enum: QualityEnum,
+    default: QualityEnum.Video720p,
+    nullable: true,
+  })
+  quality?: QualityEnum;
+
+  @Column({
+    type: 'enum',
+    enum: TypeFileEnum,
+    default: TypeFileEnum.FullAudioVideo,
+    nullable: true,
+  })
+  typeFile?: TypeFileEnum;
 
   @Column({ type: 'varchar', nullable: true })
   target?: string;

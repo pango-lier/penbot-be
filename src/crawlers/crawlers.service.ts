@@ -82,7 +82,10 @@ export class CrawlersService {
     try {
       crawlerLink.status = CrawlerLinkStatusEnum.Processing;
       crawlerLink = await this.crawlerLinkService.updateEntity(crawlerLink);
-      const file = await this.youtubeDlService.downloadFile(crawlerLink.target);
+      const file = await this.youtubeDlService.downloadFile(
+        crawlerLink.target,
+        { quality: crawlerLink.quality, typeFile: crawlerLink.typeFile },
+      );
       const createCrawler: CreateCrawlerDto = {
         name: file.title,
         userId: crawlerLink.userId,
@@ -93,7 +96,7 @@ export class CrawlersService {
         links: crawlerLink.target,
         meta: JSON.stringify(file.source),
       };
-      console.log(createCrawler, file);
+
       await this.create(createCrawler, crawlerLink.userId);
       crawlerLink.status = CrawlerLinkStatusEnum.Success;
       crawlerLink = await this.crawlerLinkService.updateEntity(crawlerLink);
