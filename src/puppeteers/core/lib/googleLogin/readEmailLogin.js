@@ -11,6 +11,8 @@ const readEmailLogin = (file, sttAcc) => {
             email: arInfo[0],
             password: arInfo[1],
             recoveryEmail: arInfo[2],
+            recoveryVerifyEmail: arInfo[5] || '',
+            recoveryVerifyPassword: arInfo[6] || '',
         }, lists: lists
     };
 }

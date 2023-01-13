@@ -35,6 +35,8 @@ services:
       - redisdata:/data
     networks:
       - pendbot
+    ports:
+      - 6376:6379
 
   app:
     container_name: app_pen

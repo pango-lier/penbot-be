@@ -11,13 +11,18 @@ const changePassword2 = require("./personal/changePassword2");
 const commentTikTok = require("./tiktok/commentTiktok");
 const videoTikTok = require("./tiktok/video");
 const watchYoutube = require("./youtube/watch");
+const fs = require('fs');
+const delay = (time) => new Promise((resolve) => setTimeout(resolve, time));
+let rawdata = fs.readFileSync('../browser.json');
+let SettingBrowser = JSON.parse(rawdata);
 
 const test = async () => {
   const browser = await puppeteer.launch({
     headless: false,
+    // ...SettingBrowser,
     args: [
       "--no-sandbox",
-      "--user-data-dir=/home/trong/.config/google-chrome/profile2",
+      "--user-data-dir=/home/trong/.config/google-chrome/profile3",
       "--tz=Asia/Bangkok",
       "--no-first-run",
       "--no-sandbox",
@@ -38,9 +43,11 @@ const test = async () => {
       "--disable-features=RendererCodeIntegrity"
     ],
   });
+  console.log(browser);
   try {
     const page = await browser.newPage();
     const pup = new PuppeteerActionFunc(page, 0.1, 0.05);
+  await googleLogin(pup, __dirname + "/helper/accounts.txt", 0,'');
 
     // const googleSearch = new GoogleSearch(pup);
     // const domain = "https://nhomkinhdalat.com/";
@@ -55,7 +62,7 @@ const test = async () => {
     //   timeoutLive: 60 * 3600, //1h
     //   maxComment: 9999,
     // });
-    await watchYoutube(pup,{fileLink:"./helper/tiktok/link.txt",timeOut:10});
+   // await watchYoutube(pup,{fileLink:"./helper/tiktok/link.txt",timeOut:10});
    // await videoTikTok(pup,{fileLink:"./helper/tiktok/link.txt"});
     //await googleLogin(pup,__dirname + "/helper/accounts.txt",0);
     //await changePassword2(pup, __dirname + "/helper/accounts.txt",0, "Abc@1234@123");

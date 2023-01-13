@@ -90,13 +90,28 @@ const changePasswordFile = async (file, sttAcc, newPwd, folder) => {
   for (let index = 0; index < name.length; index++) {
     let element = name[index];
     if (index === sttAcc) {
-      let newE = [];
-      newE.push(element[0]);
-      newE.push(newPwd);
-      newE.push(element[2]);
-      newE.push("");
-      newE.push(folder);
-      element = newE;
+      element[1] = newPwd;
+      element[3] = "";
+      element[4] = folder;
+    }
+    element = element.join('|');
+    writeFs.push(element);
+  }
+  writeFs = writeFs.join('\n'); // convert array back to string
+  await fs.writeFileSync(file, writeFs);
+}
+
+const changeRecoverMailFile = async (file, sttAcc, newEmail, folder) => {
+  console.log("-----changeRecoverMailFile");
+  const lists = readTextToArray(file);
+  const name = parseTextData(lists);
+  let writeFs = [];
+  // const folder = arFiles[arFiles.length - 2];
+  for (let index = 0; index < name.length; index++) {
+    let element = name[index];
+    if (index === sttAcc) {
+      element[2] = newEmail;
+      element[4] = folder;
     }
     element = element.join('|');
     writeFs.push(element);
@@ -197,3 +212,4 @@ module.exports.changeNumberSearchFile = changeNumberSearchFile;
 module.exports.randomParseTextToArrayFilterGoogleSearch = randomParseTextToArrayFilterGoogleSearch;
 module.exports.readTextParseToArray = readTextParseToArray;
 module.exports.changeNameFileSameFolder = changeNameFileSameFolder;
+module.exports.changeRecoverMailFile = changeRecoverMailFile;

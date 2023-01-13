@@ -361,7 +361,7 @@ class PuppeteerActionFunc {
             let data = [];
             if (elements) {
                 for (let i = 0; i < elements.length; i++) {
-                    // data.push(elements[i].textContent.trim());
+                    data.push(elements[i].textContent.trim());
                 }
                 return data;
             }
