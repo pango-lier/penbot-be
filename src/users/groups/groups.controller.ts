@@ -11,12 +11,11 @@ import {
 import { GroupsService } from './groups.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
-import { Paginate } from 'src/paginate/decorator/paginate';
-import { IPaginate } from 'src/paginate/interface/paginate.interface';
-import { jwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { CurrentUser } from '../users.decorator';
-import { ICurrentUser } from 'src/auth/interface/authenticated-user.interface';
-
+import { jwtAuthGuard } from '@auth/guards/jwt-auth.guard';
+import { IPaginate } from '@paginate/interface/paginate.interface';
+import { Paginate } from '@paginate/decorator/paginate';
+import { CurrentUser } from '@users/users.decorator';
+import { ICurrentUser } from '@auth/interface/authenticated-user.interface';
 @Controller('groups')
 @UseGuards(jwtAuthGuard)
 export class GroupsController {

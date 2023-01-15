@@ -1,4 +1,5 @@
-import { CrawlerLink } from 'src/crawlers/crawler-links/entities/crawler-link.entity';
+
+import { CrawlerLink } from '@crawlers/crawler-links/entities/crawler-link.entity';
 import {
   Column,
   CreateDateColumn,

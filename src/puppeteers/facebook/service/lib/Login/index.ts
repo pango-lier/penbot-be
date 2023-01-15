@@ -1,4 +1,5 @@
-import { CoreService } from 'src/puppeteers/core/core.service';
+import { CoreService } from "@puppeteers/core/core.service";
+
 
 export const enterUserName = async (func: CoreService, userName) => {
   await func.click('#email');

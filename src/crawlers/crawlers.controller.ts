@@ -11,13 +11,12 @@ import {
 import { CrawlersService } from './crawlers.service';
 import { CreateCrawlerDto } from './dto/create-crawler.dto';
 import { UpdateCrawlerDto } from './dto/update-crawler.dto';
-import { Paginate } from 'src/paginate/decorator/paginate';
-import { IPaginate } from 'src/paginate/interface/paginate.interface';
-import { CurrentUser } from 'src/users/users.decorator';
-import { ICurrentUser } from 'src/auth/interface/authenticated-user.interface';
-import { use } from 'passport';
-import { jwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { jwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RunCrawlerQueueDto } from './dto/run-crawler-queue.dto';
+import { CurrentUser } from '@users/users.decorator';
+import { ICurrentUser } from '@auth/interface/authenticated-user.interface';
+import { IPaginate } from '@paginate/interface/paginate.interface';
+import { Paginate } from '@paginate/decorator/paginate';
 
 @Controller('crawlers')
 @UseGuards(jwtAuthGuard)

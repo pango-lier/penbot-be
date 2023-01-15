@@ -1,7 +1,8 @@
-import { CoreService } from 'src/puppeteers/core/core.service';
+
 import { publishContent } from './publishContent';
 import { createComments } from './CommentPost';
 import { inviteOtherFriend } from './ActionOthers';
+import { CoreService } from '@puppeteers/core/core.service';
 
 class FanPage {
   async goto(pup: CoreService, url: string) {

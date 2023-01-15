@@ -4,8 +4,8 @@ import { UpdateAccountDto } from './dto/update-account.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Account } from './entities/account.entity';
 import { Repository } from 'typeorm';
-import { IPaginate } from 'src/paginate/interface/paginate.interface';
-import { PaginateService } from 'src/paginate/paginate.service';
+import { IPaginate } from '@paginate/interface/paginate.interface';
+import { PaginateService } from '@paginate/paginate.service';
 
 @Injectable()
 export class AccountsService {

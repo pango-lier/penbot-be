@@ -6,8 +6,8 @@ import { YoutubeDlService } from './youtube-dl/youtube-dl.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Crawler } from './entities/crawler.entity';
 import { CrawlerConfigsModule } from './crawler-configs/crawler-configs.module';
-import { BullmqModule } from 'src/bullmq/bullmq.module';
 import { CrawlerProcessor } from './queue/crawler.processor';
+import { BullmqModule } from '@bullmq/bullmq.module';
 
 @Module({
   controllers: [CrawlersController],

@@ -1,5 +1,6 @@
-import { Link } from 'src/links/entities/link.entity';
-import { Social } from 'src/socials/entities/social.entity';
+
+import { Link } from '@links/entities/link.entity';
+import { Social } from '@socials/entities/social.entity';
 import {
   Column,
   CreateDateColumn,

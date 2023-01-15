@@ -1,4 +1,5 @@
-import { CoreService } from 'src/puppeteers/core/core.service';
+import { CoreService } from "@puppeteers/core/core.service";
+
 
 const ACTION_SELECT_INTERACT =
   '.oajrlxb2 > .l9j0dhe7 > .bp9cbjyn > .rq0escxv:nth-child(2) > .hu5pjgll';

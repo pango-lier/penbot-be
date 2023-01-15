@@ -18,6 +18,14 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "allowJs": true,
+    "moduleResolution": "node",
+    "paths": {
+      "@*": [
+        "./src/*"
+      ],
+    }
   },
-  "include": ["src"],
+  "include": [
+    "src"
+  ]
 }

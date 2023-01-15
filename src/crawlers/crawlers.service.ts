@@ -4,8 +4,6 @@ import { UpdateCrawlerDto } from './dto/update-crawler.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Crawler } from './entities/crawler.entity';
 import { Repository } from 'typeorm';
-import { PaginateService } from 'src/paginate/paginate.service';
-import { IPaginate } from 'src/paginate/interface/paginate.interface';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import { RunCrawlerQueueDto } from './dto/run-crawler-queue.dto';
@@ -13,6 +11,8 @@ import { CrawlerLinksService } from './crawler-links/crawler-links.service';
 import { CrawlerLink } from './crawler-links/entities/crawler-link.entity';
 import { CrawlerLinkStatusEnum } from './crawler-links/entities/crawler-link.enum';
 import { YoutubeDlService } from './youtube-dl/youtube-dl.service';
+import { PaginateService } from '@paginate/paginate.service';
+import { IPaginate } from '@paginate/interface/paginate.interface';
 
 @Injectable()
 export class CrawlersService {

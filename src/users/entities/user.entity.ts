@@ -1,3 +1,10 @@
+import { CrawlerLink } from '@crawlers/crawler-links/entities/crawler-link.entity';
+import { Crawler } from '@crawlers/entities/crawler.entity';
+import { Notification } from '@notifications/entities/notification.entity';
+import { Account } from '@users/accounts/entities/account.entity';
+import { Group } from '@users/groups/entities/group.entity';
+import { Permission } from '@users/permissions/entities/permission.entity';
+import { Role } from '@users/roles/entities/role.entity';
 import {
   Column,
   CreateDateColumn,
@@ -10,13 +17,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Group } from '../groups/entities/group.entity';
-import { Role } from '../roles/entities/role.entity';
-import { Notification } from 'src/notifications/entities/notification.entity';
-import { Permission } from '../permissions/entities/permission.entity';
-import { Account } from '../accounts/entities/account.entity';
-import { CrawlerLink } from 'src/crawlers/crawler-links/entities/crawler-link.entity';
-import { Crawler } from 'src/crawlers/entities/crawler.entity';
 
 @Entity('users')
 export class User {

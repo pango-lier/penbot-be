@@ -1,7 +1,8 @@
-import { CrawlerLink } from 'src/crawlers/crawler-links/entities/crawler-link.entity';
-import { Social } from 'src/socials/entities/social.entity';
-import { User } from 'src/users/entities/user.entity';
-import { Group } from 'src/users/groups/entities/group.entity';
+
+import { CrawlerLink } from '@crawlers/crawler-links/entities/crawler-link.entity';
+import { Social } from '@socials/entities/social.entity';
+import { User } from '@users/entities/user.entity';
+import { Group } from '@users/groups/entities/group.entity';
 import {
   Column,
   CreateDateColumn,

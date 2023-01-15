@@ -1,4 +1,5 @@
-import { SocialEnum } from 'src/socials/entities/social.enum';
+import { SocialEnum } from "@socials/entities/social.enum";
+
 
 export class RunCrawlerQueueOptionDto {
   pushSocial?: SocialEnum;

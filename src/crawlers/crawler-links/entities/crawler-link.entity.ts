@@ -1,7 +1,9 @@
-import { CrawlerConfig } from 'src/crawlers/crawler-configs/entities/crawler-config.entity';
-import { Crawler } from 'src/crawlers/entities/crawler.entity';
-import { Social } from 'src/socials/entities/social.entity';
-import { Account } from 'src/users/accounts/entities/account.entity';
+
+import { CrawlerConfig } from '@crawlers/crawler-configs/entities/crawler-config.entity';
+import { Crawler } from '@crawlers/entities/crawler.entity';
+import { Social } from '@socials/entities/social.entity';
+import { Account } from '@users/accounts/entities/account.entity';
+import { User } from '@users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -19,7 +21,6 @@ import {
   QualityEnum,
   TypeFileEnum,
 } from './crawler-link.enum';
-import { User } from 'src/users/entities/user.entity';
 
 @Entity()
 export class CrawlerLink {

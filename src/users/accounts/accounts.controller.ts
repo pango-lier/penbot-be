@@ -1,3 +1,5 @@
+import { jwtAuthGuard } from '@auth/guards/jwt-auth.guard';
+import { ICurrentUser } from '@auth/interface/authenticated-user.interface';
 import {
   Controller,
   Get,
@@ -9,16 +11,12 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { Paginate } from '@paginate/decorator/paginate';
+import { IPaginate } from '@paginate/interface/paginate.interface';
+import { CurrentUser } from '@users/users.decorator';
 import { AccountsService } from './accounts.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
-import { jwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { CurrentUser } from '../users.decorator';
-import { ICurrentUser } from 'src/auth/interface/authenticated-user.interface';
-import { Paginate } from 'src/paginate/decorator/paginate';
-import { IPaginate } from 'src/paginate/interface/paginate.interface';
-import { FormatResponseInterceptor } from 'src/common/interceptors/format-response/format-response.interceptor';
-
 @Controller('accounts')
 @UseGuards(jwtAuthGuard)
 export class AccountsController {

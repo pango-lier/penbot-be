@@ -1,4 +1,5 @@
-import { CoreService } from 'src/puppeteers/core/core.service';
+import { CoreService } from "@puppeteers/core/core.service";
+
 
 const CREATE_NEW_CONTENT_BUTTON =
   '.buofh1pr:nth-child(2) > .oajrlxb2 > .l9j0dhe7 > .n00je7tq';

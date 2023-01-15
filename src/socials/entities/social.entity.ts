@@ -1,4 +1,7 @@
-import { Article } from 'src/articles/entities/article.entity';
+
+import { Article } from '@articles/entities/article.entity';
+import { CrawlerLink } from '@crawlers/crawler-links/entities/crawler-link.entity';
+import { Account } from '@users/accounts/entities/account.entity';
 import {
   Column,
   CreateDateColumn,
@@ -10,8 +13,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { SocialEnum } from './social.enum';
-import { Account } from 'src/users/accounts/entities/account.entity';
-import { CrawlerLink } from 'src/crawlers/crawler-links/entities/crawler-link.entity';
 
 @Entity()
 export class Social {

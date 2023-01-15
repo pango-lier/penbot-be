@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { downloadFileAxios } from 'src/utils/file/downloadFileAxios';
-import { random } from 'src/utils/random/random';
 import { IYoutubeDLServiceResponse } from './youtube-dl.interface';
-import { fetchVideo } from 'src/utils/file/fetchVideo';
 import {
   QualityEnum,
   TypeFileEnum,
 } from '../crawler-links/entities/crawler-link.enum';
+import { fetchVideo } from '@utils/file/fetchVideo';
+import { random } from '@utils/random/random';
 
 //import youtubeDl = require('youtube-dl-exec');
 //import youtubeDl from 'youtube-dl-exec';

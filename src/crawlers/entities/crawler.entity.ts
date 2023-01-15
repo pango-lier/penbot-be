@@ -1,3 +1,6 @@
+import { CrawlerLink } from '@crawlers/crawler-links/entities/crawler-link.entity';
+import { CrawlerStatusEnum } from '@crawlers/enum/crawler-link.enum';
+import { User } from '@users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -8,9 +11,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { CrawlerLink } from '../crawler-links/entities/crawler-link.entity';
-import { User } from 'src/users/entities/user.entity';
-import { CrawlerStatusEnum } from '../enum/crawler-link.enum';
 
 @Entity()
 export class Crawler {

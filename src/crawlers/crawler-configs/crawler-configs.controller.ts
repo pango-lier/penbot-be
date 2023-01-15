@@ -11,7 +11,7 @@ import {
 import { CrawlerConfigsService } from './crawler-configs.service';
 import { CreateCrawlerConfigDto } from './dto/create-crawler-config.dto';
 import { UpdateCrawlerConfigDto } from './dto/update-crawler-config.dto';
-import { jwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { jwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 
 @Controller('crawler-configs')
 @UseGuards(jwtAuthGuard)

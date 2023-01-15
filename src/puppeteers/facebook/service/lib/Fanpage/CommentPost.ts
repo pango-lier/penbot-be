@@ -1,4 +1,5 @@
-import { CoreService } from 'src/puppeteers/core/core.service';
+
+import { CoreService } from '@puppeteers/core/core.service';
 import SwitchUser from './SwitchUser';
 
 const COMMENT_TYPE_1 = (st: number) => {

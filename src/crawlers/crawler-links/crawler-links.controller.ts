@@ -1,3 +1,5 @@
+import { jwtAuthGuard } from '@auth/guards/jwt-auth.guard';
+import { ICurrentUser } from '@auth/interface/authenticated-user.interface';
 import {
   Controller,
   Get,
@@ -8,14 +10,12 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
+import { Paginate } from '@paginate/decorator/paginate';
+import { IPaginate } from '@paginate/interface/paginate.interface';
+import { CurrentUser } from '@users/users.decorator';
 import { CrawlerLinksService } from './crawler-links.service';
 import { CreateCrawlerLinkDto } from './dto/create-crawler-link.dto';
 import { UpdateCrawlerLinkDto } from './dto/update-crawler-link.dto';
-import { Paginate } from 'src/paginate/decorator/paginate';
-import { IPaginate } from 'src/paginate/interface/paginate.interface';
-import { CurrentUser } from 'src/users/users.decorator';
-import { ICurrentUser } from 'src/auth/interface/authenticated-user.interface';
-import { jwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('crawler-links')
 @UseGuards(jwtAuthGuard)

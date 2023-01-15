@@ -1,4 +1,5 @@
-import { CoreService } from 'src/puppeteers/core/core.service';
+import { CoreService } from "@puppeteers/core/core.service";
+
 
 const ACTION_ORTHER =
   '.h676nmdw > .oajrlxb2 > .l9j0dhe7 > .bp9cbjyn > .rq0escxv > .a8c37x1j';

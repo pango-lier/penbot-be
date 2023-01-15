@@ -4,8 +4,8 @@ import { UpdateCrawlerLinkDto } from './dto/update-crawler-link.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CrawlerLink } from './entities/crawler-link.entity';
 import { Raw, Repository } from 'typeorm';
-import { IPaginate } from 'src/paginate/interface/paginate.interface';
-import { PaginateService } from 'src/paginate/paginate.service';
+import { IPaginate } from '@paginate/interface/paginate.interface';
+import { PaginateService } from '@paginate/paginate.service';
 
 @Injectable()
 export class CrawlerLinksService {
