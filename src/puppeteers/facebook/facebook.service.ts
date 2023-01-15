@@ -1,9 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { CreateFacebookDto } from './dto/create-facebook.dto';
 import { UpdateFacebookDto } from './dto/update-facebook.dto';
+import { BrowserService } from '../browser/browser.service';
+import Facebook from './service';
 
 @Injectable()
 export class FacebookService {
+  constructor(private readonly browser: BrowserService) {}
+
+  async login() {
+    const { core } = await this.browser.StartUp();
+    const facebook = new Facebook();
+    await facebook.Login.goto(core);
+    await facebook.Login.login(core, 'trong', 'sss');
+    return 'This action adds a new facebook';
+  }
+
   create(createFacebookDto: CreateFacebookDto) {
     return 'This action adds a new facebook';
   }
