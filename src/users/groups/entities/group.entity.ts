@@ -1,5 +1,6 @@
-import { Account } from 'src/users/accounts/entities/account.entity';
-import { User } from 'src/users/entities/user.entity';
+
+import { Account } from '@users/accounts/entities/account.entity';
+import { User } from '@users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,

@@ -4,9 +4,8 @@ import { UpdateGroupDto } from './dto/update-group.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Group } from './entities/group.entity';
 import { Repository } from 'typeorm';
-import { PaginateService } from 'src/paginate/paginate.service';
-import { IPaginate } from 'src/paginate/interface/paginate.interface';
-
+import { IPaginate } from '@paginate/interface/paginate.interface';
+import { PaginateService } from '@paginate/paginate.service';
 @Injectable()
 export class GroupsService {
   constructor(
