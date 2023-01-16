@@ -10,11 +10,14 @@ interface IBrowserStart {
 
 @Injectable()
 export class BrowserService {
+  private browser: Browser;
   async StartUp(): Promise<IBrowserStart> {
     const browser = await this.start();
     const page = await browser.newPage();
-    await page.setViewport({ width: 1920, height: 937 });
+
     const core = new CoreService(page);
+    await core.page.setViewport({ width: 1920, height: 937 });
+    this.browser = browser;
     return { browser, core, page };
   }
 
@@ -24,6 +27,7 @@ export class BrowserService {
       ignoreDefaultArgs: true,
       ignoreHTTPSErrors: true,
       defaultViewport: null,
+      // devtools: true,
       // executablePath: process.env.CHROME_BIN,
       args: [
         '--no-sandbox',
@@ -32,7 +36,7 @@ export class BrowserService {
         '--disable-dev-shm-usage',
         '--disable-backgrounding-occluded-windows',
         '--disable-backing-store-limit',
-        // '--user-data-dir=/home/trong/.config/google-chrome/profile3',
+        '--user-data-dir=/home/trong/.config/google-chrome/profile3',
         '--tz=Asia/Bangkok',
         '--no-first-run',
         '--font-masking-mode=2',
@@ -52,7 +56,7 @@ export class BrowserService {
     });
   }
 
-  async stop(browser: Browser) {
-    return await browser.close();
+  async stop() {
+    return await this.browser.close();
   }
 }

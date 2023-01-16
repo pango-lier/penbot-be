@@ -10,9 +10,21 @@ export class FacebookService {
 
   async login() {
     const { core } = await this.browser.StartUp();
-    const facebook = new Facebook();
-    await facebook.Login.goto(core);
-    await facebook.Login.login(core, 'trong', 'sss');
+    const facebook = new Facebook(core);
+    await facebook.Login.login('binhtrongcdt1@gmail.com', 'binhhtrrong');
+    console.log('facebook.Login.login');
+    await core.delay(2);
+    await facebook.FanPage.goto(
+      'https://www.facebook.com/profile.php?id=100089781420908',
+    );
+    await facebook.FanPage.clickSwitchPage();
+    await facebook.FanPage.publishContent({
+      content: 'video Hay qua',
+      imagePaths: ['/home/trong/vi1673603175263_683790867.mp4'],
+      type: 'image',
+    });
+
+    await this.browser.stop();
     return 'This action adds a new facebook';
   }
 

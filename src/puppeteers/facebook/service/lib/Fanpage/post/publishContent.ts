@@ -1,9 +1,12 @@
-import { CoreService } from "@puppeteers/core/core.service";
-
+import { CoreService } from '@puppeteers/core/core.service';
 
 const CREATE_NEW_CONTENT_BUTTON =
   '.buofh1pr:nth-child(2) > .oajrlxb2 > .l9j0dhe7 > .n00je7tq';
 const INPUT_NEW_CONTENT = '._5rpb > .notranslate > div > div > ._1mf';
+
+const CLICK_BUTTON_POST = `i[style*="background-image:url('https://static.xx.fbcdn.net/rsrc.php/v3/y3/r/56825_TDFXM.png')"]`;
+const CLICK_INPUT_CONTENT = `div[aria-label="Bạn đang nghĩ gì?"]`;
+const CLICK_INPUT_VIDEO_IMAGE = `i[style*="background-image: url("https://static.xx.fbcdn.net/rsrc.php/v3/y-/r/yoCftpI9YQX.png")]`;
 
 export const publishContent = async (
   func: CoreService,
@@ -14,7 +17,7 @@ export const publishContent = async (
   await popupContent(func);
   await func.delay(0.5);
   await func.input(content, '', 50);
-  await func.delay(5);
+  await func.delay(2);
   const pathFiles = await selectImages(func, imagePaths);
   if (type === 'video') {
     await waitUploadVideo(func);
@@ -41,8 +44,14 @@ const waitUploadVideo = async (func: CoreService) => {
 };
 
 const popupContent = async (func: CoreService) => {
-  await func.clickTryCheck(CREATE_NEW_CONTENT_BUTTON, INPUT_NEW_CONTENT);
-  await func.click(INPUT_NEW_CONTENT);
+  if (await func.checkSelector(CREATE_NEW_CONTENT_BUTTON)) {
+    await func.clickTryCheck(CREATE_NEW_CONTENT_BUTTON, INPUT_NEW_CONTENT);
+    await func.click(INPUT_NEW_CONTENT);
+  }
+  if (await func.checkSelector(CLICK_BUTTON_POST)) {
+    await func.clickTryCheck(CLICK_BUTTON_POST, CLICK_INPUT_CONTENT);
+    await func.click(CLICK_INPUT_CONTENT);
+  }
 };
 
 const actionPublishContent = async (func: CoreService) => {

@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { FacebookService } from './facebook.service';
 import { CreateFacebookDto } from './dto/create-facebook.dto';
 import { UpdateFacebookDto } from './dto/update-facebook.dto';
@@ -12,6 +20,11 @@ export class FacebookController {
     return this.facebookService.create(createFacebookDto);
   }
 
+  @Post('test')
+  async test(@Body() createFacebookDto: CreateFacebookDto) {
+    return await this.facebookService.login();
+  }
+
   @Get()
   findAll() {
     return this.facebookService.findAll();
@@ -23,7 +36,10 @@ export class FacebookController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFacebookDto: UpdateFacebookDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateFacebookDto: UpdateFacebookDto,
+  ) {
     return this.facebookService.update(+id, updateFacebookDto);
   }
 

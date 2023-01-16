@@ -1,42 +1,44 @@
-
-import { publishContent } from './publishContent';
 import { createComments } from './CommentPost';
 import { inviteOtherFriend } from './ActionOthers';
 import { CoreService } from '@puppeteers/core/core.service';
+import { switchPage } from './switchToPage';
+import { postContent } from './post/postContent';
 
 class FanPage {
-  async goto(pup: CoreService, url: string) {
-    await pup.goto(url);
+  private core: CoreService;
+  constructor(core: CoreService) {
+    this.core = core;
   }
-  async publishContent(
-    pup: CoreService,
-    fanPage: {
-      content: string;
-      imagePaths?: string[];
-      type?: undefined | 'video' | 'image';
-    },
-  ) {
-    await publishContent(
-      pup,
-      fanPage.content,
-      fanPage.imagePaths,
-      fanPage.type,
-    );
+  async goto(url: string) {
+    await this.core.goto(url);
   }
-  async inviteFriend(pup: CoreService) {
-    await inviteOtherFriend(pup);
+
+  async clickSwitchPage() {
+    await switchPage(this.core);
   }
-  async commentPost(
-    pup: CoreService,
-    comment: {
-      content: string;
-      imagePaths: string[];
-      postRecentStart?: number;
-      postRecentEnd?: number;
-    },
-  ) {
+
+  async publishContent(fanPage: {
+    content: string;
+    imagePaths?: string[];
+    type?: undefined | 'video' | 'image';
+  }) {
+    try {
+      await postContent(this.core, fanPage.content, fanPage.imagePaths);
+    } catch (error) {
+      console.log('postContent' + error.message);
+    }
+  }
+  async inviteFriend() {
+    await inviteOtherFriend(this.core);
+  }
+  async commentPost(comment: {
+    content: string;
+    imagePaths: string[];
+    postRecentStart?: number;
+    postRecentEnd?: number;
+  }) {
     await createComments(
-      pup,
+      this.core,
       comment.content,
       comment.imagePaths,
       comment.postRecentStart,

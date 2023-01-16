@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { HTTPResponse, Page, Puppeteer } from 'puppeteer';
-import { delay } from './until/delay';
+import { HTTPResponse, KeyInput, Page, Puppeteer } from 'puppeteer';
+import { delay, delayMs } from './until/delay';
 import fs = require('fs');
 import { random } from './until/random';
 
@@ -15,6 +15,7 @@ export class CoreService {
   }
 
   async click(target: string): Promise<void> {
+    console.log(this.delayClickTime);
     await delay(this.delayClickTime);
     await this.page.waitForSelector(target);
     return this.page.click(target);
@@ -24,6 +25,10 @@ export class CoreService {
     return this.page.goto(url, {
       waitUntil: 'networkidle2',
     });
+  }
+
+  async enter(key: KeyInput = 'Enter') {
+    return await this.page.keyboard.press(key);
   }
   /**
    * await a element show in DOM
@@ -76,6 +81,18 @@ export class CoreService {
     const [fileChooser] = await Promise.all([
       this.page.waitForFileChooser(),
       this.click(fileChooserTriggerXpath),
+    ]);
+    await fileChooser?.accept(imagePaths);
+    return imagePaths;
+  }
+
+  async uploadImageTrigger(
+    imagePaths: string[],
+    callback: Promise<void | boolean>,
+  ): Promise<string[]> {
+    const [fileChooser] = await Promise.all([
+      this.page.waitForFileChooser(),
+      callback,
     ]);
     await fileChooser?.accept(imagePaths);
     return imagePaths;
@@ -170,6 +187,25 @@ export class CoreService {
     }, selector);
   }
 
+  clickContentSelectorMatch(selector, contents) {
+    return this.page.evaluate(
+      ({ selector, contents }) => {
+        const elements = document.querySelectorAll(selector);
+        if (elements) {
+          for (let i = 0; i < elements.length; i++) {
+            contents.forEach((content) => {
+              console.log(elements[i].textContent.trim);
+              if (content.toString() === elements[i].textContent.trim())
+                return elements[i].click();
+            });
+          }
+        }
+        return false;
+      },
+      { selector, contents },
+    );
+  }
+
   getHrefSelector(selector) {
     return this.page.evaluate((selector) => {
       const element = document.querySelector(selector);
@@ -192,6 +228,37 @@ export class CoreService {
         return false;
       },
       { selector, day },
+    );
+  }
+
+  async try(callback, loop = 4, delay_ms = 1000) {
+    for (let i = 0; i < loop; i++) {
+      try {
+        if (await callback()) {
+          return true;
+        }
+      } catch (error) {
+        console.log('try error ' + error.message);
+      }
+      await delayMs(delay_ms);
+    }
+    return false;
+  }
+
+  getAttributeSelector(params, attribute = 'disabled') {
+    return this.page.evaluate(
+      ({ params, attribute }) => {
+        const exist =
+          document.querySelector(params).hasAttribute(attribute) || false;
+        if (exist) {
+          const a = document.querySelector(params).getAttribute(attribute);
+          if (a === 'true') return true;
+          if (a === 'false') return false;
+          return a || false;
+        }
+        return false;
+      },
+      { params, attribute },
     );
   }
 }

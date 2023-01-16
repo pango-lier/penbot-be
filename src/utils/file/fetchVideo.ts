@@ -37,7 +37,7 @@ export const createLocalFile = (
     dirLocal = dirLocal.slice(0, -1);
   }
   if (!existsSync(`${dirLocal}`)) {
-    mkdirSync(`${dirLocal}`);
+    mkdirSync(`${dirLocal}`, { recursive: true });
   }
 
   const fileLocal = `${dirLocal}/${fileName}`;
