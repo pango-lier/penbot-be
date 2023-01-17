@@ -28,15 +28,31 @@ export const postContent = async (
     'aria-disabled',
   );
   console.log(disable);
+  await core.delay(5);
+  // watting upload video ;
+  await waitingUploadVideo(core);
+  await core.delay(5);
   await core.click('div[aria-label="Đăng"]');
-  await core.delay(200);
+  await core.delay(10);
+  await core.page.waitForSelector(
+    '.x9f619 > .x6s0dn4 > .x78zum5 > .always-enable-animations > .always-enable-animations',
+    {
+      hidden: true,
+      timeout: 100000,
+    },
+  );
 };
-// core.try(
-//   async () =>
-//     await core.clickContentSelectorMatch('span', [
-//       'Thêm ảnh/video',
-//       'hoặc kéo và thả',
-//     ]),
-//   5,
-//   1000,
-// ),
+
+const waitingUploadVideo = async (core: CoreService) => {
+  await core.try(async () => {
+    const selector = `.x78zum5 > div > .x1n2onr6 > .xmjcpbm > .x117nqv4`;
+    try {
+      await core.page.waitForSelector(selector, { timeout: 5000 });
+    } catch (error) {
+      return true;
+    }
+    const content = await core.getContentSelector(selector);
+    if (content == '100%') return true;
+    return false;
+  }, 100); //00s
+};

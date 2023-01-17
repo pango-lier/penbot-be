@@ -17,10 +17,9 @@ export class FacebookService {
     await facebook.FanPage.goto(
       'https://www.facebook.com/profile.php?id=100089781420908',
     );
-    await facebook.FanPage.clickSwitchPage();
     await facebook.FanPage.publishContent({
       content: 'video Hay qua',
-      imagePaths: ['/home/trong/vi1673603175263_683790867.mp4'],
+      imagePaths: ['/home/trong/Desktop/chau-tinh-tri-4686-1622859857.jpg'],
       type: 'image',
     });
 

@@ -23,6 +23,7 @@ class FanPage {
     type?: undefined | 'video' | 'image';
   }) {
     try {
+      await this.clickSwitchPage();
       await postContent(this.core, fanPage.content, fanPage.imagePaths);
     } catch (error) {
       console.log('postContent' + error.message);

@@ -80,9 +80,9 @@ export class YoutubeDlService {
       );
     }
     return {
-      title: output.title,
+      title: output.title ?? output.fulltitle,
       tags: output.tags,
-      description: output.description,
+      description: output.description ?? output.fulltitle,
       type: fileDownload.ext,
       source: fileDownload,
       linkDownloaded: path,
