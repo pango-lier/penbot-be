@@ -1,4 +1,3 @@
-
 import { Link } from '@links/entities/link.entity';
 import { Social } from '@socials/entities/social.entity';
 import {
@@ -20,6 +19,9 @@ export class Article {
 
   @Column({ type: 'varchar', nullable: true })
   title?: string;
+
+  @Column({ type: 'varchar', length: 2083, nullable: true })
+  url?: string;
 
   @Column({ type: 'tinytext', nullable: true })
   description?: string;

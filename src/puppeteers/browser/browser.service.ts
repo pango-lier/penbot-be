@@ -57,6 +57,8 @@ export class BrowserService {
   }
 
   async stop() {
-    return await this.browser.close();
+    try {
+      await this.browser.close();
+    } catch (error) {}
   }
 }

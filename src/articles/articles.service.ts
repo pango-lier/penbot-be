@@ -1,15 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Article } from './entities/article.entity';
+import { Repository } from 'typeorm';
+import { IPaginate } from '@paginate/interface/paginate.interface';
+import { PaginateService } from '@paginate/paginate.service';
 
 @Injectable()
 export class ArticlesService {
+  constructor(
+    @InjectRepository(Article) private readonly article: Repository<Article>,
+    private readonly paginateService: PaginateService,
+  ) {}
   create(createArticleDto: CreateArticleDto) {
-    return 'This action adds a new article';
+    const createArticle = this.article.create(createArticleDto);
+
+    return this.article.save(createArticle);
   }
 
-  findAll() {
-    return `This action returns all articles`;
+  async findAll(paginate: IPaginate) {
+    const q = this.article.createQueryBuilder('article');
+    return await this.paginateService.queryFilter(q, paginate, [], {
+      defaultTable: 'article',
+      getQuery: 'getMany',
+    });
   }
 
   findOne(id: number) {

@@ -3,27 +3,18 @@ import { CreateFacebookDto } from './dto/create-facebook.dto';
 import { UpdateFacebookDto } from './dto/update-facebook.dto';
 import { BrowserService } from '../browser/browser.service';
 import Facebook from './service';
+import { CreateFacebookPostArticleDto } from './dto/create-facebook-post-article.dto';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
 
 @Injectable()
 export class FacebookService {
-  constructor(private readonly browser: BrowserService) {}
+  constructor(
+    private readonly browser: BrowserService,
+    @InjectQueue('write-log') private readonly writeLog: Queue,
+  ) {}
 
   async login() {
-    const { core } = await this.browser.StartUp();
-    const facebook = new Facebook(core);
-    await facebook.Login.login('binhtrongcdt1@gmail.com', 'binhhtrrong');
-    console.log('facebook.Login.login');
-    await core.delay(2);
-    await facebook.FanPage.goto(
-      'https://www.facebook.com/profile.php?id=100089781420908',
-    );
-    await facebook.FanPage.publishContent({
-      content: 'video Hay qua',
-      imagePaths: ['/home/trong/Desktop/chau-tinh-tri-4686-1622859857.jpg'],
-      type: 'image',
-    });
-
-    await this.browser.stop();
     return 'This action adds a new facebook';
   }
 
@@ -45,5 +36,26 @@ export class FacebookService {
 
   remove(id: number) {
     return `This action removes a #${id} facebook`;
+  }
+
+  async createPostArticle(create: CreateFacebookPostArticleDto) {
+    try {
+      const { core } = await this.browser.StartUp();
+      const facebook = new Facebook(core);
+      await facebook.Login.login(create.username, create.password);
+      console.log('facebook.Login.login');
+      await core.delay(2);
+      await facebook.FanPage.goto(create.target);
+      await facebook.FanPage.publishContent({
+        content: create.content,
+        imagePaths: create.imagePaths,
+      });
+    } catch (error) {
+      this.writeLog.add('createPostArticle', {
+        message_error: error.message,
+        data: create,
+      });
+    }
+    await this.browser.stop();
   }
 }

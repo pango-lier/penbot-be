@@ -25,6 +25,7 @@ const BullMQQueueRegisterModule = [
     name: 'crawler',
   }),
 ];
+@Global()
 @Module({
   imports: [
     BullModule.forRootAsync({

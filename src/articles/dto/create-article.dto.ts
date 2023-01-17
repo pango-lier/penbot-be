@@ -12,6 +12,8 @@ export class CreateArticleDto {
   @IsString()
   content: string;
 
+  url?: string;
+
   status?: ArticleStatusEnum;
 
   active?: boolean;
@@ -24,4 +26,6 @@ export class CreateArticleDto {
 
   @Type(() => Date)
   updatedAt?: Date;
+
+  socialId: number;
 }
