@@ -1,16 +1,23 @@
 import { Type } from 'class-transformer';
-import { IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 import { SocialEnum } from '../entities/social.enum';
 
 export class CreateSocialDto {
-  @IsString()
-  email: string;
 
+  @IsOptional()
+  active?: boolean;
+
+  @IsOptional()
   @IsString()
-  name: string;
+  email?: string;
+
+  @IsOptional()
+  @IsString()
+  name?: string;
 
   @IsString()
   username?: string;
+
   @IsString()
   password?: string;
 

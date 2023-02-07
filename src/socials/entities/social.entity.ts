@@ -34,6 +34,9 @@ export class Social {
   @Column({ type: 'enum', enum: SocialEnum, default: SocialEnum.NONE })
   socialType: SocialEnum;
 
+  @Column({ type: 'boolean', default: true })
+  active?: boolean;
+
   @DeleteDateColumn({ type: 'timestamp' })
   deletedAt?: Date;
 
