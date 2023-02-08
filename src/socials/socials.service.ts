@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PaginateService } from '@paginate/paginate.service';
 import { Repository } from 'typeorm';
 import { CreateSocialDto } from './dto/create-social.dto';
 import { UpdateSocialDto } from './dto/update-social.dto';
@@ -10,6 +11,7 @@ export class SocialsService {
 
   constructor(
     @InjectRepository(Social) private readonly repo: Repository<Social>,
+    private readonly paginateService: PaginateService,
   ) { }
 
   create(createSocialDto: CreateSocialDto) {
@@ -17,8 +19,23 @@ export class SocialsService {
     return this.repo.save(user);
   }
 
-  findAll() {
-    return this.repo.find();
+  findAll(userId) {
+    return this.repo.find({
+      where: { userId }
+    });
+  }
+
+  findPage(paginate, userId) {
+    const query = this.repo.createQueryBuilder('social').where('userId = :id', { id: userId });
+    return this.paginateService.queryFilter<Social>(
+      query,
+      paginate,
+      ['social.username'],
+      {
+        defaultTable: 'username',
+        getQuery: 'getMany',
+      },
+    );
   }
 
   findOne(id: number) {

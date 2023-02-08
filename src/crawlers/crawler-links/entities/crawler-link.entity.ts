@@ -85,8 +85,8 @@ export class CrawlerLink {
   @Column({ type: 'timestamp', nullable: true })
   runEndAt?: Date;
 
-  @OneToMany(() => Social, (s) => s.crawlerLinks, { nullable: true })
-  social?: Social;
+  @ManyToMany(() => Social, (s) => s.crawlerLinks, { nullable: true })
+  socials?: Social[];
 
   @OneToMany(() => Crawler, (s) => s.crawlerLinks, { nullable: true })
   crawler?: Crawler;

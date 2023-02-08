@@ -1,6 +1,7 @@
 import { CrawlerLink } from '@crawlers/crawler-links/entities/crawler-link.entity';
 import { Crawler } from '@crawlers/entities/crawler.entity';
 import { Notification } from '@notifications/entities/notification.entity';
+import { Social } from '@socials/entities/social.entity';
 import { Account } from '@users/accounts/entities/account.entity';
 import { Group } from '@users/groups/entities/group.entity';
 import { Permission } from '@users/permissions/entities/permission.entity';
@@ -12,7 +13,6 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -81,6 +81,13 @@ export class User {
     nullable: true,
   })
   accounts?: Account[];
+
+
+  @OneToMany(() => Social, (a) => a.user, {
+    nullable: true,
+  })
+  socials?: Social[];
+
 
   @ManyToMany(() => Permission, {
     cascade: true,

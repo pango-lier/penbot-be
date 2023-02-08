@@ -2,11 +2,14 @@
 import { Article } from '@articles/entities/article.entity';
 import { CrawlerLink } from '@crawlers/crawler-links/entities/crawler-link.entity';
 import { Account } from '@users/accounts/entities/account.entity';
+import { User } from '@users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -51,11 +54,26 @@ export class Social {
   })
   account?: Account;
 
+  @Column({ type: 'bigint', nullable: true })
+  userId: number;
+
+  @ManyToOne(() => User, (u) => u.socials, {
+    nullable: true,
+  })
+  user?: User;
+
   @OneToMany(() => Article, (article) => article.social, {
     nullable: true,
   })
   articles?: Article[];
 
-  @ManyToOne(() => CrawlerLink, (s) => s.social, { nullable: true })
+  @ManyToMany(() => CrawlerLink, (s) => s.socials, {
+    nullable: true,
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinTable()
   crawlerLinks?: CrawlerLink[];
+
 }

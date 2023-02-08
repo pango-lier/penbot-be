@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 import { SocialEnum } from '../entities/social.enum';
 
 export class CreateSocialDto {
@@ -21,7 +21,12 @@ export class CreateSocialDto {
   @IsString()
   password?: string;
 
+  @IsOptional()
   socialType?: SocialEnum;
+
+  @IsOptional()
+  @IsNumber()
+  userId?: number;
 
   @Type(() => Date)
   deletedAt?: Date;
