@@ -3,27 +3,34 @@ import { CreateCrawlerLinkDto } from './dto/create-crawler-link.dto';
 import { UpdateCrawlerLinkDto } from './dto/update-crawler-link.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CrawlerLink } from './entities/crawler-link.entity';
-import { Raw, Repository } from 'typeorm';
+import { In, Raw, Repository } from 'typeorm';
 import { IPaginate } from '@paginate/interface/paginate.interface';
 import { PaginateService } from '@paginate/paginate.service';
+import { Social } from '@socials/entities/social.entity';
 
 @Injectable()
 export class CrawlerLinksService {
   constructor(
     @InjectRepository(CrawlerLink)
     private readonly crawlerLink: Repository<CrawlerLink>,
+    @InjectRepository(Social)
+    private readonly social: Repository<Social>,
+
     private readonly paginateService: PaginateService,
-  ) {}
-  create(createCrawlerLinkDto: CreateCrawlerLinkDto, userId: number) {
+  ) { }
+  async create(createCrawlerLinkDto: CreateCrawlerLinkDto, userId: number) {
     const create = this.crawlerLink.create(createCrawlerLinkDto);
     create.userId = userId;
+    create.socials = await this.social.findBy({ id: In(createCrawlerLinkDto.socialIds) })
     return this.crawlerLink.save(create);
   }
 
   async findAll(paginate: IPaginate, userId: number) {
-    const q = this.crawlerLink.createQueryBuilder('crawler-link');
+    const q = this.crawlerLink.createQueryBuilder('crawler_link');
+    q.where("crawler_link.userId = :userId", { userId });
+    q.leftJoinAndSelect('crawler_link.socials', 'socials');
     return await this.paginateService.queryFilter(q, paginate, [], {
-      defaultTable: 'crawler-link',
+      defaultTable: 'crawler_link',
       getQuery: 'getMany',
     });
   }
@@ -38,6 +45,7 @@ export class CrawlerLinksService {
     update.description = updateCrawlerLinkDto.description;
     update.type = updateCrawlerLinkDto.type;
     update.target = updateCrawlerLinkDto.target;
+    update.socials = await this.social.findBy({ id: In(updateCrawlerLinkDto.socialIds) })
     return await this.crawlerLink.save(update);
   }
 

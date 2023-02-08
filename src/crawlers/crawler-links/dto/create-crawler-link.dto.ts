@@ -1,3 +1,4 @@
+import { IsOptional } from 'class-validator';
 import {
   CrawlerLinkEnum,
   CrawlerLinkStatusEnum,
@@ -6,8 +7,11 @@ import {
 } from '../entities/crawler-link.enum';
 
 export class CreateCrawlerLinkDto {
-  name: string;
 
+  @IsOptional()
+  name?: string;
+
+  @IsOptional()
   description?: string;
 
   quality?: QualityEnum;
@@ -20,7 +24,7 @@ export class CreateCrawlerLinkDto {
 
   target: string;
 
-  socialId?: number | string;
+  socialIds?: number[];
 
   accountId?: number | string;
 
