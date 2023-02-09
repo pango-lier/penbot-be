@@ -22,4 +22,6 @@ export class CreateCrawlerDto {
   size?: number;
 
   userId?: number;
+
+  socialIds?: number[];
 }

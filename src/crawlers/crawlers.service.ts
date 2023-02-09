@@ -3,7 +3,7 @@ import { CreateCrawlerDto } from './dto/create-crawler.dto';
 import { UpdateCrawlerDto } from './dto/update-crawler.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Crawler } from './entities/crawler.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import { RunCrawlerQueueDto } from './dto/run-crawler-queue.dto';
@@ -13,21 +13,31 @@ import { CrawlerLinkStatusEnum } from './crawler-links/entities/crawler-link.enu
 import { YoutubeDlService } from './youtube-dl/youtube-dl.service';
 import { PaginateService } from '@paginate/paginate.service';
 import { IPaginate } from '@paginate/interface/paginate.interface';
+import { PuppeteersService } from '@puppeteers/puppeteers.service';
+import { Social } from '@socials/entities/social.entity';
 
 @Injectable()
 export class CrawlersService {
   constructor(
     @InjectRepository(Crawler) private readonly crawler: Repository<Crawler>,
+    @InjectRepository(Social)
+    private readonly social: Repository<Social>,
     private readonly crawlerLinkService: CrawlerLinksService,
     @InjectQueue('crawler') private readonly crawlerQueue: Queue,
     @InjectQueue('write-log') private readonly writeLogQueue: Queue,
     private readonly paginateService: PaginateService,
     private readonly youtubeDlService: YoutubeDlService,
+    private readonly puppeteerService: PuppeteersService,
   ) {}
 
-  create(createCrawlerDto: CreateCrawlerDto, userId: number) {
+  async create(createCrawlerDto: CreateCrawlerDto, userId: number) {
     const create = this.crawler.create(createCrawlerDto);
     create.userId = userId;
+    if (createCrawlerDto?.socialIds) {
+      create.socials = await this.social.findBy({
+        id: In(createCrawlerDto.socialIds),
+      });
+    }
     return this.crawler.save(create);
   }
 
@@ -51,6 +61,11 @@ export class CrawlersService {
     update.type = updateCrawlerDto.type;
     update.linkDownloaded = updateCrawlerDto.linkDownloaded;
     update.links = updateCrawlerDto.links;
+    if (updateCrawlerDto?.socialIds) {
+      update.socials = await this.social.findBy({
+        id: In(updateCrawlerDto.socialIds),
+      });
+    }
     return this.crawler.save(update);
   }
 
@@ -72,13 +87,18 @@ export class CrawlersService {
         this.crawlerQueue.add(crawlerLink.type, {
           crawlerLink,
           options: runCrawler.options,
+          userIds: [userId],
         });
     });
 
     return true;
   }
 
-  async crawlerVideoYoutubeLinkDirect(crawlerLink: CrawlerLink, options?: any) {
+  async crawlerVideoYoutubeLinkDirect(
+    crawlerLink: CrawlerLink,
+    options?: any,
+    userIds = [],
+  ) {
     try {
       crawlerLink.status = CrawlerLinkStatusEnum.Processing;
       crawlerLink = await this.crawlerLinkService.updateEntity(crawlerLink);
@@ -95,9 +115,15 @@ export class CrawlersService {
         linkDownloaded: file.linkDownloaded,
         links: crawlerLink.target,
         meta: JSON.stringify(file.source),
+        socialIds: crawlerLink.socials.map((i) => i.id),
       };
 
-      await this.create(createCrawler, crawlerLink.userId);
+      const crawler = await this.create(createCrawler, crawlerLink.userId);
+      await this.puppeteerService.posArticle(
+        crawler,
+        crawlerLink.socials,
+        userIds,
+      );
       crawlerLink.status = CrawlerLinkStatusEnum.Success;
       crawlerLink = await this.crawlerLinkService.updateEntity(crawlerLink);
     } catch (error) {
@@ -106,6 +132,7 @@ export class CrawlersService {
       crawlerLink = await this.crawlerLinkService.updateEntity(crawlerLink);
       throw new Error(error.message);
     }
+
     return 1;
   }
 }

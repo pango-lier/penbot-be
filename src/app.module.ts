@@ -19,6 +19,7 @@ import { LinksModule } from './links/links.module';
 import { SettingsModule } from './settings/settings.module';
 import { PaymentsModule } from './payments/payments.module';
 import { CrawlersModule } from './crawlers/crawlers.module';
+import { SocialTargetsModule } from './social-targets/social-targets.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { CrawlersModule } from './crawlers/crawlers.module';
     SettingsModule,
     PaymentsModule,
     CrawlersModule,
+    SocialTargetsModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppGateway],

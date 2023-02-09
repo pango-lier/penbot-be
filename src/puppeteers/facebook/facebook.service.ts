@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateFacebookDto } from './dto/create-facebook.dto';
+import {
+  CreateFacebookDto,
+  QueueDataFacebookDto,
+} from './dto/create-facebook.dto';
 import { UpdateFacebookDto } from './dto/update-facebook.dto';
 import { BrowserService } from '../browser/browser.service';
 import Facebook from './service';
@@ -12,6 +15,7 @@ export class FacebookService {
   constructor(
     private readonly browser: BrowserService,
     @InjectQueue('write-log') private readonly writeLog: Queue,
+    @InjectQueue('browser') private readonly browserQueue: Queue,
   ) {}
 
   async login() {
@@ -38,7 +42,15 @@ export class FacebookService {
     return `This action removes a #${id} facebook`;
   }
 
-  async createPostArticle(create: CreateFacebookPostArticleDto) {
+  async runMethodQueue(data: QueueDataFacebookDto) {
+    await this[data.actionMethod](data);
+  }
+  async addQueue(data: QueueDataFacebookDto) {
+    await this.browserQueue.add('facebook-service', data);
+  }
+
+  async createPostArticle(data: QueueDataFacebookDto) {
+    const create = data.data;
     try {
       const { core } = await this.browser.StartUp();
       const facebook = new Facebook(core);

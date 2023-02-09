@@ -17,17 +17,19 @@ export class CrawlerLinksService {
     private readonly social: Repository<Social>,
 
     private readonly paginateService: PaginateService,
-  ) { }
+  ) {}
   async create(createCrawlerLinkDto: CreateCrawlerLinkDto, userId: number) {
     const create = this.crawlerLink.create(createCrawlerLinkDto);
     create.userId = userId;
-    create.socials = await this.social.findBy({ id: In(createCrawlerLinkDto.socialIds) })
+    create.socials = await this.social.findBy({
+      id: In(createCrawlerLinkDto.socialIds),
+    });
     return this.crawlerLink.save(create);
   }
 
   async findAll(paginate: IPaginate, userId: number) {
     const q = this.crawlerLink.createQueryBuilder('crawler_link');
-    q.where("crawler_link.userId = :userId", { userId });
+    q.where('crawler_link.userId = :userId', { userId });
     q.leftJoinAndSelect('crawler_link.socials', 'socials');
     return await this.paginateService.queryFilter(q, paginate, [], {
       defaultTable: 'crawler_link',
@@ -45,7 +47,9 @@ export class CrawlerLinksService {
     update.description = updateCrawlerLinkDto.description;
     update.type = updateCrawlerLinkDto.type;
     update.target = updateCrawlerLinkDto.target;
-    update.socials = await this.social.findBy({ id: In(updateCrawlerLinkDto.socialIds) })
+    update.socials = await this.social.findBy({
+      id: In(updateCrawlerLinkDto.socialIds),
+    });
     return await this.crawlerLink.save(update);
   }
 
@@ -60,6 +64,9 @@ export class CrawlerLinksService {
           id,
         }),
         userId,
+      },
+      relations: {
+        socials: true,
       },
     });
   }

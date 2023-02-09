@@ -1,14 +1,15 @@
 import { Processor, WorkerHost, OnWorkerEvent } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
+import { FacebookService } from '@puppeteers/facebook/facebook.service';
 import { Job } from 'bullmq';
 
 @Processor('browser', {
   concurrency: 5,
   runRetryDelay: 300, // retry 200s
 })
-export class CrawlerQueue extends WorkerHost {
-  private readonly logger = new Logger(CrawlerQueue.name);
-  constructor() {
+export class BrowserQueue extends WorkerHost {
+  private readonly logger = new Logger(BrowserQueue.name);
+  constructor(private readonly facebook: FacebookService) {
     super();
   }
 
@@ -28,7 +29,10 @@ export class CrawlerQueue extends WorkerHost {
 
   async process(job: Job<any, any, string>, token?: string) {
     switch (job.name) {
-      case 'upload-image-to-cdn-listing':
+      case 'facebook-service':
+        await this.facebook.runMethodQueue(job.data);
+        break;
+      case 'google-service':
         break;
       default:
         this.logger.debug(

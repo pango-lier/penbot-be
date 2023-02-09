@@ -26,6 +26,7 @@ export class CrawlerProcessor extends WorkerHost {
         await this.crawlerService.crawlerVideoYoutubeLinkDirect(
           job.data.crawlerLink,
           job.data.options,
+          job.data.userIds,
         );
         break;
     }

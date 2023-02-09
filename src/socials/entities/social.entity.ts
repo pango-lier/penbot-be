@@ -1,4 +1,3 @@
-
 import { Article } from '@articles/entities/article.entity';
 import { CrawlerLink } from '@crawlers/crawler-links/entities/crawler-link.entity';
 import { Account } from '@users/accounts/entities/account.entity';
@@ -16,6 +15,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { SocialEnum } from './social.enum';
+import { Crawler } from '@crawlers/entities/crawler.entity';
+import { SocialTarget } from '@social-targets/entities/social-target.entity';
 
 @Entity()
 export class Social {
@@ -62,10 +63,10 @@ export class Social {
   })
   user?: User;
 
-  @OneToMany(() => Article, (article) => article.social, {
+  @OneToMany(() => SocialTarget, (u) => u.social, {
     nullable: true,
   })
-  articles?: Article[];
+  socialTarget?: Article[];
 
   @ManyToMany(() => CrawlerLink, (s) => s.socials, {
     nullable: true,
@@ -76,4 +77,12 @@ export class Social {
   @JoinTable()
   crawlerLinks?: CrawlerLink[];
 
+  @ManyToMany(() => Crawler, (s) => s.socials, {
+    nullable: true,
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinTable()
+  crawlers?: Crawler[];
 }

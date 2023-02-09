@@ -1,5 +1,4 @@
 import { Link } from '@links/entities/link.entity';
-import { Social } from '@socials/entities/social.entity';
 import {
   Column,
   CreateDateColumn,
@@ -11,6 +10,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { ArticleStatusEnum } from './article-status.enum';
+import { SocialTarget } from '@social-targets/entities/social-target.entity';
 
 @Entity()
 export class Article {
@@ -48,10 +48,10 @@ export class Article {
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 
-  @ManyToOne(() => Social, (social) => social.articles, {
+  @ManyToOne(() => SocialTarget, (social) => social.articles, {
     nullable: true,
   })
-  social?: Social;
+  socialTarget?: SocialTarget;
 
   @OneToMany(() => Link, (link) => link.article, { nullable: true })
   links?: Link[];

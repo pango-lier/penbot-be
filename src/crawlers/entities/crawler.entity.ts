@@ -1,11 +1,14 @@
 import { CrawlerLink } from '@crawlers/crawler-links/entities/crawler-link.entity';
 import { CrawlerStatusEnum } from '@crawlers/enum/crawler-link.enum';
+import { SocialTarget } from '@social-targets/entities/social-target.entity';
+import { Social } from '@socials/entities/social.entity';
 import { User } from '@users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -65,6 +68,12 @@ export class Crawler {
 
   @ManyToOne(() => CrawlerLink, (s) => s.crawler, { nullable: true })
   crawlerLinks?: CrawlerLink[];
+
+  @ManyToMany(() => Social, (s) => s.crawlers, { nullable: true })
+  socials?: Social[];
+
+  @ManyToMany(() => Social, (s) => s.crawlers, { nullable: true })
+  socialTargets?: SocialTarget[];
 
   @Column({ type: 'bigint', nullable: true })
   userId?: number;
