@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { SocialsService } from './socials.service';
 import { CreateSocialDto } from './dto/create-social.dto';
 import { UpdateSocialDto } from './dto/update-social.dto';
@@ -11,17 +20,22 @@ import { CurrentUser } from '@users/users.decorator';
 @Controller('socials')
 @UseGuards(jwtAuthGuard)
 export class SocialsController {
-  constructor(private readonly socialsService: SocialsService) { }
+  constructor(private readonly socialsService: SocialsService) {}
 
   @Post()
-  create(@Body() createSocialDto: CreateSocialDto, @CurrentUser() user: ICurrentUser) {
+  create(
+    @Body() createSocialDto: CreateSocialDto,
+    @CurrentUser() user: ICurrentUser,
+  ) {
     createSocialDto.userId = +user.id;
     return this.socialsService.create(createSocialDto);
   }
 
   @Get()
-  async findPage(@Paginate() paginate: IPaginate,
-    @CurrentUser() user: ICurrentUser) {
+  async findPage(
+    @Paginate() paginate: IPaginate,
+    @CurrentUser() user: ICurrentUser,
+  ) {
     const [result, total] = await this.socialsService.findPage(
       paginate,
       +user.id,

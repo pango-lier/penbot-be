@@ -4,4 +4,8 @@ export class CreateSocialTargetDto {
   link: string;
 
   targetType?: string;
+
+  social?: {
+    id: number;
+  };
 }

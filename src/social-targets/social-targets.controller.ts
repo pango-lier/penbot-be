@@ -6,12 +6,18 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Query,
 } from '@nestjs/common';
 import { SocialTargetsService } from './social-targets.service';
 import { CreateSocialTargetDto } from './dto/create-social-target.dto';
 import { UpdateSocialTargetDto } from './dto/update-social-target.dto';
+import { jwtAuthGuard } from '@auth/guards/jwt-auth.guard';
+import { CurrentUser } from '@users/users.decorator';
+import { ICurrentUser } from '@auth/interface/authenticated-user.interface';
 
 @Controller('social-targets')
+@UseGuards(jwtAuthGuard)
 export class SocialTargetsController {
   constructor(private readonly socialTargetsService: SocialTargetsService) {}
 
@@ -21,8 +27,11 @@ export class SocialTargetsController {
   }
 
   @Get()
-  findAll() {
-    return this.socialTargetsService.findAll();
+  findAll(
+    @Query('socialId') socialId: number,
+    @CurrentUser() user: ICurrentUser,
+  ) {
+    return this.socialTargetsService.findAll(socialId, +user.id);
   }
 
   @Get(':id')
