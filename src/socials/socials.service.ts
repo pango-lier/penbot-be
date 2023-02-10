@@ -47,6 +47,6 @@ export class SocialsService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} social`;
+    return this.repo.softDelete(id);
   }
 }

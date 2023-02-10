@@ -54,7 +54,7 @@ export class CrawlerLinksService {
   }
 
   remove(id: number, userId: number) {
-    return this.crawlerLink.delete({ id, userId });
+    return this.crawlerLink.softDelete({ id, userId });
   }
 
   async findArray(id: Array<number | string>, userId: number) {
