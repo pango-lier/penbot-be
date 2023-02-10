@@ -14,14 +14,14 @@ import { YoutubeDlService } from './youtube-dl/youtube-dl.service';
 import { PaginateService } from '@paginate/paginate.service';
 import { IPaginate } from '@paginate/interface/paginate.interface';
 import { PuppeteersService } from '@puppeteers/puppeteers.service';
-import { Social } from '@socials/entities/social.entity';
+import { SocialTarget } from '../social-targets/entities/social-target.entity';
 
 @Injectable()
 export class CrawlersService {
   constructor(
     @InjectRepository(Crawler) private readonly crawler: Repository<Crawler>,
-    @InjectRepository(Social)
-    private readonly social: Repository<Social>,
+    @InjectRepository(SocialTarget)
+    private readonly social: Repository<SocialTarget>,
     private readonly crawlerLinkService: CrawlerLinksService,
     @InjectQueue('crawler') private readonly crawlerQueue: Queue,
     @InjectQueue('write-log') private readonly writeLogQueue: Queue,
@@ -33,9 +33,9 @@ export class CrawlersService {
   async create(createCrawlerDto: CreateCrawlerDto, userId: number) {
     const create = this.crawler.create(createCrawlerDto);
     create.userId = userId;
-    if (createCrawlerDto?.socialIds) {
-      create.socials = await this.social.findBy({
-        id: In(createCrawlerDto.socialIds),
+    if (createCrawlerDto?.socialTargetIds) {
+      create.socialTargets = await this.social.findBy({
+        id: In(createCrawlerDto.socialTargetIds),
       });
     }
     return this.crawler.save(create);
@@ -61,9 +61,9 @@ export class CrawlersService {
     update.type = updateCrawlerDto.type;
     update.linkDownloaded = updateCrawlerDto.linkDownloaded;
     update.links = updateCrawlerDto.links;
-    if (updateCrawlerDto?.socialIds) {
-      update.socials = await this.social.findBy({
-        id: In(updateCrawlerDto.socialIds),
+    if (updateCrawlerDto?.socialTargetIds) {
+      update.socialTargets = await this.social.findBy({
+        id: In(updateCrawlerDto.socialTargetIds),
       });
     }
     return this.crawler.save(update);
@@ -115,13 +115,13 @@ export class CrawlersService {
         linkDownloaded: file.linkDownloaded,
         links: crawlerLink.target,
         meta: JSON.stringify(file.source),
-        socialIds: crawlerLink.socials.map((i) => i.id),
+        socialTargetIds: crawlerLink.socialTargets.map((i) => i.id),
       };
 
       const crawler = await this.create(createCrawler, crawlerLink.userId);
       await this.puppeteerService.posArticle(
         crawler,
-        crawlerLink.socials,
+        crawlerLink.socialTargets,
         userIds,
       );
       crawlerLink.status = CrawlerLinkStatusEnum.Success;

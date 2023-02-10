@@ -23,5 +23,5 @@ export class CreateCrawlerDto {
 
   userId?: number;
 
-  socialIds?: number[];
+  socialTargetIds?: number[];
 }

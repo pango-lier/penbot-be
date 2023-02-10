@@ -3,12 +3,10 @@ import { IsNumber, IsOptional, IsString } from 'class-validator';
 import { SocialEnum } from '../entities/social.enum';
 
 export class CreateSocialDto {
-
   @IsOptional()
   active?: boolean;
 
   @IsOptional()
-  @IsString()
   email?: string;
 
   @IsOptional()
@@ -28,12 +26,15 @@ export class CreateSocialDto {
   @IsNumber()
   userId?: number;
 
+  @IsOptional()
   @Type(() => Date)
   deletedAt?: Date;
 
+  @IsOptional()
   @Type(() => Date)
   createdAt?: Date;
 
+  @IsOptional()
   @Type(() => Date)
   updatedAt?: Date;
 }

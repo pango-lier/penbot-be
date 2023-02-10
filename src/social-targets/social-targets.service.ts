@@ -16,7 +16,25 @@ export class SocialTargetsService {
     return await this.socialTarget.save(newSocialTarget);
   }
 
-  async findAll(socialId: number, userId: number) {
+  async findRaw(userId: number) {
+    return await this.socialTarget.find({
+      where: {
+        social: { userId },
+      },
+      relations: {
+        social: true,
+      },
+      select: {
+        articles: true,
+        social: {
+          name: true,
+          socialType: true,
+        },
+      },
+    });
+  }
+
+  async findSocialId(socialId: number, userId: number) {
     return await this.socialTarget.find({
       where: {
         social: { id: socialId },
@@ -37,6 +55,6 @@ export class SocialTargetsService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} socialTarget`;
+    return this.socialTarget.softDelete(id);
   }
 }

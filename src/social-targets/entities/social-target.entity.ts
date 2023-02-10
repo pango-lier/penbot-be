@@ -13,6 +13,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { CrawlerLink } from '../../crawlers/crawler-links/entities/crawler-link.entity';
 
 @Entity()
 export class SocialTarget {
@@ -50,6 +51,15 @@ export class SocialTarget {
     nullable: true,
   })
   articles?: Article[];
+
+  @ManyToMany(() => CrawlerLink, (s) => s.socialTargets, {
+    nullable: true,
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinTable()
+  crawlerLinks?: CrawlerLink[];
 
   @ManyToOne(() => Social, (u) => u.socialTarget, { nullable: true })
   social?: Social;

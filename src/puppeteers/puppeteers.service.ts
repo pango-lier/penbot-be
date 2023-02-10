@@ -6,6 +6,7 @@ import { CrawlerLink } from '@crawlers/crawler-links/entities/crawler-link.entit
 import { Crawler } from '@crawlers/entities/crawler.entity';
 import { CreateFacebookPostArticleDto } from './facebook/dto/create-facebook-post-article.dto';
 import { Social } from '@socials/entities/social.entity';
+import { SocialTarget } from '../social-targets/entities/social-target.entity';
 
 @Injectable()
 export class PuppeteersService {
@@ -33,13 +34,13 @@ export class PuppeteersService {
 
   async posArticle(
     crawler: Crawler,
-    socials: Social[],
+    socialTargets: SocialTarget[],
     userIds: Array<number>,
   ) {
-    for (const social of socials) {
+    for (const socialTarget of socialTargets) {
       const data: CreateFacebookPostArticleDto = {
-        username: social.username,
-        password: social.password,
+        username: socialTarget.social.username,
+        password: socialTarget.social.password,
         imagePaths: [crawler.linkDownloaded],
         content: crawler.name,
         target: '',

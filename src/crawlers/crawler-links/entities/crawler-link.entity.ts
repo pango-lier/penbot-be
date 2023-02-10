@@ -1,4 +1,3 @@
-
 import { CrawlerConfig } from '@crawlers/crawler-configs/entities/crawler-config.entity';
 import { Crawler } from '@crawlers/entities/crawler.entity';
 import { Social } from '@socials/entities/social.entity';
@@ -21,6 +20,7 @@ import {
   QualityEnum,
   TypeFileEnum,
 } from './crawler-link.enum';
+import { SocialTarget } from '../../../social-targets/entities/social-target.entity';
 
 @Entity()
 export class CrawlerLink {
@@ -85,8 +85,8 @@ export class CrawlerLink {
   @Column({ type: 'timestamp', nullable: true })
   runEndAt?: Date;
 
-  @ManyToMany(() => Social, (s) => s.crawlerLinks, { nullable: true })
-  socials?: Social[];
+  @ManyToMany(() => SocialTarget, (s) => s.crawlerLinks, { nullable: true })
+  socialTargets?: SocialTarget[];
 
   @OneToMany(() => Crawler, (s) => s.crawlerLinks, { nullable: true })
   crawler?: Crawler;

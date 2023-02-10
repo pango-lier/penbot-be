@@ -7,7 +7,6 @@ import {
 } from '../entities/crawler-link.enum';
 
 export class CreateCrawlerLinkDto {
-
   @IsOptional()
   name?: string;
 
@@ -24,7 +23,7 @@ export class CreateCrawlerLinkDto {
 
   target: string;
 
-  socialIds?: number[];
+  socialTargetIds?: number[];
 
   accountId?: number | string;
 

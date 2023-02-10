@@ -6,23 +6,23 @@ import { CrawlerLink } from './entities/crawler-link.entity';
 import { In, Raw, Repository } from 'typeorm';
 import { IPaginate } from '@paginate/interface/paginate.interface';
 import { PaginateService } from '@paginate/paginate.service';
-import { Social } from '@socials/entities/social.entity';
+import { SocialTarget } from '../../social-targets/entities/social-target.entity';
 
 @Injectable()
 export class CrawlerLinksService {
   constructor(
     @InjectRepository(CrawlerLink)
     private readonly crawlerLink: Repository<CrawlerLink>,
-    @InjectRepository(Social)
-    private readonly social: Repository<Social>,
+    @InjectRepository(SocialTarget)
+    private readonly socialTarget: Repository<SocialTarget>,
 
     private readonly paginateService: PaginateService,
   ) {}
   async create(createCrawlerLinkDto: CreateCrawlerLinkDto, userId: number) {
     const create = this.crawlerLink.create(createCrawlerLinkDto);
     create.userId = userId;
-    create.socials = await this.social.findBy({
-      id: In(createCrawlerLinkDto.socialIds),
+    create.socialTargets = await this.socialTarget.findBy({
+      id: In(createCrawlerLinkDto.socialTargetIds),
     });
     return this.crawlerLink.save(create);
   }
@@ -30,7 +30,7 @@ export class CrawlerLinksService {
   async findAll(paginate: IPaginate, userId: number) {
     const q = this.crawlerLink.createQueryBuilder('crawler_link');
     q.where('crawler_link.userId = :userId', { userId });
-    q.leftJoinAndSelect('crawler_link.socials', 'socials');
+    q.leftJoinAndSelect('crawler_link.socialTargets', 'socialTargets');
     return await this.paginateService.queryFilter(q, paginate, [], {
       defaultTable: 'crawler_link',
       getQuery: 'getMany',
@@ -47,8 +47,8 @@ export class CrawlerLinksService {
     update.description = updateCrawlerLinkDto.description;
     update.type = updateCrawlerLinkDto.type;
     update.target = updateCrawlerLinkDto.target;
-    update.socials = await this.social.findBy({
-      id: In(updateCrawlerLinkDto.socialIds),
+    update.socialTargets = await this.socialTarget.findBy({
+      id: In(updateCrawlerLinkDto.socialTargetIds),
     });
     return await this.crawlerLink.save(update);
   }
@@ -66,7 +66,7 @@ export class CrawlerLinksService {
         userId,
       },
       relations: {
-        socials: true,
+        socialTargets: true,
       },
     });
   }

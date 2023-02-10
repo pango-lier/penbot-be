@@ -27,7 +27,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
       statusCode: httpStatus,
       timestamp: new Date().toISOString(),
       path: httpAdapter.getRequestUrl(ctx.getRequest()),
-      msg: exception?.message || 'Server error .',
+      msg:
+        exception?.response?.message || exception?.message || 'Server error .',
       status: 'error',
     };
 

@@ -26,12 +26,17 @@ export class SocialTargetsController {
     return this.socialTargetsService.create(createSocialTargetDto);
   }
 
+  @Get('find-all-raw')
+  findAllRaw(@CurrentUser() user: ICurrentUser) {
+    return this.socialTargetsService.findRaw(+user.id);
+  }
+
   @Get()
-  findAll(
+  findSocialId(
     @Query('socialId') socialId: number,
     @CurrentUser() user: ICurrentUser,
   ) {
-    return this.socialTargetsService.findAll(socialId, +user.id);
+    return this.socialTargetsService.findSocialId(socialId, +user.id);
   }
 
   @Get(':id')
