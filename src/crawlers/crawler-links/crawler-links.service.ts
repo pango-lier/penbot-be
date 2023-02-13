@@ -17,7 +17,7 @@ export class CrawlerLinksService {
     private readonly socialTarget: Repository<SocialTarget>,
 
     private readonly paginateService: PaginateService,
-  ) {}
+  ) { }
   async create(createCrawlerLinkDto: CreateCrawlerLinkDto, userId: number) {
     const create = this.crawlerLink.create(createCrawlerLinkDto);
     create.userId = userId;
@@ -44,7 +44,8 @@ export class CrawlerLinksService {
   async update(id: number, updateCrawlerLinkDto: UpdateCrawlerLinkDto) {
     const update = await this.crawlerLink.findOneBy({ id });
     update.name = updateCrawlerLinkDto.name;
-    update.description = updateCrawlerLinkDto.description;
+    update.countCrawl = updateCrawlerLinkDto.countCrawl;
+    update.limitCrawl = updateCrawlerLinkDto.limitCrawl;
     update.type = updateCrawlerLinkDto.type;
     update.target = updateCrawlerLinkDto.target;
     update.socialTargets = await this.socialTarget.findBy({

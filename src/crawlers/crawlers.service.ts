@@ -74,22 +74,18 @@ export class CrawlersService {
   }
 
   async runQueueCrawler(runCrawler: RunCrawlerQueueDto, userId: number) {
-    const crawlerLinks = await this.crawlerLinkService.findArray(
-      runCrawler.ids,
-      userId,
-    );
-    // await this.crawlerYoutubeNormal(
-    //   crawlerLinks[0],
-    //   runCrawler.options,
+    // const crawlerLinks = await this.crawlerLinkService.findArray(
+    //   runCrawler.ids,
+    //   userId,
     // );
-    await crawlerLinks.forEach(async (crawlerLink) => {
-      if (crawlerLink.type)
-        this.crawlerQueue.add(crawlerLink.type, {
-          crawlerLink,
-          options: runCrawler.options,
-          userIds: [userId],
-        });
-    });
+    // await crawlerLinks.forEach(async (crawlerLink) => {
+    //   if (crawlerLink.type)
+    //     this.crawlerQueue.add(crawlerLink.type, {
+    //       crawlerLink,
+    //       options: runCrawler.options,
+    //       userIds: [userId],
+    //     });
+    // });
 
     return true;
   }

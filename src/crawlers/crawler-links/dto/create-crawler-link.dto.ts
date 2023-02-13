@@ -10,9 +10,6 @@ export class CreateCrawlerLinkDto {
   @IsOptional()
   name?: string;
 
-  @IsOptional()
-  description?: string;
-
   quality?: QualityEnum;
 
   typeFile?: TypeFileEnum;
@@ -22,6 +19,12 @@ export class CreateCrawlerLinkDto {
   type?: CrawlerLinkEnum;
 
   target: string;
+
+  @IsOptional()
+  limitCrawl?: number;
+
+  @IsOptional()
+  countCrawl?: number;
 
   socialTargetIds?: number[];
 

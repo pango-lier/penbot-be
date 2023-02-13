@@ -30,8 +30,11 @@ export class CrawlerLink {
   @Column({ type: 'varchar', nullable: true })
   name: string;
 
-  @Column({ type: 'varchar', nullable: true })
-  description: string;
+  @Column({ type: 'bigint', nullable: true, default: 1 })
+  limitCrawl: number;
+
+  @Column({ type: 'bigint', nullable: true, default: 0 })
+  countCrawl: number;
 
   @Column({ type: 'text', nullable: true })
   message?: string;
