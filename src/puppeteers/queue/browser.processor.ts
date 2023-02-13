@@ -4,7 +4,7 @@ import { FacebookService } from '@puppeteers/facebook/facebook.service';
 import { Job } from 'bullmq';
 
 @Processor('browser', {
-  concurrency: 5,
+  concurrency: 1,
   runRetryDelay: 300, // retry 200s
 })
 export class BrowserQueue extends WorkerHost {
@@ -15,16 +15,17 @@ export class BrowserQueue extends WorkerHost {
 
   @OnWorkerEvent('active')
   OnWorkerEvent(job: Job) {
-    this.logger.debug(
-      `OnWorkerEvent  ${job.id} of type ${job.name} with data ${job.data}...`,
-    );
+    this.logger.debug(`OnWorker Active  ${job.id} of type ${job.name}`);
+  }
+
+  @OnWorkerEvent('completed')
+  OnWorkerEventCompleted(job: Job) {
+    this.logger.debug(`OnWorkerEvent Completed  ${job.id} of type ${job.name}`);
   }
 
   @OnWorkerEvent('error')
   OnWorkerEventFailed(job: Job) {
-    this.logger.debug(
-      `Error OnWorkerEvent  ${job.id} of type ${job.name} with data ${job.data}...`,
-    );
+    this.logger.debug(`Error OnWorkerEvent  ${job.id} of type ${job.name}`);
   }
 
   async process(job: Job<any, any, string>, token?: string) {
@@ -35,14 +36,10 @@ export class BrowserQueue extends WorkerHost {
       case 'google-service':
         break;
       default:
-        this.logger.debug(
-          `Job name is not founded. OnWorkerEvent  ${job.id} of type ${job.name} with data ${job.data}...`,
-        );
+        this.logger.debug(`Job name is not founded`);
         break;
     }
-    console.log(
-      `Processing job ${job.id} of type ${job.name} with data ${job.data}... ${token}`,
-    );
+    console.log(`Processing job ${job.id} of type ${job.name}`);
   }
 
   async uploadImageToCdnListing(id, userId) {}
