@@ -22,6 +22,7 @@ export class CoreService {
   }
 
   async goto(url): Promise<HTTPResponse> {
+    console.log(`goto >> ${url}`);
     return this.page.goto(url, {
       waitUntil: 'networkidle2',
     });

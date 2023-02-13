@@ -55,7 +55,6 @@ export class FacebookService {
       const { core } = await this.browser.StartUp();
       const facebook = new Facebook(core);
       await facebook.Login.login(create.username, create.password);
-      console.log('facebook.Login.login');
       await core.delay(2);
       await facebook.FanPage.goto(create.target);
       await facebook.FanPage.publishContent({

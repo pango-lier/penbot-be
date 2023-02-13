@@ -13,6 +13,7 @@ export const switchPage = async (core: CoreService) => {
       1000,
     )
   ) {
+    console.log('switchPage', await core.checkSelector(ACTION_SWITCH_PAGE));
     await core.click(ACTION_SWITCH_PAGE);
   }
 };
