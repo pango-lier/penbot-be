@@ -52,7 +52,12 @@ export class FacebookService {
   async createPostArticle(data: QueueDataFacebookDto) {
     const create = data.data;
     try {
-      const { core } = await this.browser.StartUp();
+      const { core } = await this.browser.StartUp({
+        profile: create.username,
+        userDataDir:
+          '/home/trong/Desktop/penbot/penbot-be/tmp/facebook/profile_' +
+          create.username,
+      });
       const facebook = new Facebook(core);
       await facebook.Login.login(create.username, create.password);
       await core.delay(2);

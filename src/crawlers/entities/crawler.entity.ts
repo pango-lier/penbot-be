@@ -29,7 +29,7 @@ export class Crawler {
   @Column({ type: 'bigint', nullable: true })
   size?: number;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: 'text', nullable: true })
   tags?: string;
 
   @Column({

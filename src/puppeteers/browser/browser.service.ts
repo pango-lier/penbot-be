@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import puppeteer, { Browser, Page } from 'puppeteer';
 import { CoreService } from '../core/core.service';
+export interface IBrowserArgs {
+  userDataDir?: string;
+  [key: string]: string | number;
+}
 
 interface IBrowserStart {
   browser: Browser;
@@ -11,8 +15,8 @@ interface IBrowserStart {
 @Injectable()
 export class BrowserService {
   private browser: Browser;
-  async StartUp(): Promise<IBrowserStart> {
-    const browser = await this.start();
+  async StartUp(argObs?: IBrowserArgs): Promise<IBrowserStart> {
+    const browser = await this.start(argObs);
     const page = await browser.newPage();
 
     const core = new CoreService(page);
@@ -21,7 +25,11 @@ export class BrowserService {
     return { browser, core, page };
   }
 
-  async start(): Promise<Browser> {
+  async start(argObs: IBrowserArgs = {}): Promise<Browser> {
+    const args = [];
+    if (argObs.userDataDir) {
+      args.push(`--user-data-dir=${argObs.userDataDir}`);
+    }
     return await puppeteer.launch({
       headless: true,
       ignoreDefaultArgs: true,
@@ -31,7 +39,7 @@ export class BrowserService {
       executablePath: process.env.CHROME_BIN,
       args: [
         '--no-sandbox',
-        '--headless',
+        // '--headless',
         // "--disable-gpu",
         '--disable-dev-shm-usage',
         '--disable-backgrounding-occluded-windows',
@@ -52,6 +60,7 @@ export class BrowserService {
         '--disable-renderer-backgrounding',
         '--disable-background-networking',
         '--disable-features=RendererCodeIntegrity',
+        ...args,
       ],
     });
   }
