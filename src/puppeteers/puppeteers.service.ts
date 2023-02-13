@@ -43,7 +43,7 @@ export class PuppeteersService {
         password: socialTarget.social.password,
         imagePaths: [crawler.linkDownloaded],
         content: crawler.name,
-        target: '',
+        target: socialTarget.link,
       };
       await this.facebookService.addQueue({
         actionMethod: 'createPostArticle',

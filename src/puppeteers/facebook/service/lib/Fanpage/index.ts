@@ -26,7 +26,7 @@ class FanPage {
       await this.clickSwitchPage();
       await postContent(this.core, fanPage.content, fanPage.imagePaths);
     } catch (error) {
-      console.log('postContent' + error.message);
+      console.log('publishContent ' + error.message);
     }
   }
   async inviteFriend() {

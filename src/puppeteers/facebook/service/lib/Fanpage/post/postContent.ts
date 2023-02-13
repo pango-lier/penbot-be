@@ -7,6 +7,7 @@ export const postContent = async (
 ) => {
   // click pop up
   await core.delay(3);
+  console.log('postContent ' + (await core.location()));
   await core.try(
     async () => await core.clickContentSelectorMatch('span', ['Ảnh/video']),
     5,

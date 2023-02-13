@@ -66,12 +66,15 @@ export class CrawlerLinksService {
         userId,
       },
       relations: {
-        socialTargets: true,
+        socialTargets: {
+          social: true,
+        },
       },
     });
   }
 
   async updateEntity(crawlerLink: CrawlerLink) {
+    console.log(crawlerLink);
     return await this.crawlerLink.save(crawlerLink);
   }
 }
