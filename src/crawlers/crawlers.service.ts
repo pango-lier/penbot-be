@@ -70,7 +70,7 @@ export class CrawlersService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} crawler`;
+    return this.crawler.softDelete(id);
   }
 
   async runQueueCrawler(runCrawler: RunCrawlerQueueDto, userId: number) {
