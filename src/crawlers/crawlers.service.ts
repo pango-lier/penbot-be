@@ -78,7 +78,7 @@ export class CrawlersService {
       runCrawler.ids,
       userId,
     );
-    // await this.crawlerVideoYoutubeLinkDirect(
+    // await this.crawlerYoutubeNormal(
     //   crawlerLinks[0],
     //   runCrawler.options,
     // );
@@ -94,7 +94,7 @@ export class CrawlersService {
     return true;
   }
 
-  async crawlerVideoYoutubeLinkDirect(
+  async crawlerYoutubeNormal(
     crawlerLink: CrawlerLink,
     options?: any,
     userIds = [],

@@ -23,7 +23,7 @@ export class CrawlerProcessor extends WorkerHost {
       case CrawlerLinkEnum.Auto:
         break;
       case CrawlerLinkEnum.Normal:
-        await this.crawlerService.crawlerVideoYoutubeLinkDirect(
+        await this.crawlerService.crawlerYoutubeNormal(
           job.data.crawlerLink,
           job.data.options,
           job.data.userIds,
