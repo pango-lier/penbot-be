@@ -1,3 +1,4 @@
+import { CrawlerLink } from "@crawlers/crawler-links/entities/crawler-link.entity";
 import { SocialEnum } from "@socials/entities/social.enum";
 
 
@@ -6,7 +7,7 @@ export class RunCrawlerQueueOptionDto {
 }
 
 export class RunCrawlerQueueDto {
-  id: Array<string | number>;
-  name: string;
+  ids: Array<string | number>;
+  commands?: string;
   options?: any;
 }

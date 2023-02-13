@@ -23,11 +23,12 @@ import { Paginate } from '@paginate/decorator/paginate';
 export class CrawlersController {
   constructor(private readonly crawlersService: CrawlersService) {}
 
-  @Post('run')
+  @Post('run-queues')
   runQueueCrawler(
     @Body() options: RunCrawlerQueueDto,
     @CurrentUser() user: ICurrentUser,
   ) {
+    console.log(options);
     return this.crawlersService.runQueueCrawler(options, +user.id);
   }
 

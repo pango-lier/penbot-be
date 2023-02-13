@@ -75,7 +75,7 @@ export class CrawlersService {
 
   async runQueueCrawler(runCrawler: RunCrawlerQueueDto, userId: number) {
     const crawlerLinks = await this.crawlerLinkService.findArray(
-      runCrawler.id,
+      runCrawler.ids,
       userId,
     );
     // await this.crawlerVideoYoutubeLinkDirect(
