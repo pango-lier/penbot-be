@@ -26,7 +26,7 @@ export const fetchVideo = async (url, filename, requestOptions = undefined) => {
 
 export const createLocalFile = (
   path: string,
-  dirLocal: string = '/home/trong/Desktop/penbot/penbot-be/tmp',
+  dirLocal: string = '/home/trong/Desktop/penbot-be/tpm',
 ): string => {
   let fileName = path;
   const folderArray = path.split('/');

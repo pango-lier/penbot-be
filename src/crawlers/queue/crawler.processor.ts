@@ -20,9 +20,9 @@ export class CrawlerProcessor extends WorkerHost {
 
   async process(job: Job<any, any, string>, token?: string) {
     switch (job.name) {
-      case CrawlerLinkEnum.YoutubeShort:
+      case CrawlerLinkEnum.Auto:
         break;
-      case CrawlerLinkEnum.YoutubeVideoDirect:
+      case CrawlerLinkEnum.Normal:
         await this.crawlerService.crawlerVideoYoutubeLinkDirect(
           job.data.crawlerLink,
           job.data.options,

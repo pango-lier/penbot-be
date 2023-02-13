@@ -43,7 +43,7 @@ export class YoutubeDlService {
     let maxFile;
     let maxVideo;
     let maxAudio;
-
+ 
     for (const format of output.formats) {
       if (format.acodec === 'none') {
         if (format.quality === options.quality) {
@@ -56,7 +56,8 @@ export class YoutubeDlService {
         }
       }
       if (format.vcodec !== 'none' && format.acodec !== 'none') {
-        if (format.quality === options.quality) {
+        console.log(format.quality);
+        if (format.quality === 8) {
           maxFile = format;
         }
       }
