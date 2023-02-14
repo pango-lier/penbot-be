@@ -19,17 +19,7 @@ export class CrawlerProcessor extends WorkerHost {
   }
 
   async process(job: Job<any, any, string>, token?: string) {
-    switch (job.name) {
-      case CrawlerLinkEnum.Auto:
-        break;
-      case CrawlerLinkEnum.Normal:
-        await this.crawlerService.crawlerYoutubeNormal(
-          job.data.crawlerLink,
-          job.data.options,
-          job.data.userIds,
-        );
-        break;
-    }
+    await this.crawlerService.queueHandle(job.name, job.data);
     console.log(
       `Processing job ${job.id} of type ${job.name} with data ${job.data}... ${token}`,
     );

@@ -1,10 +1,7 @@
-import { CrawlerLinkEnum } from "@crawlers/crawler-links/entities/crawler-link.enum";
+import { CreateCrawlerLinkDto } from '../crawler-links/dto/create-crawler-link.dto';
 
 export class RunCrawlerQueueDto {
-  commands?: CrawlerLinkEnum;
-  crawler?: {
-    type?: CrawlerLinkEnum,
-    target?: string,
-    [key: string]: string | number,
-  }
+  crawlerLinks?: CreateCrawlerLinkDto[];
+  commands: 'crawlerYoutubeNormal' | 'crawlerYoutubeAuto';
+  crawlerLinkIds?: number[];
 }

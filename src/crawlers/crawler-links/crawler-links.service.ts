@@ -17,7 +17,7 @@ export class CrawlerLinksService {
     private readonly socialTarget: Repository<SocialTarget>,
 
     private readonly paginateService: PaginateService,
-  ) { }
+  ) {}
   async create(createCrawlerLinkDto: CreateCrawlerLinkDto, userId: number) {
     const create = this.crawlerLink.create(createCrawlerLinkDto);
     create.userId = userId;
@@ -37,8 +37,8 @@ export class CrawlerLinksService {
     });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} crawlerLink`;
+  async findOne(id: number) {
+    return await this.crawlerLink.findOneBy({ id });
   }
 
   async update(id: number, updateCrawlerLinkDto: UpdateCrawlerLinkDto) {
@@ -75,7 +75,6 @@ export class CrawlerLinksService {
   }
 
   async updateEntity(crawlerLink: CrawlerLink) {
-    console.log(crawlerLink);
     return await this.crawlerLink.save(crawlerLink);
   }
 }

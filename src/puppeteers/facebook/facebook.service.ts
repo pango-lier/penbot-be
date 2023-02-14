@@ -9,6 +9,7 @@ import Facebook from './service';
 import { CreateFacebookPostArticleDto } from './dto/create-facebook-post-article.dto';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
+import { createLocalFile } from '../../utils/file/fetchVideo';
 
 @Injectable()
 export class FacebookService {
@@ -54,9 +55,7 @@ export class FacebookService {
     try {
       const { core } = await this.browser.StartUp({
         profile: create.username,
-        userDataDir:
-          '/home/trong/Desktop/penbot/penbot-be/tmp/facebook/profile_' +
-          create.username,
+        userDataDir: createLocalFile('', 'home/penbot/extendtion/facebook'),
       });
       const facebook = new Facebook(core);
       await facebook.Login.login(create.username, create.password);

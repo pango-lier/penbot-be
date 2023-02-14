@@ -74,30 +74,36 @@ export class CrawlersService {
   }
 
   async runQueueCrawler(runCrawler: RunCrawlerQueueDto, userId: number) {
-    // const crawlerLinks = await this.crawlerLinkService.findArray(
-    //   runCrawler.ids,
-    //   userId,
-    // );
-    // await crawlerLinks.forEach(async (crawlerLink) => {
-    //   if (crawlerLink.type)
-    //     this.crawlerQueue.add(crawlerLink.type, {
-    //       crawlerLink,
-    //       options: runCrawler.options,
-    //       userIds: [userId],
-    //     });
-    // });
+    const crawlerLinks: CrawlerLink[] = [];
+    for (const crawlerLinkDto of runCrawler?.crawlerLinks || []) {
+      crawlerLinks.push(
+        await this.crawlerLinkService.create(crawlerLinkDto, userId),
+      );
+    }
 
-    return true;
+    for (const crawlerLinkDto of runCrawler?.crawlerLinkIds || []) {
+      crawlerLinks.push(await this.crawlerLinkService.findOne(crawlerLinkDto));
+    }
+
+    for (const crawlerLink of crawlerLinks) {
+      await this.crawlerQueue.add(runCrawler.commands, {
+        crawlerLinkId: crawlerLink.id,
+        userIds: [userId],
+      });
+    }
+
+    return crawlerLinks;
   }
 
-  async crawlerYoutubeNormal(
-    crawlerLink: CrawlerLink,
-    options?: any,
-    userIds = [],
-  ) {
+  async queueHandle(jobName = 'crawlerYoutubeNormal', data) {
+    await this[jobName](data);
+  }
+
+  async crawlerYoutubeNormal({ crawlerLinkId, userIds }) {
+    const crawlerLink = await this.crawlerLinkService.findOne(crawlerLinkId);
     try {
       crawlerLink.status = CrawlerLinkStatusEnum.Processing;
-      crawlerLink = await this.crawlerLinkService.updateEntity(crawlerLink);
+      await this.crawlerLinkService.updateEntity(crawlerLink);
       const file = await this.youtubeDlService.downloadFile(
         crawlerLink.target,
         { quality: crawlerLink.quality, typeFile: crawlerLink.typeFile },
@@ -121,11 +127,11 @@ export class CrawlersService {
         userIds,
       );
       crawlerLink.status = CrawlerLinkStatusEnum.Success;
-      crawlerLink = await this.crawlerLinkService.updateEntity(crawlerLink);
+      await this.crawlerLinkService.updateEntity(crawlerLink);
     } catch (error) {
       crawlerLink.status = CrawlerLinkStatusEnum.Error;
       crawlerLink.message = error.message;
-      crawlerLink = await this.crawlerLinkService.updateEntity(crawlerLink);
+      await this.crawlerLinkService.updateEntity(crawlerLink);
       throw new Error(error.message);
     }
 
