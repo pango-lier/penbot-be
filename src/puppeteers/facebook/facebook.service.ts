@@ -54,8 +54,8 @@ export class FacebookService {
     const create = data.data;
     try {
       const dirProfile = createLocalFile(
-        '',
-        `/tmp/trong/extensions/facebook/profile_${create.username}`,
+        'profile_' + create.username,
+        `/tmp/trong/extensions/facebook`,
       );
       const { core } = await this.browser.StartUp({
         profile: create.username,
