@@ -53,9 +53,13 @@ export class FacebookService {
   async createPostArticle(data: QueueDataFacebookDto) {
     const create = data.data;
     try {
+      const dirProfile = createLocalFile(
+        '',
+        `/tmp/trong/extensions/facebook/profile_${create.username}`,
+      );
       const { core } = await this.browser.StartUp({
         profile: create.username,
-        userDataDir: createLocalFile('', '/tmp/extensions/facebook'),
+        userDataDir: dirProfile,
       });
       const facebook = new Facebook(core);
       await facebook.Login.login(create.username, create.password);
