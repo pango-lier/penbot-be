@@ -55,7 +55,7 @@ export class FacebookService {
     try {
       const { core } = await this.browser.StartUp({
         profile: create.username,
-        userDataDir: createLocalFile('', 'home/penbot/extendtion/facebook'),
+        userDataDir: createLocalFile('', 'home/trong/extendtion/facebook'),
       });
       const facebook = new Facebook(core);
       await facebook.Login.login(create.username, create.password);
