@@ -26,7 +26,7 @@ export const fetchVideo = async (url, filename, requestOptions = undefined) => {
 
 export const createLocalFile = (
   path: string,
-  dirLocal: string = '/tpm/trong/download',
+  dirLocal: string = '/tmp/trong/download',
 ): string => {
   let fileName = path;
   const folderArray = path.split('/');
