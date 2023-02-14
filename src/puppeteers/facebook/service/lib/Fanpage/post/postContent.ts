@@ -53,6 +53,7 @@ const waitingUploadVideo = async (core: CoreService) => {
       return true;
     }
     const content = await core.getContentSelector(selector);
+    console.log(`Upload Facebook Video: ${content}`);
     if (content == '100%') return true;
     return false;
   }, 100); //00s

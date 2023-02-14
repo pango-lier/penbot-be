@@ -38,7 +38,14 @@ export class CrawlerLinksService {
   }
 
   async findOne(id: number) {
-    return await this.crawlerLink.findOneBy({ id });
+    return await this.crawlerLink.findOne({
+      where: { id },
+      relations: {
+        socialTargets: {
+          social: true,
+        },
+      },
+    });
   }
 
   async update(id: number, updateCrawlerLinkDto: UpdateCrawlerLinkDto) {
