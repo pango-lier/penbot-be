@@ -104,7 +104,7 @@ export class CoreService {
       try {
         await delay(0.3);
         await fs.unlinkSync(pathFile);
-      } catch (e) {}
+      } catch (e) { }
     });
 
     return true;
@@ -146,6 +146,17 @@ export class CoreService {
     return this.page.evaluate((params) => {
       return document.querySelector(params) === null ? false : true;
     }, params);
+  }
+
+  checkSelectors(selectors: string[]) {
+    return this.page.evaluate((selectors) => {
+      let res: string | boolean = false;
+      for (const selector of selectors) {
+        res = document.querySelector(selector) === null ? false : selector;
+        if (res) return res;
+      }
+      return res;
+    }, selectors);
   }
 
   checkDisabledSelector(params, attribute = 'disabled') {
@@ -235,8 +246,10 @@ export class CoreService {
   async try(callback, loop = 4, delay_ms = 1000) {
     for (let i = 0; i < loop; i++) {
       try {
-        if (await callback()) {
-          return true;
+        const value = await callback();
+        console.log(value);
+        if (value) {
+          return value;
         }
       } catch (error) {
         console.log('try error ' + error.message);
