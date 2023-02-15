@@ -23,7 +23,7 @@ export const postContent = async (
     core.click('.x1i10hfl > .x78zum5 > .x9f619 > .x1n2onr6 > .x9f619'),
   );
 
-  await core.delay(15);
+  await core.delay(13);
   const disable = await core.getAttributeSelector(
     'div[aria-label="Đăng"]',
     'aria-disabled',
@@ -32,9 +32,9 @@ export const postContent = async (
   await core.delay(5);
   // watting upload video ;
   await waitingUploadVideo(core);
-  await core.delay(5);
+  await core.delay(3);
   await core.click('div[aria-label="Đăng"]');
-  await core.delay(10);
+  await core.delay(7);
   await core.page.waitForSelector(
     '.x9f619 > .x6s0dn4 > .x78zum5 > .always-enable-animations > .always-enable-animations',
     {
