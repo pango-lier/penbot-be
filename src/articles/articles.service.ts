@@ -56,7 +56,6 @@ export class ArticlesService {
         socialTargets: {
           social: true,
         },
-        crawler: true,
       },
     });
   }

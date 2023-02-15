@@ -51,7 +51,7 @@ export class Article {
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 
-  @ManyToMany(() => SocialTarget, (s) => s.crawlerLinks, { nullable: true })
+  @ManyToMany(() => SocialTarget, (s) => s.articles, { nullable: true })
   socialTargets?: SocialTarget[];
 
   @ManyToOne(() => Crawler, (s) => s.articles, { nullable: true })
