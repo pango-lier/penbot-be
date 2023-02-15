@@ -8,6 +8,7 @@ import { IPaginate } from '@paginate/interface/paginate.interface';
 import { PaginateService } from '@paginate/paginate.service';
 import { LinksService } from '../links/links.service';
 import { Link } from '../links/entities/link.entity';
+import { SocialTarget } from '../social-targets/entities/social-target.entity';
 
 @Injectable()
 export class ArticlesService {
@@ -15,6 +16,8 @@ export class ArticlesService {
     @InjectRepository(Article) private readonly article: Repository<Article>,
     private readonly paginateService: PaginateService,
     private readonly linkService: LinksService,
+    @InjectRepository(SocialTarget)
+    private readonly socialTarget: Repository<SocialTarget>,
   ) {}
   async create(createArticleDto: CreateArticleDto, userId?: number) {
     const createArticle = this.article.create(createArticleDto);
@@ -25,6 +28,9 @@ export class ArticlesService {
       }
       createArticle.links = links;
     }
+    createArticle.socialTargets = await this.socialTarget.findBy({
+      id: In(createArticleDto.socialTargetIds),
+    });
     createArticle.userId = userId;
     return this.article.save(createArticle);
   }
@@ -56,6 +62,7 @@ export class ArticlesService {
         socialTargets: {
           social: true,
         },
+        links: true,
       },
     });
   }
