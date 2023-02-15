@@ -4,4 +4,6 @@ export class CreateFacebookPostArticleDto {
   target: string;
   content: string;
   imagePaths: string[];
+  tags?: string[];
+  [key: string]: any;
 }

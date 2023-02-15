@@ -7,6 +7,7 @@ import { Crawler } from '@crawlers/entities/crawler.entity';
 import { CreateFacebookPostArticleDto } from './facebook/dto/create-facebook-post-article.dto';
 import { Social } from '@socials/entities/social.entity';
 import { SocialTarget } from '../social-targets/entities/social-target.entity';
+import { addTagsToString } from '../utils/addTagsToString';
 
 @Injectable()
 export class PuppeteersService {
@@ -42,7 +43,7 @@ export class PuppeteersService {
         username: socialTarget.social.username,
         password: socialTarget.social.password,
         imagePaths: [crawler.linkDownloaded],
-        content: crawler.name,
+        content: addTagsToString(crawler.name, crawler.tags),
         target: socialTarget.link,
       };
       await this.facebookService.addQueue({

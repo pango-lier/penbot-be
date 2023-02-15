@@ -40,33 +40,44 @@ export class YoutubeDlService {
       referer: options.url,
       //  addHeader: [`referer:${options.url}`, 'user-agent:googlebot'],
     });
-    let maxFile;
-    let maxVideo;
-    let maxAudio;
+    let maxFile = {};
+    let maxVideo = {};
+    let maxAudio = {};
 
     for (const format of output.formats) {
-      if (format.acodec === 'none') {
-        if (format.quality === options.quality) {
-          maxVideo = format;
-        }
+      if (format.acodec === 'none' && format.quality) {
+        maxVideo[format.quality] = format;
       }
-      if (format.vcodec === 'none') {
-        if (format.quality === options.quality) {
-          maxAudio = format;
-        }
+      if (format.vcodec === 'none' && format.quality) {
+        maxAudio[format.quality] = format;
       }
-      if (format.vcodec !== 'none' && format.acodec !== 'none') {
-        console.log(format.quality);
-        if (format.quality === 8) {
-          maxFile = format;
-        }
+      if (
+        format.vcodec !== 'none' &&
+        format.acodec !== 'none' &&
+        format.quality
+      ) {
+        maxFile[format.quality] = format;
       }
     }
-    let fileDownload = maxFile;
+    let fileDownload =
+      maxFile[options.quality] ||
+      maxFile[(options.quality as number) + 1] ||
+      maxFile[(options.quality as number) - 1];
     if (options.typeFile === TypeFileEnum.OnlyAudio) {
-      fileDownload = maxAudio;
+      fileDownload =
+        maxAudio[options.quality] ||
+        maxAudio[(options.quality as number) + 1] ||
+        maxAudio[(options.quality as number) - 1];
     } else if (options.typeFile === TypeFileEnum.OnlyVideo) {
-      fileDownload = maxVideo;
+      fileDownload =
+        maxVideo[options.quality] ||
+        maxVideo[(options.quality as number) + 1] ||
+        maxVideo[(options.quality as number) - 1];
+    }
+    if (!fileDownload) {
+      throw new Error(
+        'Download file is Failed .Quality of video or This video is not support to download .',
+      );
     }
     if (options.isDownload === true) {
       const d = new Date();
@@ -80,6 +91,7 @@ export class YoutubeDlService {
           fileDownload.ext,
       );
     }
+
     return {
       title: output.title ?? output.fulltitle,
       tags: output.tags,
@@ -88,8 +100,6 @@ export class YoutubeDlService {
       source: fileDownload,
       linkDownloaded: path,
       size: fileDownload.filesize,
-      maxVideo,
-      maxAudio,
       duration: output?.duration || 0,
     };
   };

@@ -6,7 +6,6 @@ import {
 import { UpdateFacebookDto } from './dto/update-facebook.dto';
 import { BrowserService } from '../browser/browser.service';
 import Facebook from './service';
-import { CreateFacebookPostArticleDto } from './dto/create-facebook-post-article.dto';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import { createLocalFile } from '../../utils/file/fetchVideo';
