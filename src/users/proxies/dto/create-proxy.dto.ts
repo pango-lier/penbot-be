@@ -3,11 +3,12 @@ import {
   IsBoolean,
   IsInt,
   IsNotEmpty,
+  IsNumberString,
   IsOptional,
   IsString,
 } from 'class-validator';
 
-export class CreateAccountDto {
+export class CreateProxyDto {
   id?: number;
 
   @IsNotEmpty()
@@ -36,9 +37,10 @@ export class CreateAccountDto {
   @Type(() => Date)
   deletedAt?: Date;
 
-  @IsInt()
+  @IsNumberString()
   groupId?: number;
 
-  @IsInt()
+  @IsOptional()
+  @IsNumberString()
   userId?: number;
 }

@@ -28,7 +28,7 @@ export class CreateCrawlerLinkDto {
 
   socialTargetIds?: number[];
 
-  accountId?: number | string;
+  proxyId?: number | string;
 
   deletedAt?: Date;
 

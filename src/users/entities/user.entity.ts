@@ -2,7 +2,7 @@ import { CrawlerLink } from '@crawlers/crawler-links/entities/crawler-link.entit
 import { Crawler } from '@crawlers/entities/crawler.entity';
 import { Notification } from '@notifications/entities/notification.entity';
 import { Social } from '@socials/entities/social.entity';
-import { Account } from '@users/accounts/entities/account.entity';
+import { Proxy } from '@users/proxies/entities/proxy.entity';
 import { Group } from '@users/groups/entities/group.entity';
 import { Permission } from '@users/permissions/entities/permission.entity';
 import { Role } from '@users/roles/entities/role.entity';
@@ -77,10 +77,10 @@ export class User {
   })
   groups?: Group[];
 
-  @OneToMany(() => Account, (a) => a.user, {
+  @OneToMany(() => Proxy, (a) => a.user, {
     nullable: true,
   })
-  accounts?: Account[];
+  proxies?: Proxy[];
 
 
   @OneToMany(() => Social, (a) => a.user, {

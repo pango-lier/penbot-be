@@ -16,7 +16,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Account {
+export class Proxy {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
@@ -47,22 +47,22 @@ export class Account {
   @Column({ type: 'bigint', nullable: true })
   groupId: number;
 
-  @ManyToOne(() => Group, (group) => group.accounts, { cascade: true })
+  @ManyToOne(() => Group, (group) => group.proxies, { cascade: true })
   @JoinColumn()
   group?: Group;
 
   @Column({ type: 'bigint', nullable: true })
   userId: number;
 
-  @ManyToOne(() => User, (u) => u.accounts)
+  @ManyToOne(() => User, (u) => u.proxies)
   user?: User;
 
-  @OneToMany(() => Social, (social) => social.account, {
+  @OneToMany(() => Social, (social) => social.proxy, {
     nullable: true,
   })
   socials?: Social[];
 
-  @OneToMany(() => CrawlerLink, (s) => s.account, {
+  @OneToMany(() => CrawlerLink, (s) => s.proxy, {
     nullable: true,
   })
   crawlers?: CrawlerLink[];

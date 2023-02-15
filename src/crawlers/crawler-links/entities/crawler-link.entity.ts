@@ -1,7 +1,7 @@
 import { CrawlerConfig } from '@crawlers/crawler-configs/entities/crawler-config.entity';
 import { Crawler } from '@crawlers/entities/crawler.entity';
 import { Social } from '@socials/entities/social.entity';
-import { Account } from '@users/accounts/entities/account.entity';
+import { Proxy } from '@users/proxies/entities/proxy.entity';
 import { User } from '@users/entities/user.entity';
 import {
   Column,
@@ -94,10 +94,10 @@ export class CrawlerLink {
   @OneToMany(() => Crawler, (s) => s.crawlerLinks, { nullable: true })
   crawler?: Crawler;
 
-  @ManyToOne(() => Account, (account) => account.crawlers, {
+  @ManyToOne(() => Proxy, (proxy) => proxy.crawlers, {
     nullable: true,
   })
-  account?: Account;
+  proxy?: Proxy;
 
   @ManyToMany(() => CrawlerConfig)
   crawlerConfigs?: CrawlerConfig[];

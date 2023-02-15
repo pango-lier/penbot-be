@@ -1,6 +1,6 @@
 import { Article } from '@articles/entities/article.entity';
 import { CrawlerLink } from '@crawlers/crawler-links/entities/crawler-link.entity';
-import { Account } from '@users/accounts/entities/account.entity';
+import { Proxy } from '@users/proxies/entities/proxy.entity';
 import { User } from '@users/entities/user.entity';
 import {
   Column,
@@ -50,10 +50,10 @@ export class Social {
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 
-  @ManyToOne(() => Account, (account) => account.socials, {
+  @ManyToOne(() => Proxy, (proxy) => proxy.socials, {
     nullable: true,
   })
-  account?: Account;
+  proxy?: Proxy;
 
   @Column({ type: 'bigint', nullable: true })
   userId: number;

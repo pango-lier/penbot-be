@@ -1,5 +1,5 @@
 
-import { Account } from '@users/accounts/entities/account.entity';
+import { Proxy } from '@users/proxies/entities/proxy.entity';
 import { User } from '@users/entities/user.entity';
 import {
   Column,
@@ -42,8 +42,8 @@ export class Group {
   @Column({ type: 'bigint' })
   userId: number;
 
-  @OneToMany(() => Account, (account) => account.group)
-  accounts?: Account[];
+  @OneToMany(() => Proxy, (proxy) => proxy.group)
+  proxies?: Proxy[];
 
   @ManyToOne(() => User, (user) => user.groups)
   user?: User;
