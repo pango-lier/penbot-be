@@ -5,26 +5,24 @@ import { IPaginate } from '../interface/paginate.interface';
 export const Paginate = createParamDecorator(
   (data: unknown, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest() as Request;
-    let paginate: IPaginate = { offset: undefined, limit: undefined };
-    if (request.query.filter && typeof request.query.filter === 'string') {
-      const filter = JSON.parse(request.query.filter);
+    const paginate: IPaginate = { offset: undefined, limit: undefined };
+    if (request.query.offset) {
+      const filter = request.query;
 
-      const pageIndex = parseInt(filter.pageIndex) || undefined;
-      const pageSize = parseInt(filter.pageIndex) || undefined;
+      paginate.pageIndex = +filter?.pageIndex;
+      paginate.pageSize = +filter?.pageSize;
 
-      const offset = pageIndex * pageSize || undefined;
-      const limit = filter.pageSize || undefined;
-      const sorted = filter.sorted || undefined;
-      const filtered = filter.filtered || undefined;
-      paginate = {
-        pageIndex,
-        pageSize,
-        limit,
-        offset,
-        sorted,
-        filtered,
-        q: filter.q || undefined,
-      };
+      paginate.offset = +filter.offset;
+      paginate.limit = +filter.limit || undefined;
+      if (filter?.sorted) {
+        paginate.sorted = JSON.parse(filter.sorted as string);
+      }
+      if (filter?.filtered) {
+        paginate.filtered = JSON.parse(filter.filtered as string);
+      }
+      if (filter?.q && filter?.q !== '') {
+        paginate.q = filter.q as any;
+      }
     }
     return paginate;
   },

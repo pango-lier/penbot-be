@@ -31,10 +31,10 @@ export class BrowserService {
       args.push(`--user-data-dir=${argObs.userDataDir}`);
     }
     return await puppeteer.launch({
-      headless: true,
-      ignoreDefaultArgs: true,
+      // headless: true,
+      // ignoreDefaultArgs: true,
       ignoreHTTPSErrors: true,
-      defaultViewport: null,
+      // defaultViewport: null,
       // devtools: true,
       executablePath: process.env.CHROME_BIN,
       args: [

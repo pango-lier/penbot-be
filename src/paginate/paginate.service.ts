@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { IPaginate } from './interface/paginate.interface';
 import { SelectQueryBuilder } from 'typeorm';
+import { IPaginate } from './interface/paginate.interface';
 
 @Injectable()
 export class PaginateService {
@@ -14,9 +14,6 @@ export class PaginateService {
       getQuery?: 'getRawMany' | 'getMany';
     } = { getQuery: 'getRawMany', operator: 'like' },
   ) {
-    if (filter.limit) query.limit(filter.limit);
-    if (filter.offset) query.offset(filter.offset);
-
     if (filter.sorted) {
       filter.sorted.forEach((sorted) => {
         let sortedId = sorted.id;
@@ -27,6 +24,11 @@ export class PaginateService {
           sortedId = `${options.defaultTable}.${sortedId}`;
         }
         query.orderBy(sortedId, sorted.desc === true ? 'DESC' : 'ASC');
+      });
+    }
+    if (filter.filtered && !filter.q) {
+      filter.filtered.forEach((filtered) => {
+        if (filtered.id === 'q') filter.q = filtered.value;
       });
     }
     if (filter.q && q.length > 0) {
@@ -60,7 +62,10 @@ export class PaginateService {
         }
       });
     }
+    const total = await query.getCount();
+    if (filter.limit) query.limit(filter.limit);
+    if (filter.offset) query.offset(filter.offset);
     const result = await query[options.getQuery]();
-    return [result, result.length];
+    return [result, total];
   }
 }
