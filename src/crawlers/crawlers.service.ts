@@ -15,6 +15,10 @@ import { PaginateService } from '@paginate/paginate.service';
 import { IPaginate } from '@paginate/interface/paginate.interface';
 import { PuppeteersService } from '@puppeteers/puppeteers.service';
 import { SocialTarget } from '../social-targets/entities/social-target.entity';
+import { ArticlesService } from '../articles/articles.service';
+import { CreateArticleDto } from '../articles/dto/create-article.dto';
+import { ArticleStatusEnum } from '../articles/entities/article-status.enum';
+import { LinkEnum } from '../links/entities/link.enum';
 
 @Injectable()
 export class CrawlersService {
@@ -23,6 +27,7 @@ export class CrawlersService {
     @InjectRepository(SocialTarget)
     private readonly social: Repository<SocialTarget>,
     private readonly crawlerLinkService: CrawlerLinksService,
+    private readonly articleService: ArticlesService,
     @InjectQueue('crawler') private readonly crawlerQueue: Queue,
     @InjectQueue('write-log') private readonly writeLogQueue: Queue,
     private readonly paginateService: PaginateService,
@@ -100,6 +105,7 @@ export class CrawlersService {
   }
 
   async crawlerYoutubeNormal({ crawlerLinkId, userIds }) {
+    console.log('crawlerYoutubeNormal');
     const crawlerLink = await this.crawlerLinkService.findOne(crawlerLinkId);
     try {
       crawlerLink.status = CrawlerLinkStatusEnum.Processing;
@@ -119,15 +125,32 @@ export class CrawlersService {
         meta: JSON.stringify(file.source),
         socialTargetIds: crawlerLink.socialTargets.map((i) => i.id),
       };
-
-      const crawler = await this.create(createCrawler, crawlerLink.userId);
-      await this.puppeteerService.posArticle(
-        crawler,
-        crawlerLink.socialTargets,
-        userIds,
-      );
       crawlerLink.status = CrawlerLinkStatusEnum.Success;
       await this.crawlerLinkService.updateEntity(crawlerLink);
+      await this.create(createCrawler, crawlerLink.userId);
+      const createArticle: CreateArticleDto = {
+        title: file.title,
+        tags: JSON.stringify(file.tags),
+        description: file.description,
+        status: ArticleStatusEnum.PENDING,
+        socialTargetIds: crawlerLink.socialTargets.map((i) => i.id),
+        createLinks: [
+          {
+            url: crawlerLink.target,
+            urlLocal: file.linkDownloaded,
+            typeLink: LinkEnum.VIDEO,
+            size: file.size,
+          },
+        ],
+      };
+      const article = await this.articleService.create(
+        createArticle,
+        crawlerLink.userId,
+      );
+      await this.puppeteerService.posArticle(
+        { articleIds: [article.id] },
+        userIds,
+      );
     } catch (error) {
       crawlerLink.status = CrawlerLinkStatusEnum.Error;
       crawlerLink.message = error.message;

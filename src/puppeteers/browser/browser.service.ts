@@ -19,7 +19,7 @@ export class BrowserService {
     const browser = await this.start(argObs);
     const page = await browser.newPage();
 
-    const core = new CoreService(page);
+    const core = new CoreService(page, 0.3, 0.02);
     await core.page.setViewport({ width: 1920, height: 937 });
     this.browser = browser;
     return { browser, core, page };
@@ -31,15 +31,15 @@ export class BrowserService {
       args.push(`--user-data-dir=${argObs.userDataDir}`);
     }
     return await puppeteer.launch({
-      // headless: true,
+      headless: false,
       // ignoreDefaultArgs: true,
       ignoreHTTPSErrors: true,
       // defaultViewport: null,
       // devtools: true,
       executablePath: process.env.CHROME_BIN,
       args: [
-        '--no-sandbox',
-        '--headless',
+        // '--no-sandbox',
+        // '--headless',
         // "--disable-gpu",
         '--disable-dev-shm-usage',
         '--disable-backgrounding-occluded-windows',

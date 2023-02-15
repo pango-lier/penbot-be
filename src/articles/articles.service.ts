@@ -3,19 +3,29 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Article } from './entities/article.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { IPaginate } from '@paginate/interface/paginate.interface';
 import { PaginateService } from '@paginate/paginate.service';
+import { LinksService } from '../links/links.service';
+import { Link } from '../links/entities/link.entity';
 
 @Injectable()
 export class ArticlesService {
   constructor(
     @InjectRepository(Article) private readonly article: Repository<Article>,
     private readonly paginateService: PaginateService,
+    private readonly linkService: LinksService,
   ) {}
-  create(createArticleDto: CreateArticleDto) {
+  async create(createArticleDto: CreateArticleDto, userId?: number) {
     const createArticle = this.article.create(createArticleDto);
-
+    if (createArticleDto.createLinks) {
+      const links: Link[] = [];
+      for (const link of createArticleDto.createLinks) {
+        links.push(await this.linkService.create(link));
+      }
+      createArticle.links = links;
+    }
+    createArticle.userId = userId;
     return this.article.save(createArticle);
   }
 
@@ -27,8 +37,28 @@ export class ArticlesService {
     });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} article`;
+  async findOne(id: number) {
+    return await this.article.findOne({
+      where: { id },
+      relations: {
+        socialTargets: {
+          social: true,
+        },
+        links: true,
+      },
+    });
+  }
+
+  async findIds(ids: number[]) {
+    return await this.article.find({
+      where: { id: In(ids) },
+      relations: {
+        socialTargets: {
+          social: true,
+        },
+        crawler: true,
+      },
+    });
   }
 
   update(id: number, updateArticleDto: UpdateArticleDto) {

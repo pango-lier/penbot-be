@@ -2,6 +2,7 @@ import { Processor, WorkerHost, OnWorkerEvent } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
 import { FacebookService } from '@puppeteers/facebook/facebook.service';
 import { Job } from 'bullmq';
+import { PuppeteersService } from '../puppeteers.service';
 
 @Processor('browser', {
   concurrency: 1,
@@ -9,29 +10,29 @@ import { Job } from 'bullmq';
 })
 export class BrowserQueue extends WorkerHost {
   private readonly logger = new Logger(BrowserQueue.name);
-  constructor(private readonly facebook: FacebookService) {
+  constructor(private readonly puppeteer: PuppeteersService) {
     super();
   }
 
   @OnWorkerEvent('active')
   OnWorkerEvent(job: Job) {
-    this.logger.debug(`OnWorker Active  ${job.id} of type ${job.name}`);
+    this.logger.debug(`BrowserQueue ${job.name} is Active`);
   }
 
   @OnWorkerEvent('completed')
   OnWorkerEventCompleted(job: Job) {
-    this.logger.debug(`OnWorkerEvent Completed  ${job.id} of type ${job.name}`);
+    this.logger.debug(`BrowserQueue ${job.name} is completed`);
   }
 
   @OnWorkerEvent('error')
   OnWorkerEventFailed(job: Job) {
-    this.logger.debug(`Error OnWorkerEvent  ${job.id} of type ${job.name}`);
+    this.logger.debug(`BrowserQueue ${job.name} is error`);
   }
 
   async process(job: Job<any, any, string>, token?: string) {
     switch (job.name) {
       case 'facebook-service':
-        await this.facebook.runMethodQueue(job.data);
+        await this.puppeteer.runMethodQueue(job.data);
         break;
       case 'google-service':
         break;

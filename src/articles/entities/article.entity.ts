@@ -4,6 +4,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -11,6 +12,8 @@ import {
 } from 'typeorm';
 import { ArticleStatusEnum } from './article-status.enum';
 import { SocialTarget } from '@social-targets/entities/social-target.entity';
+import { Crawler } from '../../crawlers/entities/crawler.entity';
+import { User } from '../../users/entities/user.entity';
 
 @Entity()
 export class Article {
@@ -23,11 +26,11 @@ export class Article {
   @Column({ type: 'varchar', length: 2083, nullable: true })
   url?: string;
 
-  @Column({ type: 'tinytext', nullable: true })
+  @Column({ type: 'text', nullable: true })
   description?: string;
 
   @Column({ type: 'text', nullable: true })
-  content: string;
+  tags: string;
 
   @Column({
     type: 'enum',
@@ -48,11 +51,18 @@ export class Article {
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 
-  @ManyToOne(() => SocialTarget, (social) => social.articles, {
-    nullable: true,
-  })
-  socialTarget?: SocialTarget;
+  @ManyToMany(() => SocialTarget, (s) => s.crawlerLinks, { nullable: true })
+  socialTargets?: SocialTarget[];
 
-  @OneToMany(() => Link, (link) => link.article, { nullable: true })
+  @ManyToOne(() => Crawler, (s) => s.articles, { nullable: true })
+  crawler?: Crawler;
+
+  @Column({ type: 'bigint', nullable: true })
+  userId?: number;
+
+  @ManyToOne(() => User, (s) => s.articles)
+  user?: User;
+
+  @ManyToMany(() => Link, (s) => s.articles, { nullable: true })
   links?: Link[];
 }

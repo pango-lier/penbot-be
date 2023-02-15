@@ -9,6 +9,9 @@ export class CreateLinkDto {
   url: string;
 
   @IsString()
+  urlLocal?: string;
+
+  @IsString()
   thumb?: string;
 
   typeLink?: LinkEnum;

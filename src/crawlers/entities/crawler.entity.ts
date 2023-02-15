@@ -14,6 +14,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Article } from '../../articles/entities/article.entity';
 
 @Entity()
 export class Crawler {
@@ -77,6 +78,11 @@ export class Crawler {
 
   @Column({ type: 'bigint', nullable: true })
   userId?: number;
+
+  @OneToMany(() => Article, (a) => a.crawler, {
+    nullable: true,
+  })
+  articles?: Article[];
 
   @OneToMany(() => User, (s) => s.crawlers, { nullable: true })
   user?: User;

@@ -99,7 +99,7 @@ export class YoutubeDlService {
       type: fileDownload.ext,
       source: fileDownload,
       linkDownloaded: path,
-      size: fileDownload.filesize,
+      size: fileDownload.filesize || fileDownload.filesize_approx || null,
       duration: output?.duration || 0,
     };
   };

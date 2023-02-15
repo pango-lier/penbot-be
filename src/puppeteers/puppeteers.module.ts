@@ -5,11 +5,12 @@ import { FacebookModule } from './facebook/facebook.module';
 import { CoreService } from './core/core.service';
 import { BrowserModule } from './browser/browser.module';
 import { BrowserQueue } from './queue/browser.processor';
+import { ArticlesModule } from '../articles/articles.module';
 
 @Module({
   controllers: [PuppeteersController],
   providers: [PuppeteersService, CoreService, BrowserQueue],
-  imports: [FacebookModule, BrowserModule],
+  imports: [FacebookModule, BrowserModule, ArticlesModule],
   exports: [PuppeteersModule, BrowserQueue, PuppeteersService, CoreService],
 })
 export class PuppeteersModule {}

@@ -8,10 +8,22 @@ import { CreateFacebookPostArticleDto } from './facebook/dto/create-facebook-pos
 import { Social } from '@socials/entities/social.entity';
 import { SocialTarget } from '../social-targets/entities/social-target.entity';
 import { addTagsToString } from '../utils/addTagsToString';
+import { QueueDataFacebookDto } from './facebook/dto/create-facebook.dto';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
+import { CrawlersService } from '../crawlers/crawlers.service';
+import { ArticlesService } from '../articles/articles.service';
+import { PostArticlePuppeteerDto } from './dto/create-article-puppeteer.dto';
+const randomstring = require('randomstring');
 
 @Injectable()
 export class PuppeteersService {
-  constructor(private readonly facebookService: FacebookService) {}
+  constructor(
+    private readonly facebookService: FacebookService,
+    private readonly articleService: ArticlesService,
+    @InjectQueue('write-log') private readonly writeLog: Queue,
+    @InjectQueue('browser') private readonly browserQueue: Queue,
+  ) {}
 
   create(createPuppeteerDto: CreatePuppeteerDto) {
     return 'This action adds a new puppeteer';
@@ -33,24 +45,44 @@ export class PuppeteersService {
     return `This action removes a #${id} puppeteer`;
   }
 
+  async addFacebookQueue(data: QueueDataFacebookDto) {
+    await this.browserQueue.add('facebook-service', data, {
+      jobId: `fb__${
+        data.data.username
+      }_${new Date().getMilliseconds()}_${randomstring.generate(6)}`,
+    });
+  }
+
+  async runMethodQueue(data: QueueDataFacebookDto) {
+    await this[data.actionMethod](data);
+  }
+
   async posArticle(
-    crawler: Crawler,
-    socialTargets: SocialTarget[],
+    postArticle: PostArticlePuppeteerDto,
     userIds: Array<number>,
   ) {
-    for (const socialTarget of socialTargets) {
-      const data: CreateFacebookPostArticleDto = {
-        username: socialTarget.social.username,
-        password: socialTarget.social.password,
-        imagePaths: [crawler.linkDownloaded],
-        content: addTagsToString(crawler.name, crawler.tags),
-        target: socialTarget.link,
-      };
-      await this.facebookService.addQueue({
-        actionMethod: 'createPostArticle',
-        data,
-        userIds,
-      });
+    await this.addFacebookQueue({
+      actionMethod: 'createFacebookPostArticle',
+      data: postArticle,
+      userIds,
+    });
+  }
+
+  async createFacebookPostArticle(data: QueueDataFacebookDto) {
+    const articles = await this.articleService.findIds(data.data.articleIds);
+
+    for (const article of articles) {
+      const imagePaths = article.links.map((i) => i.urlLocal);
+      for (const socialTarget of article.socialTargets) {
+        const create: CreateFacebookPostArticleDto = {
+          username: socialTarget.social.username,
+          password: socialTarget.social.password,
+          imagePaths,
+          content: addTagsToString(article.title, article.tags),
+          target: socialTarget.link,
+        };
+        const response = await this.facebookService.createPostArticle(create);
+      }
     }
   }
 }

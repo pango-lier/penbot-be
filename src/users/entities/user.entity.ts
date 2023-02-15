@@ -17,6 +17,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Article } from '../../articles/entities/article.entity';
 
 @Entity('users')
 export class User {
@@ -82,12 +83,10 @@ export class User {
   })
   proxies?: Proxy[];
 
-
   @OneToMany(() => Social, (a) => a.user, {
     nullable: true,
   })
   socials?: Social[];
-
 
   @ManyToMany(() => Permission, {
     cascade: true,
@@ -106,4 +105,9 @@ export class User {
     nullable: true,
   })
   crawlers?: Crawler[];
+
+  @OneToMany(() => Article, (a) => a.user, {
+    nullable: true,
+  })
+  articles?: Article[];
 }

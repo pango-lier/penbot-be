@@ -10,6 +10,7 @@ import { CrawlerProcessor } from './queue/crawler.processor';
 import { BullmqModule } from '@bullmq/bullmq.module';
 import { PuppeteersModule } from '@puppeteers/puppeteers.module';
 import { Social } from '@socials/entities/social.entity';
+import { ArticlesModule } from '../articles/articles.module';
 
 @Module({
   controllers: [CrawlersController],
@@ -20,6 +21,7 @@ import { Social } from '@socials/entities/social.entity';
     CrawlerConfigsModule,
     BullmqModule,
     PuppeteersModule,
+    ArticlesModule,
   ],
 })
 export class CrawlersModule {}

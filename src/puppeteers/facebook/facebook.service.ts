@@ -1,21 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import {
-  CreateFacebookDto,
-  QueueDataFacebookDto,
-} from './dto/create-facebook.dto';
+import { CreateFacebookDto } from './dto/create-facebook.dto';
 import { UpdateFacebookDto } from './dto/update-facebook.dto';
 import { BrowserService } from '../browser/browser.service';
 import Facebook from './service';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import { createLocalFile } from '../../utils/file/fetchVideo';
+import { SocialResponse } from '../type/response-puppeteer.interface';
+import { CreateFacebookPostArticleDto } from './dto/create-facebook-post-article.dto';
 
 @Injectable()
 export class FacebookService {
   constructor(
     private readonly browser: BrowserService,
     @InjectQueue('write-log') private readonly writeLog: Queue,
-    @InjectQueue('browser') private readonly browserQueue: Queue,
   ) {}
 
   async login() {
@@ -42,19 +40,15 @@ export class FacebookService {
     return `This action removes a #${id} facebook`;
   }
 
-  async runMethodQueue(data: QueueDataFacebookDto) {
-    await this[data.actionMethod](data);
-  }
-  async addQueue(data: QueueDataFacebookDto) {
-    await this.browserQueue.add('facebook-service', data);
-  }
-
-  async createPostArticle(data: QueueDataFacebookDto) {
-    const create = data.data;
+  async createPostArticle(create: CreateFacebookPostArticleDto) {
+    const result: SocialResponse = {
+      status: 'success',
+      message: null,
+    };
     try {
       const dirProfile = createLocalFile(
-        'profile_' + create.username,
-        `/tmp/trong/extensions/facebook`,
+        'facebook_' + create.username,
+        `/tmp/trong/profiles/facebook`,
       );
       const { core } = await this.browser.StartUp({
         profile: create.username,
@@ -69,11 +63,12 @@ export class FacebookService {
         imagePaths: create.imagePaths,
       });
     } catch (error) {
-      this.writeLog.add('createPostArticle', {
-        message_error: error.message,
-        data: create,
-      });
+      result.status = 'error';
+      result.message = error.message;
+      console.log(error.message);
+      this.writeLog.add('CreateFacebookPostArticleDto', result);
     }
     await this.browser.stop();
+    return result;
   }
 }

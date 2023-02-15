@@ -1,6 +1,7 @@
 import { IsString } from 'class-validator';
 import { ArticleStatusEnum } from '../entities/article-status.enum';
 import { Type } from 'class-transformer';
+import { CreateLinkDto } from '../../links/dto/create-link.dto';
 
 export class CreateArticleDto {
   @IsString()
@@ -9,10 +10,9 @@ export class CreateArticleDto {
   @IsString()
   description?: string;
 
-  @IsString()
-  content: string;
-
   url?: string;
+
+  tags: string;
 
   status?: ArticleStatusEnum;
 
@@ -27,5 +27,7 @@ export class CreateArticleDto {
   @Type(() => Date)
   updatedAt?: Date;
 
-  socialId: number;
+  socialTargetIds?: number[];
+
+  createLinks?: CreateLinkDto[];
 }
