@@ -32,7 +32,7 @@ export class ArticlesService {
       id: In(createArticleDto.socialTargetIds),
     });
     createArticle.userId = userId;
-    return this.article.save(createArticle);
+    return await this.article.save(createArticle);
   }
 
   async findAll(paginate: IPaginate) {
