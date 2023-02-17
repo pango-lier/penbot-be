@@ -14,12 +14,14 @@ import { Queue } from 'bullmq';
 import { CrawlersService } from '../crawlers/crawlers.service';
 import { ArticlesService } from '../articles/articles.service';
 import { PostArticlePuppeteerDto } from './dto/create-article-puppeteer.dto';
+import { YoutubeService } from './youtube/youtube.service';
 const randomstring = require('randomstring');
 
 @Injectable()
 export class PuppeteersService {
   constructor(
     private readonly facebookService: FacebookService,
+    private readonly youtubeService: YoutubeService,
     private readonly articleService: ArticlesService,
     @InjectQueue('write-log') private readonly writeLog: Queue,
     @InjectQueue('browser') private readonly browserQueue: Queue,

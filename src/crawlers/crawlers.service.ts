@@ -19,6 +19,7 @@ import { ArticlesService } from '../articles/articles.service';
 import { CreateArticleDto } from '../articles/dto/create-article.dto';
 import { ArticleStatusEnum } from '../articles/entities/article-status.enum';
 import { LinkEnum } from '../links/entities/link.enum';
+import { YoutubeService } from '../puppeteers/youtube/youtube.service';
 
 @Injectable()
 export class CrawlersService {
@@ -33,6 +34,7 @@ export class CrawlersService {
     private readonly paginateService: PaginateService,
     private readonly youtubeDlService: YoutubeDlService,
     private readonly puppeteerService: PuppeteersService,
+    private readonly youtubeService: YoutubeService,
   ) {}
 
   async create(createCrawlerDto: CreateCrawlerDto, userId: number) {
@@ -100,57 +102,36 @@ export class CrawlersService {
     return crawlerLinks;
   }
 
-  async queueHandle(jobName = 'crawlerYoutubeNormal', data) {
+  async queueHandle(
+    jobName = 'crawlerYoutubeNormal', //
+    data,
+  ) {
     await this[jobName](data);
   }
 
-  async crawlerYoutubeNormal({ crawlerLinkId, userIds }) {
-    console.log('crawlerYoutubeNormal');
+  async crawlerYoutubeShortAuto({ crawlerLinkId, userIds }) {
+    console.log('crawlerYoutubeShortAuto');
     const crawlerLink = await this.crawlerLinkService.findOne(crawlerLinkId);
     try {
       crawlerLink.status = CrawlerLinkStatusEnum.Processing;
       await this.crawlerLinkService.updateEntity(crawlerLink);
-      const file = await this.youtubeDlService.downloadFile(
-        crawlerLink.target,
-        { quality: crawlerLink.quality, typeFile: crawlerLink.typeFile },
-      );
-      const createCrawler: CreateCrawlerDto = {
-        name: file.title,
-        userId: crawlerLink.userId,
-        tags: JSON.stringify(file.tags),
-        description: file.description,
-        size: file.size,
-        linkDownloaded: file.linkDownloaded,
-        links: crawlerLink.target,
-        meta: JSON.stringify(file.source),
-        socialTargetIds: crawlerLink.socialTargets.map((i) => i.id),
-      };
+      await this.youtubeService.init();
+      await this.youtubeService.youtube.login.goto();
+      await this.youtubeService.youtube.login.gotoShort();
+      let offset = 0;
+      while (1) {
+        const dataShort = await this.youtubeService.youtube.short.getLink({
+          offset,
+        });
+        console.log(dataShort);
+        crawlerLink.target = dataShort.href;
+        await this.crawlerExcute(crawlerLink, userIds);
+        await this.youtubeService.youtube.short.clickBtnDown();
+        offset++;
+        if (offset > 100) break;
+      }
       crawlerLink.status = CrawlerLinkStatusEnum.Success;
       await this.crawlerLinkService.updateEntity(crawlerLink);
-      await this.create(createCrawler, crawlerLink.userId);
-      const createArticle: CreateArticleDto = {
-        title: file.title,
-        tags: JSON.stringify(file.tags),
-        description: file.description,
-        status: ArticleStatusEnum.PENDING,
-        socialTargetIds: crawlerLink.socialTargets.map((i) => i.id),
-        createLinks: [
-          {
-            url: crawlerLink.target,
-            urlLocal: file.linkDownloaded,
-            typeLink: LinkEnum.VIDEO,
-            size: file.size,
-          },
-        ],
-      };
-      const article = await this.articleService.create(
-        createArticle,
-        crawlerLink.userId,
-      );
-      await this.puppeteerService.posArticle(
-        { articleIds: [article.id] },
-        userIds,
-      );
     } catch (error) {
       crawlerLink.status = CrawlerLinkStatusEnum.Error;
       crawlerLink.message = error.message;
@@ -159,5 +140,67 @@ export class CrawlersService {
     }
 
     return 1;
+  }
+
+  async crawlerYoutubeNormal({ crawlerLinkId, userIds }) {
+    console.log('crawlerYoutubeNormal');
+    const crawlerLink = await this.crawlerLinkService.findOne(crawlerLinkId);
+    try {
+      crawlerLink.status = CrawlerLinkStatusEnum.Processing;
+      await this.crawlerLinkService.updateEntity(crawlerLink);
+      await this.crawlerExcute(crawlerLink, userIds);
+      crawlerLink.status = CrawlerLinkStatusEnum.Success;
+      await this.crawlerLinkService.updateEntity(crawlerLink);
+    } catch (error) {
+      crawlerLink.status = CrawlerLinkStatusEnum.Error;
+      crawlerLink.message = error.message;
+      await this.crawlerLinkService.updateEntity(crawlerLink);
+      throw new Error(error.message);
+    }
+
+    return 1;
+  }
+
+  async crawlerExcute(crawlerLink: CrawlerLink, userIds) {
+    const file = await this.youtubeDlService.downloadFile(crawlerLink.target, {
+      quality: crawlerLink.quality,
+      typeFile: crawlerLink.typeFile,
+    });
+    const createCrawler: CreateCrawlerDto = {
+      name: file.title,
+      userId: crawlerLink.userId,
+      tags: JSON.stringify(file.tags),
+      description: file.description,
+      size: file.size,
+      linkDownloaded: file.linkDownloaded,
+      links: crawlerLink.target,
+      meta: JSON.stringify(file.source),
+      socialTargetIds: crawlerLink.socialTargets.map((i) => i.id),
+    };
+
+    await this.create(createCrawler, crawlerLink.userId);
+    const createArticle: CreateArticleDto = {
+      title: file.title,
+      tags: JSON.stringify(file.tags),
+      description: file.description,
+      status: ArticleStatusEnum.PENDING,
+      socialTargetIds: crawlerLink.socialTargets.map((i) => i.id),
+      createLinks: [
+        {
+          url: crawlerLink.target,
+          urlLocal: file.linkDownloaded,
+          typeLink: LinkEnum.VIDEO,
+          size: file.size,
+        },
+      ],
+    };
+    const article = await this.articleService.create(
+      createArticle,
+      crawlerLink.userId,
+    );
+    await this.puppeteerService.posArticle(
+      { articleIds: [article.id] },
+      userIds,
+    );
   }
 }

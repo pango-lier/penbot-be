@@ -11,11 +11,13 @@ import { BullmqModule } from '@bullmq/bullmq.module';
 import { PuppeteersModule } from '@puppeteers/puppeteers.module';
 import { Social } from '@socials/entities/social.entity';
 import { ArticlesModule } from '../articles/articles.module';
+import { YoutubeModule } from '../puppeteers/youtube/youtube.module';
 
 @Module({
   controllers: [CrawlersController],
   providers: [CrawlersService, YoutubeDlService, CrawlerProcessor],
   imports: [
+    YoutubeModule,
     CrawlerLinksModule,
     TypeOrmModule.forFeature([Crawler, Social]),
     CrawlerConfigsModule,
