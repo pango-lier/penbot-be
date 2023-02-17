@@ -9,12 +9,22 @@ export const postContent = async (
   await core.delay(3);
   console.log('postContent ' + (await core.location()));
   await core.try(
-    async () => await core.clickContentSelectorMatch('span', ['Ảnh/video']),
-    5,
-    2000,
+    async () => { return await core.clickContentSelectorMatch('span', ['Ảnh/video']) },
+    10,
+    1000,
   );
   await core.delay(3);
-  await core.click('div[aria-label="Bạn đang nghĩ gì?"]');
+  const selector = await core.try(
+    async () => {
+      return await core.checkSelectors(['div[aria-label="Bạn đang nghĩ gì?"]',
+        'div[aria-label*="Viết gì đó cho"]',
+        'div[aria-label="Thêm vào bài viết của bạn"]']);
+    },
+    30,
+    1000,
+  );
+  console.log(selector,content);
+  await core.click(selector || 'div[aria-label="Bạn đang nghĩ gì?"]');
   await core.input(content);
   console.log('upload', imagePaths);
   await core.delay(3);
