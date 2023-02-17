@@ -120,13 +120,17 @@ export class CrawlersService {
       await this.youtubeService.youtube.login.gotoShort();
       let offset = 0;
       while (1) {
-        const dataShort = await this.youtubeService.youtube.short.getLink({
-          offset,
-        });
-        console.log(dataShort);
-        crawlerLink.target = dataShort.href;
-        await this.crawlerExcute(crawlerLink, userIds);
-        await this.youtubeService.youtube.short.clickBtnDown();
+        try {
+          const dataShort = await this.youtubeService.youtube.short.getLink({
+            offset,
+          });
+          console.log(dataShort);
+          crawlerLink.target = dataShort.href;
+          await this.crawlerExcute(crawlerLink, userIds);
+          await this.youtubeService.youtube.short.clickBtnDown();
+        } catch (error) {
+          console.log(error.message);
+        }
         offset++;
         if (offset > 100) break;
       }
