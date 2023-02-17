@@ -2,9 +2,8 @@ import { CoreService } from '../../../../core/core.service';
 
 export enum EnumLink {
   Home = 1,
-  Development = 2,
-  Short = 3,
-  Subcrice = 4,
+  Short = 2,
+  Subcrice = 3,
 }
 
 const links = (link: EnumLink) =>
@@ -25,9 +24,7 @@ class Login {
   async gotoHome() {
     await this.core.click(links(EnumLink.Home));
   }
-  async gotoDevelopment() {
-    await this.core.click(links(EnumLink.Development));
-  }
+
   async gotoHSubcrice() {
     await this.core.click(links(EnumLink.Subcrice));
   }
