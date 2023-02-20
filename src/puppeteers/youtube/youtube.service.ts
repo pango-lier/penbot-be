@@ -41,4 +41,8 @@ export class YoutubeService {
   remove(id: number) {
     return `This action removes a #${id} youtube`;
   }
+
+  async close() {
+    return await this.browser.stop();
+  }
 }

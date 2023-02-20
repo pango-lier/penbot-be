@@ -119,19 +119,27 @@ export class CrawlersService {
       await this.youtubeService.init();
       await this.youtubeService.youtube.login.goto();
       await this.youtubeService.youtube.login.gotoShort();
-      let offset = 0;
       let article;
-      while (1) {
+      for (let i = 0; i < 100; i++) {
         try {
           await delay(15);
           const dataShort = await this.youtubeService.youtube.short.getLink({
-            offset,
+            offset: i,
           });
+          console.log(dataShort);
+          if (await this.crawler.exist({ where: { links: dataShort.href } })) {
+            console.log(`${dataShort.href} is existed .`);
+            continue;
+          }
           crawlerLink.target = dataShort.href;
-          article = await this.crawlerExcute(crawlerLink, userIds);
-          crawlerLink.name = article.title;
-          crawlerLink.thumbnail = article.thumbnail;
-          crawlerLink.status = CrawlerLinkStatusEnum.Success;
+          try {
+            article = await this.crawlerExcute(crawlerLink, userIds);
+            crawlerLink.name = article.title;
+            crawlerLink.thumbnail = article.thumbnail;
+            crawlerLink.status = CrawlerLinkStatusEnum.Success;
+          } catch (error) {
+            console.log('Warning : Ignore error ' + error.message);
+          }
           await this.youtubeService.youtube.short.clickBtnDown();
         } catch (error) {
           console.log(error.message);
@@ -139,14 +147,13 @@ export class CrawlersService {
           crawlerLink.message = error.message;
           break;
         }
-        offset++;
-        if (offset > 100) break;
       }
     } catch (error) {
       crawlerLink.status = CrawlerLinkStatusEnum.Error;
       crawlerLink.message = error.message;
     }
     await this.crawlerLinkService.updateEntity(crawlerLink);
+    await this.youtubeService.close();
     return 1;
   }
 

@@ -38,8 +38,8 @@ export class BrowserService {
       // devtools: true,
       executablePath: process.env.CHROME_BIN,
       args: [
-        // '--no-sandbox',
-        // '--headless',
+        '--no-sandbox',
+        '--headless',
         // "--disable-gpu",
         '--disable-dev-shm-usage',
         '--disable-backgrounding-occluded-windows',

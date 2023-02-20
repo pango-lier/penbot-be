@@ -49,9 +49,9 @@ export class PuppeteersService {
 
   async addFacebookQueue(data: QueueDataFacebookDto) {
     await this.browserQueue.add('facebook-service', data, {
-      jobId: `fb__${
-        data.data.username
-      }_${new Date().getMilliseconds()}_${randomstring.generate(6)}`,
+      jobId: `profile_fb${
+        data.userIds[0]
+      }_${new Date().getTime()}_${randomstring.generate(6)}`,
     });
   }
 
@@ -69,7 +69,7 @@ export class PuppeteersService {
       userIds,
     });
   }
- 
+
   async createFacebookPostArticle(data: QueueDataFacebookDto) {
     const articles = await this.articleService.findIds(data.data.articleIds);
 

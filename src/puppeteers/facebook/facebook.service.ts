@@ -8,13 +8,19 @@ import { Queue } from 'bullmq';
 import { createLocalFile } from '../../utils/file/fetchVideo';
 import { SocialResponse } from '../type/response-puppeteer.interface';
 import { CreateFacebookPostArticleDto } from './dto/create-facebook-post-article.dto';
+import { closePopup } from './service/lib/Fanpage/post/postContent';
 
 @Injectable()
 export class FacebookService {
+  intervalClosePopup;
   constructor(
     private readonly browser: BrowserService,
     @InjectQueue('write-log') private readonly writeLog: Queue,
   ) {}
+
+  async init() {
+    return 'This action adds a new facebook';
+  }
 
   async login() {
     return 'This action adds a new facebook';
@@ -55,6 +61,7 @@ export class FacebookService {
         userDataDir: dirProfile,
       });
       const facebook = new Facebook(core);
+      this.intervalClosePopup = setInterval(() => closePopup(core), 1000);
       await facebook.Login.login(create.username, create.password);
       await core.delay(2);
       await facebook.FanPage.goto(create.target);
@@ -68,7 +75,10 @@ export class FacebookService {
       console.log(error.message);
       this.writeLog.add('CreateFacebookPostArticleDto', result);
     }
-    await this.browser.stop();
+    try {
+      clearInterval(this.intervalClosePopup);
+      await this.browser.stop();
+    } catch (error) {}
     return result;
   }
 }

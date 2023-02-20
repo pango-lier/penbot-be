@@ -1,5 +1,11 @@
 import { CoreService } from '@puppeteers/core/core.service';
 
+export const closePopup = async (core: CoreService) => {
+  try {
+    return await core.clickContentSelectorMatch('span', ['aria-label="Đóng"']);
+  } catch (e) {}
+};
+
 export const postContent = async (
   core: CoreService,
   content: string,
@@ -9,21 +15,25 @@ export const postContent = async (
   await core.delay(3);
   console.log('postContent ' + (await core.location()));
   await core.try(
-    async () => { return await core.clickContentSelectorMatch('span', ['Ảnh/video']) },
+    async () => {
+      return await core.clickContentSelectorMatch('span', ['Ảnh/video']);
+    },
     10,
     1000,
   );
   await core.delay(3);
   const selector = await core.try(
     async () => {
-      return await core.checkSelectors(['div[aria-label="Bạn đang nghĩ gì?"]',
+      return await core.checkSelectors([
+        'div[aria-label="Bạn đang nghĩ gì?"]',
         'div[aria-label*="Viết gì đó cho"]',
-        'div[aria-label="Thêm vào bài viết của bạn"]']);
+        'div[aria-label="Thêm vào bài viết của bạn"]',
+      ]);
     },
     30,
     1000,
   );
-  console.log(selector,content);
+  console.log(selector, content);
   await core.click(selector || 'div[aria-label="Bạn đang nghĩ gì?"]');
   await core.input(content);
   console.log('upload', imagePaths);
