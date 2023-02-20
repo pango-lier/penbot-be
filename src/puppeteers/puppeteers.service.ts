@@ -69,7 +69,7 @@ export class PuppeteersService {
       userIds,
     });
   }
-
+ 
   async createFacebookPostArticle(data: QueueDataFacebookDto) {
     const articles = await this.articleService.findIds(data.data.articleIds);
 

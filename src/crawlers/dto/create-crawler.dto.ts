@@ -24,4 +24,6 @@ export class CreateCrawlerDto {
   userId?: number;
 
   socialTargetIds?: number[];
+
+  thumbnail?: string;
 }

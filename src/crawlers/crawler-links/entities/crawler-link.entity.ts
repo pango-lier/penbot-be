@@ -54,6 +54,9 @@ export class CrawlerLink {
   })
   type?: CrawlerLinkEnum;
 
+  @Column({ type: 'varchar', length: 2083, nullable: true })
+  thumbnail?: string;
+
   @Column({
     type: 'enum',
     enum: QualityEnum,

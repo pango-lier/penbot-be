@@ -20,6 +20,7 @@ import { CreateArticleDto } from '../articles/dto/create-article.dto';
 import { ArticleStatusEnum } from '../articles/entities/article-status.enum';
 import { LinkEnum } from '../links/entities/link.enum';
 import { YoutubeService } from '../puppeteers/youtube/youtube.service';
+import { delay } from '../puppeteers/core/until/delay';
 
 @Injectable()
 export class CrawlersService {
@@ -121,6 +122,7 @@ export class CrawlersService {
       let offset = 0;
       while (1) {
         try {
+          await delay(15);
           const dataShort = await this.youtubeService.youtube.short.getLink({
             offset,
           });
@@ -130,6 +132,7 @@ export class CrawlersService {
           await this.youtubeService.youtube.short.clickBtnDown();
         } catch (error) {
           console.log(error.message);
+          break;
         }
         offset++;
         if (offset > 100) break;
@@ -180,6 +183,7 @@ export class CrawlersService {
       links: crawlerLink.target,
       meta: JSON.stringify(file.source),
       socialTargetIds: crawlerLink.socialTargets.map((i) => i.id),
+      thumbnail: file.thumbnail,
     };
 
     await this.create(createCrawler, crawlerLink.userId);

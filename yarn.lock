@@ -6689,7 +6689,7 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-youtube-dl-exec@^2.1.11:
+youtube-dl-exec@^2.2.3:
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/youtube-dl-exec/-/youtube-dl-exec-2.2.3.tgz#edd310b1efc9ead35d6158cbe3ba60ddf7b6cb92"
   integrity sha512-OiyKsd2jMT9MxzYJUO10DUAglJVDnFk7u2MubpxR1DtWzmBYsNaAVch7ELOlKyh07iPdvqDzDZVyEokfC95O6g==

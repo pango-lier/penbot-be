@@ -1,7 +1,6 @@
 import { CoreService } from '../../../../core/core.service';
 
-const BUTTON_DOWN =
-  '#navigation-button-down > .style-scope > .yt-simple-endpoint > #button > #button > .style-scope';
+const BUTTON_DOWN = 'button[aria-label="Next video"]';
 class Short {
   private core: CoreService;
   constructor(core: CoreService) {
@@ -13,7 +12,9 @@ class Short {
     };
     const currentContent = (options) => {
       const element = document.querySelector(
-        `#\\${options.offset} > .overlay > .style-scope > #overlay > .style-scope > .title > .style-scope`,
+        `#\\${
+          options.offset + 30
+        } > .overlay > .style-scope > #overlay > .style-scope > .title > .style-scope`,
       );
       if (element) {
         return element.textContent;

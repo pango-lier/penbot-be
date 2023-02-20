@@ -50,6 +50,9 @@ export class Crawler {
   links?: string;
 
   @Column({ type: 'varchar', length: 2083, nullable: true })
+  thumbnail?: string;
+
+  @Column({ type: 'varchar', length: 2083, nullable: true })
   linkDownloaded?: string;
 
   @Column({ type: 'json', nullable: true })

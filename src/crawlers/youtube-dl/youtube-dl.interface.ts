@@ -13,4 +13,5 @@ export interface IYoutubeDLServiceResponse {
   width?: number;
   height?: number;
   duration?: number;
+  thumbnail?: string;
 }

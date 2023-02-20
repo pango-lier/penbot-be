@@ -36,5 +36,7 @@ export class CreateCrawlerLinkDto {
 
   updatedAt?: Date;
 
+  thumbnail?: string;
+
   crawlerConfigs: Array<any>;
 }

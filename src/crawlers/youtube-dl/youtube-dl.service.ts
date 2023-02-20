@@ -101,6 +101,7 @@ export class YoutubeDlService {
       linkDownloaded: path,
       size: fileDownload.filesize || fileDownload.filesize_approx || null,
       duration: output?.duration || 0,
+      thumbnail:output?.thumbnail||''
     };
   };
   async downloadFile(
