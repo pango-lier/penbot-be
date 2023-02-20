@@ -120,32 +120,33 @@ export class CrawlersService {
       await this.youtubeService.youtube.login.goto();
       await this.youtubeService.youtube.login.gotoShort();
       let offset = 0;
+      let article;
       while (1) {
         try {
           await delay(15);
           const dataShort = await this.youtubeService.youtube.short.getLink({
             offset,
           });
-          console.log(dataShort);
           crawlerLink.target = dataShort.href;
-          await this.crawlerExcute(crawlerLink, userIds);
+          article = await this.crawlerExcute(crawlerLink, userIds);
+          crawlerLink.name = article.title;
+          crawlerLink.thumbnail = article.thumbnail;
+          crawlerLink.status = CrawlerLinkStatusEnum.Success;
           await this.youtubeService.youtube.short.clickBtnDown();
         } catch (error) {
           console.log(error.message);
+          crawlerLink.status = CrawlerLinkStatusEnum.Error;
+          crawlerLink.message = error.message;
           break;
         }
         offset++;
         if (offset > 100) break;
       }
-      crawlerLink.status = CrawlerLinkStatusEnum.Success;
-      await this.crawlerLinkService.updateEntity(crawlerLink);
     } catch (error) {
       crawlerLink.status = CrawlerLinkStatusEnum.Error;
       crawlerLink.message = error.message;
-      await this.crawlerLinkService.updateEntity(crawlerLink);
-      throw new Error(error.message);
     }
-
+    await this.crawlerLinkService.updateEntity(crawlerLink);
     return 1;
   }
 
@@ -155,7 +156,9 @@ export class CrawlersService {
     try {
       crawlerLink.status = CrawlerLinkStatusEnum.Processing;
       await this.crawlerLinkService.updateEntity(crawlerLink);
-      await this.crawlerExcute(crawlerLink, userIds);
+      const article = await this.crawlerExcute(crawlerLink, userIds);
+      crawlerLink.name = article.title;
+      crawlerLink.thumbnail = article.thumbnail;
       crawlerLink.status = CrawlerLinkStatusEnum.Success;
       await this.crawlerLinkService.updateEntity(crawlerLink);
     } catch (error) {
@@ -192,6 +195,7 @@ export class CrawlersService {
       tags: JSON.stringify(file.tags),
       description: file.description,
       status: ArticleStatusEnum.PENDING,
+      thumbnail: file.thumbnail,
       socialTargetIds: crawlerLink.socialTargets.map((i) => i.id),
       createLinks: [
         {
@@ -199,6 +203,7 @@ export class CrawlersService {
           urlLocal: file.linkDownloaded,
           typeLink: LinkEnum.VIDEO,
           size: file.size,
+          thumbnail: file.thumbnail,
         },
       ],
     };
@@ -210,5 +215,6 @@ export class CrawlersService {
       { articleIds: [article.id] },
       userIds,
     );
+    return article;
   }
 }

@@ -26,6 +26,9 @@ export class Article {
   @Column({ type: 'varchar', length: 2083, nullable: true })
   url?: string;
 
+  @Column({ type: 'varchar', length: 2083, nullable: true })
+  thumbnail?: string;
+
   @Column({ type: 'text', nullable: true })
   description?: string;
 

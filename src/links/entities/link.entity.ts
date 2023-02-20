@@ -17,11 +17,14 @@ export class Link {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', length: 2083 })
   url: string;
 
   @Column({ type: 'varchar', length: 2083, nullable: true })
   urlLocal?: string;
+
+  @Column({ type: 'varchar', length: 2083, nullable: true })
+  thumbnail?: string;
 
   @Column({ type: 'varchar', nullable: true })
   thumb?: string;

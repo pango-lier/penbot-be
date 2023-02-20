@@ -18,6 +18,8 @@ export class CreateArticleDto {
 
   active?: boolean;
 
+  thumbnail?: string;
+
   @Type(() => Date)
   deletedAt?: Date;
 

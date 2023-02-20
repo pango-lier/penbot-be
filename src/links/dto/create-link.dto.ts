@@ -20,6 +20,8 @@ export class CreateLinkDto {
 
   description?: string;
 
+  thumbnail?: string;
+
   @Type(() => Date)
   deletedAt?: Date;
 
