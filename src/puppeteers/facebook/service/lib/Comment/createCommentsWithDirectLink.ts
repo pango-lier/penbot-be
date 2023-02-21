@@ -1,12 +1,14 @@
 import { CoreService } from '../../../../core/core.service';
 
+export interface IComment {
+  title: string;
+  url?: string;
+  imageVideos?: string[];
+}
+
 export const createCommentsWithDirectLink = async (
   core: CoreService,
-  url: string,
-  content: {
-    title: string;
-    imageVideos?: string[];
-  },
+  comments: IComment[],
 ) => {
   let selector = await core.try(
     async () => {
@@ -26,11 +28,13 @@ export const createCommentsWithDirectLink = async (
       1000,
     );
   }
-  console.log(selector);
-  await core.click(selector);
-  await core.delayRandom(500, 3000);
-  await core.input(content.title);
-  await core.delayRandom(300, 2000);
-  await core.enter();
-  await core.delayRandom(500, 2000);
+  for (const comment of comments) {
+    console.log(selector);
+    await core.click(selector);
+    await core.delayMsRandom(500, 3000);
+    await core.input(comment.title);
+    await core.delayMsRandom(300, 2000);
+    await core.enter();
+    await core.delayMsRandom(500, 2000);
+  }
 };

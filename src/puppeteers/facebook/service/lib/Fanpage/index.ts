@@ -3,6 +3,10 @@ import { inviteOtherFriend } from './ActionOthers';
 import { CoreService } from '@puppeteers/core/core.service';
 import { switchPage } from './switchToPage';
 import { postContent } from './post/postContent';
+import {
+  IComment,
+  createCommentsWithDirectLink,
+} from '../Comment/createCommentsWithDirectLink';
 
 class FanPage {
   private core: CoreService;
@@ -23,6 +27,13 @@ class FanPage {
     type?: undefined | 'video' | 'image';
   }) {
     try {
+      // await this.goto('https://www.facebook.com/watch/?v=1360543028045142');
+      // await this.core.delay(2);
+      // await this.commentPost([
+      //   {
+      //     title: 'làm thế ai mà dám làm . Nam mô A di đà phật @@',
+      //   },
+      // ]);
       await this.clickSwitchPage();
       await postContent(this.core, fanPage.content, fanPage.imagePaths);
     } catch (error) {
@@ -32,19 +43,9 @@ class FanPage {
   async inviteFriend() {
     await inviteOtherFriend(this.core);
   }
-  async commentPost(comment: {
-    content: string;
-    imagePaths: string[];
-    postRecentStart?: number;
-    postRecentEnd?: number;
-  }) {
-    await createComments(
-      this.core,
-      comment.content,
-      comment.imagePaths,
-      comment.postRecentStart,
-      comment.postRecentEnd,
-    );
+
+  async commentPost(comments: IComment[]) {
+    await createCommentsWithDirectLink(this.core, comments);
   }
 }
 
