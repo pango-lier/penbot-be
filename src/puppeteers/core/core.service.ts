@@ -104,7 +104,7 @@ export class CoreService {
       try {
         await delay(0.3);
         await fs.unlinkSync(pathFile);
-      } catch (e) { }
+      } catch (e) {}
     });
 
     return true;
@@ -116,6 +116,10 @@ export class CoreService {
 
   async delayRandom(min, max): Promise<unknown> {
     return delay(random(min, max));
+  }
+
+  async delayMsRandom(min, max): Promise<unknown> {
+    return delayMs(random(min, max));
   }
 
   async getContent(selector): Promise<string> {

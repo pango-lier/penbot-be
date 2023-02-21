@@ -191,7 +191,7 @@ export class CrawlersService {
       size: file.size,
       linkDownloaded: file.linkDownloaded,
       links: crawlerLink.target,
-      meta: JSON.stringify(file.source),
+      // meta: JSON.stringify(file.source),
       socialTargetIds: crawlerLink.socialTargets.map((i) => i.id),
       thumbnail: file.thumbnail,
     };
