@@ -201,7 +201,6 @@ export class CrawlersService {
       title: file.title,
       tags: JSON.stringify(file.tags),
       description: file.description,
-      status: ArticleStatusEnum.PENDING,
       thumbnail: file.thumbnail,
       socialTargetIds: crawlerLink.socialTargets.map((i) => i.id),
       createLinks: [

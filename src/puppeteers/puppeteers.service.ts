@@ -15,6 +15,7 @@ import { CrawlersService } from '../crawlers/crawlers.service';
 import { ArticlesService } from '../articles/articles.service';
 import { PostArticlePuppeteerDto } from './dto/create-article-puppeteer.dto';
 import { YoutubeService } from './youtube/youtube.service';
+import { ArticleStatusEnum } from '../articles/entities/article-status.enum';
 const randomstring = require('randomstring');
 
 @Injectable()
@@ -72,7 +73,6 @@ export class PuppeteersService {
 
   async createFacebookPostArticle(data: QueueDataFacebookDto) {
     const articles = await this.articleService.findIds(data.data.articleIds);
-
     for (const article of articles) {
       const imagePaths = article.links.map((i) => i.urlLocal);
       for (const socialTarget of article.socialTargets) {

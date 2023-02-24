@@ -35,7 +35,10 @@ export class ArticlesController {
     @Paginate() paginate: IPaginate,
     @CurrentUser() user: ICurrentUser,
   ) {
-    const [result, total] = await this.articlesService.findAll(paginate);
+    const [result, total] = await this.articlesService.findAll(
+      paginate,
+      +user.id,
+    );
     return {
       result,
       total,

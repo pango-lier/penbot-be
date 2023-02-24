@@ -26,9 +26,6 @@ export class Link {
   @Column({ type: 'varchar', length: 2083, nullable: true })
   thumbnail?: string;
 
-  @Column({ type: 'varchar', nullable: true })
-  thumb?: string;
-
   @Column({ type: 'enum', enum: LinkEnum, default: LinkEnum.NONE })
   typeLink: LinkEnum;
 

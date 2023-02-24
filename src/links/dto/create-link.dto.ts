@@ -11,15 +11,13 @@ export class CreateLinkDto {
   @IsString()
   urlLocal?: string;
 
-  @IsString()
-  thumb?: string;
-
   typeLink?: LinkEnum;
 
   size?: number;
 
   description?: string;
 
+  @IsString()
   thumbnail?: string;
 
   @Type(() => Date)

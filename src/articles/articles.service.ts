@@ -35,12 +35,18 @@ export class ArticlesService {
     return await this.article.save(createArticle);
   }
 
-  async findAll(paginate: IPaginate) {
+  async findAll(paginate: IPaginate, userId: number) {
     const q = this.article.createQueryBuilder('article');
-    return await this.paginateService.queryFilter(q, paginate, [], {
-      defaultTable: 'article',
-      getQuery: 'getMany',
-    });
+    q.where('userId = :id', { id: userId });
+    return await this.paginateService.queryFilter(
+      q,
+      paginate,
+      ['title', 'id', 'tags', 'url'],
+      {
+        defaultTable: 'article',
+        getQuery: 'getMany',
+      },
+    );
   }
 
   async findOne(id: number) {
