@@ -20,6 +20,7 @@ import { SettingsModule } from './settings/settings.module';
 import { PaymentsModule } from './payments/payments.module';
 import { CrawlersModule } from './crawlers/crawlers.module';
 import { SocialTargetsModule } from './social-targets/social-targets.module';
+import { PrintwayModule } from './printway/printway.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { SocialTargetsModule } from './social-targets/social-targets.module';
     PaymentsModule,
     CrawlersModule,
     SocialTargetsModule,
+    PrintwayModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppGateway],

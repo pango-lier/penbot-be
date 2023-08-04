@@ -232,6 +232,91 @@ export class CoreService {
     }, selector);
   }
 
+  getSrcImageSelector(selector) {
+    return this.page.evaluate((selector) => {
+      const element = document.querySelector(selector);
+      if (element && element?.src) {
+        return element.src;
+      }
+      return false;
+    }, selector);
+  }
+
+  async scrollRandDown(
+    { stepMin = 50, stepMax = 400 },
+    { loopMin = 1, loopMax = 6 },
+  ) {
+    const maxLoop = random(loopMin, loopMax);
+    let poision = { x: null, y: null };
+    let old_y = 0;
+    let c = 0;
+    for (let i = 0; i < maxLoop; i++) {
+      console.log('scroll------------------ ' + i);
+      await this.page.mouse.move(random(20, 500), random(100, 300));
+      const _random = random(stepMin, stepMax);
+
+      await this.page.mouse.wheel({ deltaY: _random });
+      await this.delayMsRandom(700, 1500);
+      poision = await this.page.evaluate(() => {
+        const x = window.scrollX;
+        const y = window.scrollY;
+        return { x, y };
+      });
+
+      const size = await this.getSizeWindow();
+      const body = await this.getSizeWindowBody();
+
+      if (old_y === poision.y && old_y > size.h) {
+        //end-page
+        c++;
+        console.log('------------------end ', body, size);
+      } else c = 0;
+      if (c > 10) break;
+      old_y = poision.y;
+    }
+  }
+
+  async getSizeWindow() {
+    return await this.page.evaluate(() => {
+      return {
+        w: document.documentElement.clientWidth,
+        h: document.documentElement.clientHeight,
+      };
+    });
+  }
+
+  async getSizeWindowInner() {
+    return await this.page.evaluate(() => {
+      return {
+        w: document.body.scrollWidth,
+        h: document.body.scrollHeight,
+      };
+    });
+  }
+
+  async getSizeWindowBody() {
+    return await this.page.evaluate(() => {
+      return {
+        w: document.body.scrollWidth,
+        h: document.body.scrollHeight,
+      };
+    });
+  }
+
+  getAllSrcImageSelector(selector) {
+    return this.page.evaluate((selector) => {
+      const elements = document.querySelectorAll(selector);
+      const data = [];
+      if (elements) {
+        for (let i = 0; i < elements.length; i++) {
+          data.push(elements[i].src.trim());
+        }
+        return data;
+      }
+      return false;
+    }, selector);
+  }
+
   selectDate(selector, day) {
     return this.page.evaluate(
       ({ selector, day }) => {

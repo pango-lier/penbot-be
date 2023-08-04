@@ -36,10 +36,10 @@ export class BrowserService {
       ignoreHTTPSErrors: true,
       // defaultViewport: null,
       // devtools: true,
-      executablePath: process.env.CHROME_BIN,
+      // executablePath: process.env.CHROME_BIN,
       args: [
         '--no-sandbox',
-        '--headless',
+        // '--headless',
         // "--disable-gpu",
         '--disable-dev-shm-usage',
         '--disable-backgrounding-occluded-windows',
