@@ -19,7 +19,7 @@ export class PrintwayController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.printwayService.findOne(+id);
+    return this.printwayService.download();
   }
 
   @Patch(':id')

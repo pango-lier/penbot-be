@@ -4,10 +4,15 @@ import { UpdatePrintwayDto } from './dto/update-printway.dto';
 import { BrowserService } from '@puppeteers/browser/browser.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Printway } from './entities/printway.entity';
-import { Repository } from 'typeorm';
-import { createLocalFile } from '@utils/file/fetchVideo';
+import { IsNull, Repository } from 'typeorm';
+import {
+  createLocalFile,
+  fetchImage,
+  fetchVideo,
+} from '@utils/file/fetchVideo';
 import { CoreService } from '@puppeteers/core/core.service';
 import axios from 'axios';
+import Jimp from 'jimp';
 
 @Injectable()
 export class PrintwayService {
@@ -182,5 +187,34 @@ export class PrintwayService {
 
   remove(id: number) {
     return `This action removes a #${id} printway`;
+  }
+
+  async download() {
+    const data = await this.printWay.find({
+      where: { thumb512: IsNull() },
+      select: { id: true, url: true },
+    });
+    console.log(data.length);
+    for (let i = 0; i < data.length; i++) {
+      try {
+        const e = data[i];
+        const filename = e.url.match(/.*\/(.*)$/)[1];
+        const location = await fetchImage(e.url, filename);
+        const image = await Jimp.read(location);
+        console.log(image.bitmap.height, image.bitmap.width);
+        e.width = image.bitmap.width;
+        e.height = image.bitmap.height;
+        e.location = location;
+        const thumb256 = `/printway/thumb256/${filename}`;
+        const thumb512 = `/printway/thumb512/${filename}`;
+        await image.resize(256, Jimp.AUTO).quality(60).write(thumb256);
+        await image.resize(512, Jimp.AUTO).quality(60).write(thumb512);
+        e.thumb256 = thumb256;
+        e.thumb512 = thumb512;
+        await this.printWay.save(e);
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
   }
 }

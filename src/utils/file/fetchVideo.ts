@@ -43,3 +43,12 @@ export const createLocalFile = (
   const fileLocal = `${dirLocal}/${fileName}`;
   return fileLocal;
 };
+
+export const fetchImage = async (url, filename, dir = '/printway') => {
+  const localFilePath = createLocalFile(filename, dir);
+  const downloader = download(url, localFilePath);
+  await downloader
+    .go() // Promise returned
+    .then(() => console.log(`Downloaded and stored as the ${filename}`));
+  return localFilePath;
+};

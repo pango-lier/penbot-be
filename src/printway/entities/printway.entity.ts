@@ -18,8 +18,17 @@ export class Printway {
   @Column({ type: 'varchar', length: 500, nullable: true })
   url?: string;
 
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  thumb256?: string;
+
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  thumb512?: string;
+
   @Column({ type: 'varchar', length: 255, nullable: true })
   title: string;
+
+  @Column({ type: 'varchar', length: 512, nullable: true })
+  location?: string;
 
   @Column({ type: 'json', nullable: true })
   data?: any;

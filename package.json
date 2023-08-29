@@ -59,6 +59,7 @@
     "fetch-video": "^2.5.5",
     "fluent-ffmpeg": "^2.1.2",
     "ioredis": "^5.2.4",
+    "jimp": "^0.22.10",
     "mysql2": "^2.3.3",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
