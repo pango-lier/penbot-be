@@ -7,6 +7,7 @@ import { Printway } from './entities/printway.entity';
 import { Repository } from 'typeorm';
 import { createLocalFile } from '@utils/file/fetchVideo';
 import { CoreService } from '@puppeteers/core/core.service';
+import axios from 'axios';
 
 @Injectable()
 export class PrintwayService {
@@ -18,7 +19,43 @@ export class PrintwayService {
     return 'This action adds a new printway';
   }
 
+  async getOrder() {
+    console.log('aa');
+    for (let index = 0; index < 2000; index++) {
+      try {
+        const rest = await axios.request({
+          url: 'https://pro.printway.io/api/list-new-order',
+          method: 'post',
+          headers: {
+            Authorization:
+              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoxNTAyLCJ1c3JfZW1haWwiOiJraW5oZG9hbmgxMS5idEBnbWFpbC5jb20iLCJyb2xlX2lkIjo2LCJ1c3JfY29kZSI6IlBXU0VSMTUwMiIsInVzcl9maXJzdF9uYW1lIjoidHJvbmciLCJ1c3JfbGFzdF9uYW1lIjoidHJhbiIsInVzcl9hdmF0YXIiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BQVRYQUp6YThKMGVYMDFsTnpEc0hzZHItM0dzb2NWNlJxVjV2Ym5VZm9EaT1zOTYtYyIsInVzZXJfbGV2ZWwiOiJ2aXAxIiwic3ViX2lkIjpudWxsLCJzdXBfY29kZSI6bnVsbCwiYWNjZXNzX3Rva2VuIjoiVTJGc2RHVmtYMTlJS2d4R0s2RE9IOXUvMmg1d3RrWUNGZVBnazcvdThnam9TcDhSNWVjTmpRTXRDUVJSUXdlcmswNCtwckdUOW1rcFgrK3VGaHhtU3lqMjEwcHBBWXJ0YjZPLzlUQWtYa2hIRGEwMmFZRUNwSTYvR3N2dnREVHlYdGhtZFI4VjdIR2Q3d25HWThOTVhxYmU0WWtsTmNWdEg5TDV5RHFIazlVPSIsImxpc3RfYWNjb3VudF9zdG9yZSI6IltcInNob3BpZnlcIixcImViYXlcIixcImFtYXpvblwiLFwiYXBpXCIsXCJ3b29jb21tZXJjZVwiLFwiZXRzeVwiXSIsImNoZWNrX3BhcmVudCI6ImZhbHNlIiwic2VsbGVyX2NoZWNrIjpudWxsfSwiaWF0IjoxNjkxMTkzMjg3LCJleHAiOjE2OTEyMjIwODd9.hR7NAlx7OEEN98pAGTYUWFEMhWg_7Qpho4wSo5TxVPg',
+          },
+          data: {
+            user_id: index,
+            role_id: 1,
+            sup_code: null,
+            start: '2023-05-01T00:00:00.000Z',
+            end: '2023-08-05T23:59:59.000Z',
+            track: 'all',
+            keyWord: '',
+            currentTab: '99+totalElements',
+            design: 'all',
+            shippingCountryCode: false,
+            locationId: false,
+            rows: 20,
+            page: 0,
+          },
+        });
+        console.log(`user ${index}`, rest.data);
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+    return 's';
+  }
+
   async findAll() {
+    // return await this.getOrder();
     const dirProfile = createLocalFile(
       'printway_' + 'library',
       `/tmp/trong/profiles/printway`,
@@ -96,8 +133,8 @@ export class PrintwayService {
     await core.delay(1);
     console.log('scroll');
     await core.scrollRandDown(
-      { stepMin: 500, stepMax: 1000 },
-      { loopMin: 400, loopMax: 600 },
+      { stepMin: 500, stepMax: 800 },
+      { loopMin: 500, loopMax: 750 },
     );
     await core.delay(1);
     const images = await core.getAllSrcImageSelector(
@@ -125,7 +162,7 @@ export class PrintwayService {
           },
           search,
         };
-        let _printw = await this.printWay.findOneBy({ url: '' });
+        let _printw = await this.printWay.findOneBy({ url });
         if (!_printw) {
           _printw = this.printWay.create(createPrintwayDto);
         }
