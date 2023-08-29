@@ -13,12 +13,15 @@ import {
 import { CoreService } from '@puppeteers/core/core.service';
 import axios from 'axios';
 import Jimp from 'jimp';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
 
 @Injectable()
 export class PrintwayService {
   constructor(
     private readonly browser: BrowserService,
     @InjectRepository(Printway) private readonly printWay: Repository<Printway>,
+    @InjectQueue('image') private readonly imageQueue: Queue,
   ) {}
   create(createPrintwayDto: CreatePrintwayDto) {
     return 'This action adds a new printway';
@@ -190,6 +193,10 @@ export class PrintwayService {
   }
 
   async download() {
+    this.imageQueue.add('resize', {});
+  }
+
+  async runDownload() {
     const data = await this.printWay.find({
       where: { thumb512: IsNull() },
       select: { id: true, url: true },
