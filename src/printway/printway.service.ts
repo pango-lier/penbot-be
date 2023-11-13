@@ -197,30 +197,35 @@ export class PrintwayService {
   }
 
   async runDownload() {
-    const data = await this.printWay.find({
-      where: { thumb512: IsNull() },
-      select: { id: true, url: true },
-    });
-    console.log(data.length);
-    for (let i = 0; i < data.length; i++) {
-      try {
-        const e = data[i];
-        const filename = e.url.match(/.*\/(.*)$/)[1];
-        const location = await fetchImage(e.url, filename);
-        const image = await Jimp.read(location);
-        console.log(image.bitmap.height, image.bitmap.width);
-        e.width = image.bitmap.width;
-        e.height = image.bitmap.height;
-        e.location = location;
-        const thumb256 = `/printway/thumb256/${filename}`;
-        const thumb512 = `/printway/thumb512/${filename}`;
-        await image.resize(256, Jimp.AUTO).quality(60).write(thumb256);
-        await image.resize(512, Jimp.AUTO).quality(60).write(thumb512);
-        e.thumb256 = thumb256;
-        e.thumb512 = thumb512;
-        await this.printWay.save(e);
-      } catch (error) {
-        console.log(error.message);
+    for (let index = 0; ; index++) {
+      const data = await this.printWay.find({
+        where: { thumb512: IsNull() },
+        take: 200,
+        skip: 200 * index,
+        select: { id: true, url: true },
+      });
+      console.log(data.length);
+      for (let i = 0; i < data.length; i++) {
+        try {
+          const e = data[i];
+          const filename = e.url.match(/.*\/(.*)$/)[1];
+          const dir = '/printway/f' + Math.floor(parseInt(e.id as any) / 100);
+          const location = await fetchImage(e.url, filename, dir);
+          const image = await Jimp.read(location);
+          console.log(image.bitmap.height, image.bitmap.width);
+          e.width = image.bitmap.width;
+          e.height = image.bitmap.height;
+          e.location = location;
+          const thumb256 = `${dir}/thumb256/${filename}`;
+          const thumb512 = `${dir}/thumb512/${filename}`;
+          await image.resize(256, Jimp.AUTO).quality(80).write(thumb256);
+          await image.resize(512, Jimp.AUTO).quality(80).write(thumb512);
+          e.thumb256 = thumb256;
+          e.thumb512 = thumb512;
+          await this.printWay.save(e);
+        } catch (error) {
+          console.log(error.message);
+        }
       }
     }
   }
