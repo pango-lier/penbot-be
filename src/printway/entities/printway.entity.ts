@@ -7,7 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity('printway-link')
 export class Printway {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
