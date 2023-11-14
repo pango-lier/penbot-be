@@ -81,32 +81,32 @@ export class PrintwayService {
       }
     });
     const alphabet = [
-      'a',
-      'b',
-      'c',
-      'd',
-      'e',
-      'f',
-      'g',
-      'h',
-      'i',
-      'j',
-      'k',
-      'l',
-      'm',
-      'n',
-      'o',
-      'p',
-      'q',
-      'r',
-      's',
-      't',
-      'u',
-      'v',
-      'w',
-      'x',
-      'y',
-      'z',
+      // 'a',
+      // 'b',
+      // 'c',
+      // 'd',
+      // 'e',
+      // 'f',
+      // 'g',
+      // 'h',
+      // 'i',
+      // 'j',
+      // 'k',
+      // 'l',
+      // 'm',
+      // 'n',
+      // 'o',
+      // 'p',
+      // 'q',
+      // 'r',
+      // 's',
+      // 't',
+      // 'u',
+      // 'v',
+      // 'w',
+      // 'x',
+      // 'y',
+      // 'z',
       '1',
       '2',
       '3',
@@ -141,8 +141,8 @@ export class PrintwayService {
     await core.delay(1);
     console.log('scroll');
     await core.scrollRandDown(
-      { stepMin: 500, stepMax: 800 },
-      { loopMin: 500, loopMax: 750 },
+      { stepMin: 900, stepMax: 1400 },
+      { loopMin: 8700, loopMax: 9750 },
     );
     await core.delay(1);
     const images = await core.getAllSrcImageSelector(
@@ -205,12 +205,14 @@ export class PrintwayService {
         select: { id: true, url: true },
       });
       console.log(data.length);
+      if (data.length === 0) break;
+
       for (let i = 0; i < data.length; i++) {
         try {
           const e = data[i];
           const filename = e.url.match(/.*\/(.*)$/)[1];
-          const dir = '/printway/f' + Math.floor(parseInt(e.id as any) / 100);
-          const location = await fetchImage(e.url, filename, dir);
+          const dir = '/mnt/game/printway/b' + Math.floor(parseInt(e.id as any) / 100);
+          const location = await fetchImage(e.url, filename, `${dir}/origin`);
           const image = await Jimp.read(location);
           console.log(image.bitmap.height, image.bitmap.width);
           e.width = image.bitmap.width;
