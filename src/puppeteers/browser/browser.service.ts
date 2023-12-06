@@ -3,6 +3,7 @@ import puppeteer, { Browser, Page } from 'puppeteer';
 import { CoreService } from '../core/core.service';
 export interface IBrowserArgs {
   userDataDir?: string;
+  executablePath?: string;
   [key: string]: string | number;
 }
 
@@ -31,6 +32,7 @@ export class BrowserService {
       args.push(`--user-data-dir=${argObs.userDataDir}`);
     }
     return await puppeteer.launch({
+      executablePath: argObs.executablePath ? argObs.executablePath : undefined, //,
       headless: false,
       // ignoreDefaultArgs: true,
       ignoreHTTPSErrors: true,

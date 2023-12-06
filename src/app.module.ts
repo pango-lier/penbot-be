@@ -21,6 +21,7 @@ import { PaymentsModule } from './payments/payments.module';
 import { CrawlersModule } from './crawlers/crawlers.module';
 import { SocialTargetsModule } from './social-targets/social-targets.module';
 import { PrintwayModule } from './printway/printway.module';
+import { GoogleSearchConsoleModule } from './google-search-console/google-search-console.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { PrintwayModule } from './printway/printway.module';
     CrawlersModule,
     SocialTargetsModule,
     PrintwayModule,
+    GoogleSearchConsoleModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppGateway],

@@ -15,19 +15,19 @@ export class AppService implements OnApplicationBootstrap {
   }
 
   async createUserAdmin(): Promise<User> {
-    try {
-      const userDto = new User();
-      userDto.active = true;
-      userDto.name = 'admin';
-      userDto.username = 'username';
-      userDto.email = 'admin@gmail.com';
-      userDto.password = encodePwd('123456');
-      userDto.active = true;
+    // try {
+    //   const userDto = new User();
+    //   userDto.active = true;
+    //   userDto.name = 'admin';
+    //   userDto.username = 'username';
+    //   userDto.email = 'admin@gmail.com';
+    //   userDto.password = encodePwd('123456');
+    //   userDto.active = true;
 
-      await this.userService.repository().upsert(userDto, ['email']);
-    } catch (error) {
-      console.log(error.message || 'Create user error.');
-    }
+    //   await this.userService.repository().upsert(userDto, ['email']);
+    // } catch (error) {
+    //   console.log(error.message || 'Create user error.');
+    // }
     return undefined;
   }
 }

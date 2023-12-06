@@ -352,9 +352,9 @@ export class CoreService {
     return this.page.evaluate(
       ({ params, attribute }) => {
         const exist =
-          document.querySelector(params).hasAttribute(attribute) || false;
+          document.querySelector(params)?.hasAttribute(attribute) || false;
         if (exist) {
-          const a = document.querySelector(params).getAttribute(attribute);
+          const a = document.querySelector(params)?.getAttribute(attribute);
           if (a === 'true') return true;
           if (a === 'false') return false;
           return a || false;
