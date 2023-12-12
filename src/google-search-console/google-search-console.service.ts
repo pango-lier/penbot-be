@@ -3,6 +3,7 @@ import { CreateGoogleSearchConsoleDto } from './dto/create-google-search-console
 import { UpdateGoogleSearchConsoleDto } from './dto/update-google-search-console.dto';
 import { BrowserService } from '@puppeteers/browser/browser.service';
 import * as SITE_MAP from './data/sitemap.json';
+import * as SITE_MAP_BING from './data/sitemap-bing.json';
 import { createLocalFile } from '@utils/file/fetchVideo';
 
 @Injectable()
@@ -32,7 +33,7 @@ export class GoogleSearchConsoleService {
     return `This action removes a #${id} googleSearchConsole`;
   }
 
-  async findAll() {
+  async indexGoogleNow() {
     try {
       const dirProfile = createLocalFile(
         'printway_' + 'library',
@@ -48,14 +49,37 @@ export class GoogleSearchConsoleService {
       for (let index = 0; index < SITE_MAP.urlset.url.length; index++) {
         const element = SITE_MAP.urlset.url[index];
         console.warn(`${index}.${element.loc}`);
-        await this.requestIndex(element.loc, core);
+        await this.requestIndexGoogle(element.loc, core);
       }
     } catch (error) {
       console.log(error.message);
     }
   }
 
-  async requestIndex(url, core) {
+  async indexBingNow() {
+    try {
+      const dirProfile = createLocalFile(
+        'printway_' + 'library',
+        `/tmp/trong/profiles/google`,
+      );
+      const { core } = await this.browser.StartUp({
+        profile: 'google-search-console-index',
+        userDataDir: dirProfile,
+        executablePath:
+          '/home/trong/.gologin/browser/orbita-browser-107/chrome',
+      });
+
+      for (let index = 0; index < SITE_MAP_BING.urlset.url.length; index++) {
+        const element = SITE_MAP_BING.urlset.url[index];
+        console.warn(`${index}.${element.loc}`);
+        await this.requestIndexBing(element.loc, core);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  async requestIndexGoogle(url, core) {
     await core.goto(
       'https://search.google.com/search-console/index?resource_id=sc-domain%3Acutom.us&hl=en',
     );
@@ -92,6 +116,33 @@ export class GoogleSearchConsoleService {
       // console.log('gotIt :' + gotIt);
       // if (gotIt) break;
     }
+    console.log('success');
+  }
+
+  async requestIndexBing(url, core) {
+    await core.goto(
+      'https://www.bing.com/webmasters/urlinspection?siteUrl=https://cutom.us/',
+    );
+    await core.delay(3);
+    await core.click('input[id^="TextField"]');
+    await core.delay(1);
+    await core.input(url);
+
+    await core.delay(1);
+    await core.click('button[data-tag="inspectBtn"]');
+    await core.delay(35);
+    // await core.click('button[data-tag="requestIndexingButton"]');
+    console.log('requestIndexingButton');
+    await core.click(
+      '#content > .containerLayout > .urlInspectionStatusHeaderContainer > .urlInspectionIndexingHeader > .ms-Button',
+    );
+    await core.delay(7);
+    // await core.click('button[data-tag="submitBtn"]');
+    console.log('submitBtn');
+    await core.click(
+      '.submitUrlIndexModalForm > .modalFooter > .ms-Button--primary > .ms-Button-flexContainer > .ms-Button-textContainer',
+    );
+    await core.delay(15);
     console.log('success');
   }
 }

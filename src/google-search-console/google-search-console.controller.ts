@@ -11,7 +11,7 @@ import { GoogleSearchConsoleService } from './google-search-console.service';
 import { CreateGoogleSearchConsoleDto } from './dto/create-google-search-console.dto';
 import { UpdateGoogleSearchConsoleDto } from './dto/update-google-search-console.dto';
 
-@Controller('google-search-console')
+@Controller('index-search')
 export class GoogleSearchConsoleController {
   constructor(
     private readonly googleSearchConsoleService: GoogleSearchConsoleService,
@@ -22,9 +22,14 @@ export class GoogleSearchConsoleController {
     return this.googleSearchConsoleService.create(createGoogleSearchConsoleDto);
   }
 
-  @Get()
-  findAll() {
-    return this.googleSearchConsoleService.findAll();
+  @Get('bing')
+  bing() {
+    return this.googleSearchConsoleService.indexBingNow();
+  }
+
+  @Get('google')
+  google() {
+    return this.googleSearchConsoleService.indexGoogleNow();
   }
 
   @Get(':id')
