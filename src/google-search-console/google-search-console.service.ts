@@ -60,7 +60,7 @@ export class GoogleSearchConsoleService {
     try {
       const dirProfile = createLocalFile(
         'printway_' + 'library',
-        `/tmp/trong/profiles/google`,
+        `/tmp/trong/profiles/bing`,
       );
       const { core } = await this.browser.StartUp({
         profile: 'google-search-console-index',
