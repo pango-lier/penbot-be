@@ -72,6 +72,7 @@ export class PuppeteersService {
   }
 
   async createFacebookPostArticle(data: QueueDataFacebookDto) {
+    console.log('createFacebookPostArticle');
     const articles = await this.articleService.findIds(data.data.articleIds);
     for (const article of articles) {
       const imagePaths = article.links.map((i) => i.urlLocal);
