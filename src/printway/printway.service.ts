@@ -140,11 +140,24 @@ export class PrintwayService {
     await core.click('.MuiSvgIcon-root');
     await core.delay(1);
     console.log('scroll');
-    await core.scrollRandDown(
-      { stepMin: 900, stepMax: 1400 },
-      { loopMin: 8700, loopMax: 9750 },
-    );
-    await core.delay(1);
+    let oldLength = 0;
+    let try2 = 0;
+    for (let index = 0; ; index++) {
+      await core.scrollRandDown(
+        { stepMin: 900, stepMax: 1400 },
+        { loopMin: 2, loopMax: 4 },
+      );
+      await core.delay(1);
+      const _images = await core.getAllSrcImageSelector(
+        '.ant-table-tbody > .ant-table-row > .ant-table-cell > div > .ant-image > .ant-image-img',
+      );
+      console.log(`${index}.${search} : ${try2}`);
+      if (_images === false || _images.length <= oldLength) {
+        try2++;
+        if (try2 > 10) break;
+      } else try2 = 0;
+      oldLength = (_images as any)?.length || 0;
+    }
     const images = await core.getAllSrcImageSelector(
       '.ant-table-tbody > .ant-table-row > .ant-table-cell > div > .ant-image > .ant-image-img',
     );
@@ -157,7 +170,6 @@ export class PrintwayService {
     const size = await core.getContentSelectorAll(
       '.ant-table-tbody > .ant-table-row > .ant-table-cell:nth-child(4) > .detail-row > span:nth-child(2)',
     );
-    console.log(images, titles, type, size);
     if (images) {
       for (let index = 0; index < images.length; index++) {
         const url = images[index];
