@@ -65,8 +65,8 @@ export class PrintwayService {
   async findAll() {
     // return await this.getOrder();
     const dirProfile = createLocalFile(
-      'printway_' + 'library',
-      `/tmp/trong/profiles/printway`,
+      'library',
+      `/home/trong/Pictures/prinway`,
     );
     const { core } = await this.browser.StartUp({
       profile: 'printway',
@@ -81,32 +81,32 @@ export class PrintwayService {
       }
     });
     const alphabet = [
-      // 'a',
-      // 'b',
-      // 'c',
-      // 'd',
-      // 'e',
-      // 'f',
-      // 'g',
-      // 'h',
-      // 'i',
-      // 'j',
-      // 'k',
-      // 'l',
-      // 'm',
-      // 'n',
-      // 'o',
-      // 'p',
-      // 'q',
-      // 'r',
-      // 's',
-      // 't',
-      // 'u',
-      // 'v',
-      // 'w',
-      // 'x',
-      // 'y',
-      // 'z',
+      'a',
+      'b',
+      'c',
+      'd',
+      'e',
+      'f',
+      'g',
+      'h',
+      'i',
+      'j',
+      'k',
+      'l',
+      'm',
+      'n',
+      'o',
+      'p',
+      'q',
+      'r',
+      's',
+      't',
+      'u',
+      'v',
+      'w',
+      'x',
+      'y',
+      'z',
       '1',
       '2',
       '3',
@@ -211,7 +211,8 @@ export class PrintwayService {
         try {
           const e = data[i];
           const filename = e.url.match(/.*\/(.*)$/)[1];
-          const dir = '/mnt/game/printway/b' + Math.floor(parseInt(e.id as any) / 100);
+          const dir =
+            '/mnt/game/printway/b' + Math.floor(parseInt(e.id as any) / 100);
           const location = await fetchImage(e.url, filename, `${dir}/origin`);
           const image = await Jimp.read(location);
           console.log(image.bitmap.height, image.bitmap.width);
