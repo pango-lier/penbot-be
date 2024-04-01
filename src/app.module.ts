@@ -23,6 +23,8 @@ import { SocialTargetsModule } from './social-targets/social-targets.module';
 import { PrintwayModule } from './printway/printway.module';
 import { GoogleSearchConsoleModule } from './google-search-console/google-search-console.module';
 import { NotificationsModule } from '@notifications/notifications.module';
+import { SocketModule } from '@socket/socket.module';
+import { MailModule } from '@mail/mail.module';
 
 @Module({
   imports: [
@@ -58,6 +60,7 @@ import { NotificationsModule } from '@notifications/notifications.module';
     GoogleSearchConsoleModule,
     NotificationsModule,
     SocialsModule,
+    SocketModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppGateway],
