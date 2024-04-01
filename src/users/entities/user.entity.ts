@@ -60,7 +60,7 @@ export class User {
   @DeleteDateColumn({ type: 'timestamp' })
   deleted_at?: Date;
 
-  @OneToMany(() => Notification, (notification) => notification.user, {
+  @OneToMany(() => Notification, (notification) => notification.receivers, {
     nullable: true,
   })
   notifications?: Notification[];
