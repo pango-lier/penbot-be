@@ -22,6 +22,7 @@ import { CrawlersModule } from './crawlers/crawlers.module';
 import { SocialTargetsModule } from './social-targets/social-targets.module';
 import { PrintwayModule } from './printway/printway.module';
 import { GoogleSearchConsoleModule } from './google-search-console/google-search-console.module';
+import { NotificationsModule } from '@notifications/notifications.module';
 
 @Module({
   imports: [
@@ -55,6 +56,8 @@ import { GoogleSearchConsoleModule } from './google-search-console/google-search
     SocialTargetsModule,
     PrintwayModule,
     GoogleSearchConsoleModule,
+    NotificationsModule,
+    SocialsModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppGateway],
