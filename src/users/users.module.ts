@@ -10,7 +10,13 @@ import { PermissionsModule } from './permissions/permissions.module';
 
 @Global()
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), RolesModule, ProxiesModule, GroupsModule, PermissionsModule],
+  imports: [
+    TypeOrmModule.forFeature([User]),
+    RolesModule,
+    ProxiesModule,
+    GroupsModule,
+    PermissionsModule,
+  ],
   controllers: [UsersController],
   providers: [UsersService],
   exports: [TypeOrmModule.forFeature([User]), UsersService],
