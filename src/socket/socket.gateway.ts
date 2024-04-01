@@ -14,7 +14,7 @@ import { SocketManagerOnlineService } from './socket-manager-online.service';
 import { SocketService } from './socket.service';
 import WsDeSocket from './ws-jwt/ws-de-socket';
 
-@WebSocketGateway(6002, { transports: ['websocket'], cors: true })
+@WebSocketGateway(6005, { transports: ['websocket'], cors: true })
 export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;

@@ -5,5 +5,9 @@
   "compilerOptions": {
     "assets": ["mail/templates/**/*"],
     "watchAssets": true
+  },
+  "resolutions": {
+    "strip-ansi": "6.0.0",
+    "string-width": "4.2.3"
   }
 }

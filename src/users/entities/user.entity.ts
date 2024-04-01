@@ -18,6 +18,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Article } from '../../articles/entities/article.entity';
+import { Mail } from '@mail/entities/mail.entity';
 
 @Entity('users')
 export class User {
@@ -110,4 +111,9 @@ export class User {
     nullable: true,
   })
   articles?: Article[];
+
+  @OneToMany(() => Mail, (a) => a.user, {
+    nullable: true,
+  })
+  mails?: Mail[];
 }

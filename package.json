@@ -49,6 +49,7 @@
     "@nestjs/platform-socket.io": "^9.2.1",
     "@nestjs/typeorm": "^9.0.1",
     "@nestjs/websockets": "^9.2.1",
+    "@types/nodemailer": "^6.4.14",
     "@types/passport-local": "^1.0.34",
     "axios": "^1.2.1",
     "bcrypt": "^5.1.0",
@@ -120,5 +121,9 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "resolutions": {
+    "strip-ansi": "6.0.0",
+    "string-width": "4.2.3"
   }
 }

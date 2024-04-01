@@ -12,7 +12,7 @@ import { SocketNotificationCountService } from './socket-notification-count.serv
 import { User } from '@users/entities/user.entity';
 
 @Injectable()
-@WebSocketGateway(6002, { transports: ['websocket'], cors: true })
+@WebSocketGateway(6005, { transports: ['websocket'], cors: true })
 export class SocketService {
   private logger: Logger = new Logger('SocketService');
   @WebSocketServer()
