@@ -27,6 +27,9 @@ const BullMQQueueRegisterModule = [
   BullModule.registerQueue({
     name: 'image',
   }),
+  BullModule.registerQueue({
+    name: 'mail',
+  }),
 ];
 @Global()
 @Module({
@@ -57,6 +60,7 @@ export class BullmqModule {
     @InjectQueue('browser') private browserQueue: Queue,
     @InjectQueue('crawler') private crawlerQueue: Queue,
     @InjectQueue('image') private imageQueue: Queue,
+    @InjectQueue('mail') private mailQueue: Queue,
   ) {
     this.serverAdapter.setBasePath('/api/admin/queues'); //http://localhost:3023/api/admin/queues/
     createBullBoard({
@@ -66,6 +70,7 @@ export class BullmqModule {
         new BullMQAdapter(browserQueue),
         new BullMQAdapter(crawlerQueue),
         new BullMQAdapter(imageQueue),
+        new BullMQAdapter(mailQueue),
       ],
       serverAdapter: this.serverAdapter,
     });

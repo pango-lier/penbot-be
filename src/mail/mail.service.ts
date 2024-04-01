@@ -33,23 +33,23 @@ export class MailService {
     });
   }
 
-  // async sendEmailOtp(
-  //   email: string,
-  //   meta: { username: string; code: string },
-  //   user_id?: number,
-  // ) {
-  //   const mail = await this.create({
-  //     email,
-  //     meta,
-  //     user_id,
-  //     subject: `Your One-Time Password (OTP)`,
-  //     type: EnumMailType.EmailOtp,
-  //   });
-  //   this.mailQueue.add(EnumMailType.EmailOtp, {
-  //     mail,
-  //   });
-  //   return mail;
-  // }
+  async sendEmailOtp(
+    email: string,
+    meta: { username: string; code: string },
+    userId?: number,
+  ) {
+    const mail = await this.create({
+      email,
+      meta,
+      userId,
+      subject: `Your One-Time Password (OTP)`,
+      type: EnumMailType.EmailOtp,
+    } as any);
+    this.mailQueue.add(EnumMailType.EmailOtp, {
+      mail,
+    });
+    return mail;
+  }
 
   // async EmailLinkOtp(
   //   email: string,

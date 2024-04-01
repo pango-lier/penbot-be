@@ -26,6 +26,10 @@ export class Mail extends CoreEntity {
   @Column({ type: 'enum', default: EnumMailStatus.Draft, enum: EnumMailStatus })
   status?: EnumMailStatus;
 
+  @Column({ type: 'bigint', nullable: true })
+  userId?: number;
+
   @ManyToOne(() => User, (e) => e.mails)
+  @JoinColumn({ name: 'userId' })
   user?: User;
 }
