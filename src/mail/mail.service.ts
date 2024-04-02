@@ -51,6 +51,24 @@ export class MailService {
     return mail;
   }
 
+  async sendAdvert(
+    email: string,
+    meta: { username: string; code: string },
+    userId?: number,
+  ) {
+    const mail = await this.create({
+      email,
+      meta,
+      userId,
+      subject: `Discover Custom Gifts for Your Loved Ones at Cutom.us`,
+      type: EnumMailType.Advert,
+    } as any);
+    this.mailQueue.add(EnumMailType.EmailOtp, {
+      mail,
+    });
+    return mail;
+  }
+
   // async EmailLinkOtp(
   //   email: string,
   //   meta: { username: string; code: string },
@@ -103,7 +121,7 @@ export class MailService {
     const socials: any = {};
 
     return {
-      siteTitle: 'The CUTOM',
+      siteTitle: 'The Cutom.us',
       website: 'https://cutom.us/',
       logo: '',
       formattedAddress: '',
