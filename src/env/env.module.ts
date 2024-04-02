@@ -4,6 +4,7 @@ import authConfig from './auth.config';
 import databaseConfig from './database.config';
 import ioredis from './ioredis';
 import queueConfig from './queue.config';
+import mailConfig from './mail.config';
 
 @Module({
   imports: [
@@ -11,7 +12,7 @@ import queueConfig from './queue.config';
       isGlobal: true,
       expandVariables: true,
       cache: false,
-      load: [databaseConfig, authConfig, queueConfig, ioredis],
+      load: [databaseConfig, authConfig, queueConfig, ioredis, mailConfig],
     }),
   ],
 })

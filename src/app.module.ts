@@ -61,6 +61,7 @@ import { MailModule } from '@mail/mail.module';
     NotificationsModule,
     SocialsModule,
     SocketModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppGateway],

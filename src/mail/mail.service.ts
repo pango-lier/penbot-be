@@ -51,19 +51,15 @@ export class MailService {
     return mail;
   }
 
-  async sendAdvert(
-    email: string,
-    meta: { username: string; code: string },
-    userId?: number,
-  ) {
+  async sendAdvert(email?: string) {
     const mail = await this.create({
       email,
-      meta,
-      userId,
+      meta: '',
+      userId: 1,
       subject: `Discover Custom Gifts for Your Loved Ones at Cutom.us`,
       type: EnumMailType.Advert,
     } as any);
-    this.mailQueue.add(EnumMailType.EmailOtp, {
+    this.mailQueue.add(EnumMailType.Advert, {
       mail,
     });
     return mail;
@@ -90,7 +86,7 @@ export class MailService {
   async send(mail: CreateMailDto) {
     try {
       const list = this.configService.get('mail.toAdmin').split(',');
-      const contextSetting = await this.contextSetting();
+      //  const contextSetting = await this.contextSetting();
       await this.setGmailTransport();
       await this.mailerService.sendMail({
         transporterName: 'gmail',
@@ -99,14 +95,7 @@ export class MailService {
         subject: mail.subject,
         template: mail.type, // The `.pug` or `.hbs` extension is appended automatically.
         context: {
-          mail: {
-            ...mail,
-            meta: {
-              ...mail.meta,
-              username: mail.meta?.username,
-            },
-          },
-          ...contextSetting,
+          mail,
         },
       });
     } catch (error) {

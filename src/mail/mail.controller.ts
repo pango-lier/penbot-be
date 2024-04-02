@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { MailService } from './mail.service';
 import { CreateMailDto } from './dto/create-mail.dto';
@@ -23,6 +24,11 @@ export class MailController {
   @Get()
   findAll() {
     return this.mailService.findAll();
+  }
+
+  @Get('test')
+  sendAdvert(@Query('email') email: string) {
+    return this.mailService.sendAdvert(email);
   }
 
   @Get(':id')
