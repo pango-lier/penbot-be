@@ -25,6 +25,7 @@ import { GoogleSearchConsoleModule } from './google-search-console/google-search
 import { NotificationsModule } from '@notifications/notifications.module';
 import { SocketModule } from '@socket/socket.module';
 import { MailModule } from '@mail/mail.module';
+import { MailersModule } from './mailers/mailers.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { MailModule } from '@mail/mail.module';
     SocialsModule,
     SocketModule,
     MailModule,
+    MailersModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppGateway],
