@@ -1,26 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { CreateMailerDto } from './dto/create-mailer.dto';
 import { UpdateMailerDto } from './dto/update-mailer.dto';
+import { BaseService } from '@common/base/base.service';
+import { PagingQueryDto } from '@common/dto/paging-query.dto';
+import { Mailer } from './entities/mailer.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
-export class MailersService {
-  create(createMailerDto: CreateMailerDto) {
-    return 'This action adds a new mailer';
-  }
-
-  findAll() {
-    return `This action returns all mailers`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} mailer`;
-  }
-
-  update(id: number, updateMailerDto: UpdateMailerDto) {
-    return `This action updates a #${id} mailer`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} mailer`;
+export class MailersService extends BaseService<
+  Mailer,
+  CreateMailerDto,
+  UpdateMailerDto,
+  PagingQueryDto
+> {
+  constructor(@InjectRepository(Mailer) protected repo: Repository<Mailer>) {
+    super(repo);
   }
 }

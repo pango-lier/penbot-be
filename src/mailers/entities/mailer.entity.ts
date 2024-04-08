@@ -6,6 +6,12 @@ export class Mailer extends CoreEntity {
   @Column({ type: 'varchar', nullable: true })
   city?: string;
 
+  @Column({ type: 'varchar', nullable: true, length: 128 })
+  zip?: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  formatted_address?: string;
+
   @Column({ type: 'varchar', nullable: true })
   address?: string;
 
@@ -17,6 +23,12 @@ export class Mailer extends CoreEntity {
 
   @Column({ type: 'varchar', nullable: true })
   name?: string;
+
+  @Column({ type: 'varchar', nullable: true, length: 128 })
+  firstName?: string;
+
+  @Column({ type: 'varchar', nullable: true, length: 128 })
+  lasName?: string;
 
   @Column({ type: 'varchar', length: 125 })
   email: string;
