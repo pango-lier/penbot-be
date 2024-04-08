@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { MailersService } from './mailers.service';
 import { CreateMailerDto } from './dto/create-mailer.dto';
 import { UpdateMailerDto } from './dto/update-mailer.dto';
@@ -15,5 +15,10 @@ export class MailersController extends BaseController<
 >(CreateMailerDto, UpdateMailerDto, PagingQueryDto) {
   constructor(protected service: MailersService) {
     super(service);
+  }
+
+  @Get('import')
+  import() {
+    return this.service.importData();
   }
 }

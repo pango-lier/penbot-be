@@ -4,6 +4,7 @@
   "sourceRoot": "src",
   "compilerOptions": {
     "assets": ["mail/templates/**/*"],
+    "assets": ["mailers/data/**/*"],
     "watchAssets": true
   },
   "resolutions": {

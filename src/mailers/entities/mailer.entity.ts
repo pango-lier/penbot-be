@@ -1,5 +1,5 @@
 import { CoreEntity } from 'src/common/entities/core.entity';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, Index } from 'typeorm';
 
 @Entity()
 export class Mailer extends CoreEntity {
@@ -30,7 +30,8 @@ export class Mailer extends CoreEntity {
   @Column({ type: 'varchar', nullable: true, length: 128 })
   lasName?: string;
 
-  @Column({ type: 'varchar', length: 125 })
+  @Index()
+  @Column({ type: 'varchar', length: 125, unique: true })
   email: string;
 
   @Column({ type: 'boolean', default: false })
