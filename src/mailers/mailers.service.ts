@@ -6,9 +6,9 @@ import { PagingQueryDto } from '@common/dto/paging-query.dto';
 import { Mailer } from './entities/mailer.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { createReadStream } from 'fs';
+import { createReadStream, readdir } from 'fs';
 import * as csvParser from 'csv-parser';
-import { join } from 'path';
+import { join, extname } from 'path';
 
 @Injectable()
 export class MailersService extends BaseService<
@@ -22,26 +22,43 @@ export class MailersService extends BaseService<
   }
 
   async importData() {
-    const results = [];
-    const filePath = join(__dirname, '../mailers/data/csv1.csv');
-    // Đọc dữ liệu từ tệp CSV và thêm vào mảng results
-    createReadStream(filePath)
-      .pipe(csvParser())
-      .on('data', (data) => results.push(data))
-      .on('end', async () => {
-        // Thêm dữ liệu vào cơ sở dữ liệu
-        for (const result of results) {
-          if (result?.Email?.toLowerCase()?.trim()) {
-            const mailers = await this.repo.findOne({
-              where: { email: result.Email.toLowerCase().trim() },
-            });
-            if (!mailers) {
-              await this.create({ email: result.Email.toLowerCase().trim() });
-            } else {
-              await this.update(mailers.id, { ...mailers, ...result });
+    const readCsvFile = (filePath) => {
+      const results = [];
+      createReadStream(filePath)
+        .pipe(csvParser())
+        .on('data', (data) => results.push(data))
+        .on('end', async () => {
+          // Thêm dữ liệu vào cơ sở dữ liệu
+          for (const result of results) {
+            if (result?.Email?.toLowerCase()?.trim()) {
+              const mailers = await this.repo.findOne({
+                where: { email: result.Email.toLowerCase().trim() },
+              });
+              if (!mailers) {
+                await this.create({
+                  email: result.Email.toLowerCase().trim(),
+                });
+              } else {
+                await this.update(mailers.id, { ...mailers, ...result });
+              }
             }
           }
+        });
+    };
+    const directoryPath = join(__dirname, '../mailers/data');
+    readdir(directoryPath, (err, files) => {
+      if (err) {
+        console.error('Error reading directory:', err);
+        return;
+      }
+
+      files.forEach((file) => {
+        console.log(file);
+        if (extname(file)) {
+          const filePath = join(directoryPath, file);
+          readCsvFile(filePath);
         }
       });
+    });
   }
 }
