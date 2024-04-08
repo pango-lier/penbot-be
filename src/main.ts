@@ -39,29 +39,29 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: true,
     abortOnError: false,
-    logger: WinstonModule.createLogger({
-      format: format.combine(format.splat(), format.simple()),
-      transports: [
-        new transports.Console({
-          level: 'verbose',
-          format: format.combine(
-            format.ms(),
-            format.prettyPrint(),
-            logFormat(),
-            format.colorize({ all: true }),
-          ),
-        }),
-        // new DailyRotateFile({
-        //   level: process.env.LOG_LEVEL || 'info',
-        //   dirname: 'logs',
-        //   filename: 'nestjs-%DATE%.log',
-        //   datePattern: 'YYYY-MM-DD-HH',
-        //   zippedArchive: true,
-        //   maxSize: '20m',
-        //   maxFiles: '14d',
-        // }),
-      ],
-    }),
+    // logger: WinstonModule.createLogger({
+    //   format: format.combine(format.splat(), format.simple()),
+    //   transports: [
+    //     new transports.Console({
+    //       level: 'verbose',
+    //       format: format.combine(
+    //         format.ms(),
+    //         format.prettyPrint(),
+    //         logFormat(),
+    //         format.colorize({ all: true }),
+    //       ),
+    //     }),
+    //     // new DailyRotateFile({
+    //     //   level: process.env.LOG_LEVEL || 'info',
+    //     //   dirname: 'logs',
+    //     //   filename: 'nestjs-%DATE%.log',
+    //     //   datePattern: 'YYYY-MM-DD-HH',
+    //     //   zippedArchive: true,
+    //     //   maxSize: '20m',
+    //     //   maxFiles: '14d',
+    //     // }),
+    //   ],
+    // }),
   });
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('api'); //
