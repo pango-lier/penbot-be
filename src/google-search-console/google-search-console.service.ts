@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { CreateGoogleSearchConsoleDto } from './dto/create-google-search-console.dto';
 import { UpdateGoogleSearchConsoleDto } from './dto/update-google-search-console.dto';
 import { BrowserService } from '@puppeteers/browser/browser.service';
-import * as SITE_MAP from './data/sitemap.json';
 import * as SITE_MAP_BING from './data/sitemap-bing.json';
 import { createLocalFile } from '@utils/file/fetchVideo';
+import { parseStringPromise } from 'xml2js';
+import axios from 'axios';
 
 @Injectable()
 export class GoogleSearchConsoleService {
@@ -35,6 +36,7 @@ export class GoogleSearchConsoleService {
 
   async indexGoogleNow() {
     try {
+      const sitemap = await this.fetchAndConvertSitemap();
       const dirProfile = createLocalFile(
         'printway_' + 'library',
         `/tmp/trong/profiles/google`,
@@ -46,13 +48,35 @@ export class GoogleSearchConsoleService {
           '/home/trong/.gologin/browser/orbita-browser-107/chrome',
       });
 
-      for (let index = 0; index < SITE_MAP.urlset.url.length; index++) {
-        const element = SITE_MAP.urlset.url[index];
+      for (let index = 0; index < sitemap.urlset.url.length; index++) {
+        const element = sitemap.urlset.url[index];
         console.warn(`${index}.${element.loc}`);
         await this.requestIndexGoogle(element.loc, core);
       }
     } catch (error) {
       console.log(error.message);
+    }
+  }
+
+  async fetchAndConvertSitemap(url = 'https://cutom.us/sitemap-0.xml') {
+    try {
+      // Bước 1: Fetch sitemap từ URL
+      const response = await axios.get(url, {
+        headers: {
+          'Content-Type': 'application/xml',
+        },
+      });
+
+      const xmlData = response.data;
+      const jsonData = await parseStringPromise(xmlData, {
+        explicitArray: false,
+        trim: true,
+      });
+
+      return jsonData;
+    } catch (error) {
+      console.error('Error fetching or parsing sitemap:', error);
+      throw error;
     }
   }
 
@@ -91,7 +115,6 @@ export class GoogleSearchConsoleService {
     await core.delay(1);
     await core.enter();
     await core.delay(5);
-    console.log('delay(3)');
     const indexTed2 = await core.getAttributeSelector(
       '.uwtVyc c-wiz:nth-child(1) > .CerIhf > span > div',
       'aria-disabled',
@@ -101,13 +124,11 @@ export class GoogleSearchConsoleService {
     await core.click(
       '.uwtVyc c-wiz:nth-child(2) > .CerIhf > span > .U26fgb > .ZFr60d',
     );
-    for (let index = 0; index < 25; index++) {
+    for (let index = 0; index < 15; index++) {
       const indexTed = await core.getAttributeSelector(
         '.uwtVyc c-wiz:nth-child(1) > .CerIhf > span > div',
         'aria-disabled',
       );
-
-      console.log('Indexted :' + indexTed);
       await core.delay(2);
       if (!indexTed) break;
       // const gotIt = await core.checkSelector(
