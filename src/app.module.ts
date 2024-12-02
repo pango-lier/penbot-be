@@ -26,6 +26,9 @@ import { NotificationsModule } from '@notifications/notifications.module';
 import { SocketModule } from '@socket/socket.module';
 import { MailModule } from '@mail/mail.module';
 import { MailersModule } from './mailers/mailers.module';
+import { InstagramModule } from './instagram/instagram.module';
+import { ThreadsModule } from './threads/threads.module';
+import { PinterestModule } from './pinterest/pinterest.module';
 
 @Module({
   imports: [
@@ -64,6 +67,9 @@ import { MailersModule } from './mailers/mailers.module';
     SocketModule,
     MailModule,
     MailersModule,
+    InstagramModule,
+    ThreadsModule,
+    PinterestModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppGateway],
