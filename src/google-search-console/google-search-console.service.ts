@@ -39,7 +39,7 @@ export class GoogleSearchConsoleService {
       const sitemap = await this.fetchAndConvertSitemap();
       const dirProfile = createLocalFile(
         'printway_' + 'library',
-        `/tmp/trong/profiles/google`,
+        `/home/profiles/google`,
       );
       const { core } = await this.browser.StartUp({
         profile: 'google-search-console-index',
@@ -49,6 +49,7 @@ export class GoogleSearchConsoleService {
       });
 
       for (let index = 0; index < sitemap.urlset.url.length; index++) {
+        if (index < 262) continue;
         const element = sitemap.urlset.url[index];
         console.warn(`${index}.${element.loc}`);
         await this.requestIndexGoogle(element.loc, core);
@@ -84,7 +85,7 @@ export class GoogleSearchConsoleService {
     try {
       const dirProfile = createLocalFile(
         'printway_' + 'library',
-        `/tmp/trong/profiles/bing`,
+        `/home/profiles/bing`,
       );
       const { core } = await this.browser.StartUp({
         profile: 'google-search-console-index',

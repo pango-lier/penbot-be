@@ -49,7 +49,7 @@ export class BrowserService {
         '--disable-backgrounding-occluded-windows',
         '--disable-backing-store-limit',
         // '--user-data-dir=/home/trong/.config/google-chrome/profile3',
-        '--tz=Asia/Bangkok',
+        // '--tz=Asia/Bangkok',
         '--no-first-run',
         '--font-masking-mode=2',
         '--origin-trial-disabled-features=ConditionalFocus',

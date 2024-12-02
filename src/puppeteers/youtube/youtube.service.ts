@@ -12,10 +12,7 @@ export class YoutubeService {
   core: CoreService;
   youtube: Youtube;
   async init() {
-    const dirProfile = createLocalFile(
-      'youtube',
-      `/tmp/trong/profiles/youtube`,
-    );
+    const dirProfile = createLocalFile('youtube', `/home/profiles/youtube`);
     const { core } = await this.browser.StartUp({
       profile: 'youtube',
       userDataDir: dirProfile,
