@@ -74,6 +74,6 @@ export class Social {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
-  @JoinTable()
+  @JoinTable({ name: 'social_crawler' })
   crawlers?: Crawler[];
 }

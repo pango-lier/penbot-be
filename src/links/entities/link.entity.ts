@@ -50,6 +50,6 @@ export class Link {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
-  @JoinTable()
+  @JoinTable({ name: 'link_article' })
   articles?: Article[];
 }

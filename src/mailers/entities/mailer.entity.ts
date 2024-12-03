@@ -30,7 +30,6 @@ export class Mailer extends CoreEntity {
   @Column({ type: 'varchar', nullable: true, length: 128 })
   lasName?: string;
 
-  @Index()
   @Column({ type: 'varchar', length: 125, unique: true })
   email: string;
 

@@ -64,6 +64,7 @@ export class User {
   @ManyToMany(() => Notification, (notification) => notification.receivers, {
     nullable: true,
   })
+  @JoinTable({ name: 'user_notification' })
   notifications?: Notification[];
 
   @ManyToMany(() => Role, {
@@ -71,7 +72,7 @@ export class User {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
-  @JoinTable()
+  @JoinTable({ name: 'user_role' })
   roles: Role[];
 
   @OneToMany(() => Group, (group) => group.user, {
@@ -94,7 +95,7 @@ export class User {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
-  @JoinTable()
+  @JoinTable({ name: 'user_permission' })
   permissions?: Permission[];
 
   @OneToMany(() => CrawlerLink, (a) => a.user, {

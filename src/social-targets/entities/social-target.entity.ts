@@ -44,7 +44,7 @@ export class SocialTarget {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
-  @JoinTable()
+  @JoinTable({ name: 'social_target_crawler' })
   crawlers: Crawler[];
 
   @ManyToMany(() => Article, (s) => s.socialTargets, {
@@ -53,7 +53,7 @@ export class SocialTarget {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
-  @JoinTable()
+  @JoinTable({ name: 'social_target_article' })
   articles?: Article[];
 
   @ManyToMany(() => CrawlerLink, (s) => s.socialTargets, {
@@ -62,7 +62,7 @@ export class SocialTarget {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
-  @JoinTable()
+  @JoinTable({ name: 'social_target_crawler_link' })
   crawlerLinks?: CrawlerLink[];
 
   @ManyToOne(() => Social, (u) => u.socialTarget, { nullable: true })

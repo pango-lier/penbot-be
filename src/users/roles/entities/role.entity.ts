@@ -29,7 +29,7 @@ export class Role {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
-  @JoinTable()
+  @JoinTable({ name: 'role_permission' })
   permissions: Permission[];
 
   @CreateDateColumn({ type: 'timestamp' })

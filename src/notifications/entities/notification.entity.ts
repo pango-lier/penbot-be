@@ -69,7 +69,6 @@ export class Notification {
   @CreateDateColumn({ type: 'timestamp', nullable: true })
   createdAt?: Date;
 
-  @Index()
   @UpdateDateColumn({ type: 'timestamp', nullable: true })
   updatedAt?: Date;
 }
