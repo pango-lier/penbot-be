@@ -1,4 +1,3 @@
-import { CrawlerLinkEnum } from '@crawlers/crawler-links/entities/crawler-link.enum';
 import { CrawlersService } from '@crawlers/crawlers.service';
 import { Processor, WorkerHost, OnWorkerEvent } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
