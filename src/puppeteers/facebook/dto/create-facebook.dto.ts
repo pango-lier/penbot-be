@@ -1,10 +1,9 @@
-import { PostArticlePuppeteerDto } from '../../dto/create-article-puppeteer.dto';
-import { CreateFacebookPostArticleDto } from './create-facebook-post-article.dto';
+import { Article } from '@articles/entities/article.entity';
 
 export class CreateFacebookDto {}
 
 export class QueueDataFacebookDto {
-  actionMethod: 'createFacebookPostArticle' | 'updateFacebookPostArticle';
-  data: PostArticlePuppeteerDto;
+  actionMethod: 'createPostArticle' | 'updateFacebookPostArticle';
+  articles: Article[];
   userIds: Array<number>;
 }

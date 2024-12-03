@@ -17,7 +17,6 @@ import { PuppeteersService } from '@puppeteers/puppeteers.service';
 import { SocialTarget } from '../social-targets/entities/social-target.entity';
 import { ArticlesService } from '../articles/articles.service';
 import { CreateArticleDto } from '../articles/dto/create-article.dto';
-import { ArticleStatusEnum } from '../articles/entities/article-status.enum';
 import { LinkEnum } from '../links/entities/link.enum';
 import { YoutubeService } from '../puppeteers/youtube/youtube.service';
 import { delay } from '../puppeteers/core/until/delay';
@@ -217,10 +216,7 @@ export class CrawlersService {
       createArticle,
       crawlerLink.userId,
     );
-    await this.puppeteerService.posArticle(
-      { articleIds: [article.id] },
-      userIds,
-    );
+    await this.puppeteerService.posArticle([article], userIds);
     return article;
   }
 }

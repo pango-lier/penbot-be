@@ -16,6 +16,8 @@ import { ArticlesService } from '../articles/articles.service';
 import { PostArticlePuppeteerDto } from './dto/create-article-puppeteer.dto';
 import { YoutubeService } from './youtube/youtube.service';
 import { ArticleStatusEnum } from '../articles/entities/article-status.enum';
+import { Article } from '@articles/entities/article.entity';
+import { SocialEnum } from '@socials/entities/social.enum';
 const randomstring = require('randomstring');
 
 @Injectable()
@@ -48,33 +50,24 @@ export class PuppeteersService {
     return `This action removes a #${id} puppeteer`;
   }
 
-  async addFacebookQueue(data: QueueDataFacebookDto) {
-    await this.browserQueue.add('facebook-service', data, {
-      jobId: `profile_fb${
-        data.userIds[0]
-      }_${new Date().getTime()}_${randomstring.generate(6)}`,
-    });
-  }
-
   async runMethodQueue(data: QueueDataFacebookDto) {
     await this[data.actionMethod](data);
   }
 
-  async posArticle(
-    postArticle: PostArticlePuppeteerDto,
-    userIds: Array<number>,
-  ) {
-    await this.addFacebookQueue({
-      actionMethod: 'createFacebookPostArticle',
-      data: postArticle,
-      userIds,
+  async posArticle(articles: Article[], userIds: Array<number>) {
+    await this.browserQueue.add('post-article-service', articles, {
+      jobId: `profile_${
+        userIds[0]
+      }_${new Date().getTime()}_${randomstring.generate(6)}`,
     });
   }
 
-  async createFacebookPostArticle(data: QueueDataFacebookDto) {
-    console.log('createFacebookPostArticle');
-    const articles = await this.articleService.findIds(data.data.articleIds);
-    for (const article of articles) {
+  async createPostArticle(articles: Article[]) {
+    console.log('createPostArticle');
+    const articleFull = await this.articleService.findIds(
+      articles?.map((i) => i.id),
+    );
+    for (const article of articleFull) {
       const imagePaths = article.links.map((i) => i.urlLocal);
       for (const socialTarget of article.socialTargets) {
         const create: CreateFacebookPostArticleDto = {
@@ -84,7 +77,9 @@ export class PuppeteersService {
           content: addTagsToString(article.title, article.tags),
           target: socialTarget.link,
         };
-        const response = await this.facebookService.createPostArticle(create);
+        if (SocialEnum.FACEBOOK === socialTarget.social.socialType) {
+          const response = await this.facebookService.createPostArticle(create);
+        }
       }
     }
   }
