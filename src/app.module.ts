@@ -29,10 +29,12 @@ import { MailersModule } from './mailers/mailers.module';
 import { InstagramModule } from './instagram/instagram.module';
 import { ThreadsModule } from './threads/threads.module';
 import { PinterestModule } from './pinterest/pinterest.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
     DatabaseModule,
+    ScheduleModule.forRoot(),
     RedisModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

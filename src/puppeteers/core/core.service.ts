@@ -21,6 +21,21 @@ export class CoreService {
     return this.page.click(target);
   }
 
+  clickSelector(selector) {
+    return this.page.evaluate(
+      ({ selector }) => {
+        const elements = document.querySelectorAll(selector);
+        if (elements) {
+          for (let i = 0; i < elements.length; i++) {
+            return elements[i].click();
+          }
+        }
+        return false;
+      },
+      { selector },
+    );
+  }
+
   async goto(url): Promise<HTTPResponse> {
     console.log(`goto >> ${url}`);
     return this.page.goto(url, {
@@ -72,6 +87,25 @@ export class CoreService {
       return this.page.keyboard.type(value, {
         delay: this.delayTypingTime * delay,
       });
+    }
+  }
+
+  async inputClean(value, delay = 1000) {
+    // tslint:disable-next-line: prefer-for-of
+    await this.page.keyboard.down('Control');
+    await this.page.keyboard.press('A');
+    await this.page.keyboard.up('Control');
+    await this.page.keyboard.press('Backspace');
+    if (value !== null && value !== undefined && value !== 'null') {
+      return await this.page.keyboard.type(value + '', {
+        delay: this.delayTypingTime * delay,
+      });
+    }
+  }
+
+  async type(value) {
+    if (value !== null && value !== undefined && value !== 'null') {
+      return await this.page.keyboard.sendCharacter(value);
     }
   }
 
@@ -210,8 +244,8 @@ export class CoreService {
         if (elements) {
           for (let i = 0; i < elements.length; i++) {
             contents.forEach((content) => {
-              console.log(elements[i].textContent.trim);
-              if (content.toString() === elements[i].textContent.trim())
+              // console.log(elements[i]?.textContent?.trim());
+              if (content.toString() === elements[i]?.textContent?.trim())
                 return elements[i].click();
             });
           }

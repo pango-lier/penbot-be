@@ -4,7 +4,8 @@ import { CoreService } from '../core/core.service';
 export interface IBrowserArgs {
   userDataDir?: string;
   executablePath?: string;
-  [key: string]: string | number;
+  headless?: boolean;
+  [key: string]: string | number | boolean;
 }
 
 interface IBrowserStart {
@@ -35,7 +36,7 @@ export class BrowserService {
       executablePath: argObs.executablePath
         ? argObs.executablePath
         : process.env.CHROME_BIN ?? undefined, //,
-      headless: false,
+      headless: argObs?.headless || false,
       // ignoreDefaultArgs: true,
       ignoreHTTPSErrors: true,
       // defaultViewport: null,
@@ -49,7 +50,7 @@ export class BrowserService {
         '--disable-backgrounding-occluded-windows',
         '--disable-backing-store-limit',
         // '--user-data-dir=/home/trong/.config/google-chrome/profile3',
-        // '--tz=Asia/Bangkok',
+        '--tz=Asia/Bangkok',
         '--no-first-run',
         '--font-masking-mode=2',
         '--origin-trial-disabled-features=ConditionalFocus',
