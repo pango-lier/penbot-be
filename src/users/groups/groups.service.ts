@@ -13,7 +13,8 @@ export class GroupsService {
     private readonly paginateService: PaginateService,
   ) {}
   create(createGroupDto: CreateGroupDto) {
-    return 'This action adds a new group';
+    const createGroup = this.group.create(createGroupDto);
+    return this.group.save(createGroup);
   }
 
   async findAll(paginate: IPaginate, userId: number) {
@@ -29,11 +30,15 @@ export class GroupsService {
     return `This action returns a #${id} group`;
   }
 
-  update(id: number, updateGroupDto: UpdateGroupDto) {
-    return `This action updates a #${id} group`;
+  async update(id: number, updateGroupDto: UpdateGroupDto) {
+    const update = await this.group.findOne({
+      where: { id },
+    });
+    const newUpdateGroup = this.group.merge(update, updateGroupDto);
+    return await this.group.save(newUpdateGroup);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} group`;
+    return this.group.delete(id);
   }
 }

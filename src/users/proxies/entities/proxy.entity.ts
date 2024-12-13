@@ -1,4 +1,3 @@
-
 import { CrawlerLink } from '@crawlers/crawler-links/entities/crawler-link.entity';
 import { Social } from '@socials/entities/social.entity';
 import { User } from '@users/entities/user.entity';
@@ -15,6 +14,13 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+export enum ProxyType {
+  HTTP = 'http',
+  HTTPS = 'https',
+  SOCKS4 = 'socks4',
+  SOCKS5 = 'socks5',
+}
+
 @Entity()
 export class Proxy {
   @PrimaryGeneratedColumn({ type: 'bigint' })
@@ -26,8 +32,23 @@ export class Proxy {
   @Column({ type: 'varchar', nullable: true })
   proxyId: string;
 
+  @Column({ type: 'enum', enum: ProxyType, nullable: true })
+  proxyType: ProxyType;
+
   @Column({ type: 'varchar', nullable: true })
-  proxyType: string;
+  host: string;
+
+  @Column({ type: 'int', unsigned: true, nullable: true })
+  port: number;
+
+  @Column({ type: 'varchar', nullable: true })
+  username: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  password: string;
+
+  @Column({ type: 'varchar', nullable: true, length: 3 })
+  country_code: string;
 
   @Column('bool', { default: true })
   active?: boolean;

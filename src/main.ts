@@ -67,6 +67,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api'); //
   const httpAdapter = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
+  console.log(`app run at ${process.env.PORT || 3006}`)
   await app.listen(process.env.PORT || 3006);
 }
 bootstrap();

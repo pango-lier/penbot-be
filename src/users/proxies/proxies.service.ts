@@ -41,10 +41,15 @@ export class ProxiesService {
       where: { id, userId: updateProxyDto.userId },
     });
     update.active = updateProxyDto.active;
-    update.proxyId = updateProxyDto.proxyId;
+    update.proxyId = updateProxyDto.proxyId || null;
     update.proxyType = updateProxyDto.proxyType;
-    update.name = updateProxyDto.name;
-    update.groupId = updateProxyDto.groupId;
+    update.name = updateProxyDto.name || null;
+    update.host = updateProxyDto.host || null;
+    update.port = updateProxyDto.port || null;
+    update.country_code = updateProxyDto.country_code || null;
+    update.username = updateProxyDto.username || null;
+    update.password = updateProxyDto.password || null;
+    update.groupId = updateProxyDto.groupId || null;
     return await this.repo.save(update);
   }
 
