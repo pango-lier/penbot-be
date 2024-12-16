@@ -1,7 +1,7 @@
 import { IsString } from 'class-validator';
 import { ArticleStatusEnum } from '../entities/article-status.enum';
 import { Type } from 'class-transformer';
-import { CreateLinkDto } from '../../links/dto/create-link.dto';
+import { CreateFileDto } from '../../files/dto/create-file.dto';
 
 export class CreateArticleDto {
   @IsString()
@@ -31,5 +31,5 @@ export class CreateArticleDto {
 
   socialTargetIds?: number[];
 
-  createLinks?: CreateLinkDto[];
+  createLinks?: CreateFileDto[];
 }

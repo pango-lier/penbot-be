@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { CreateLinkDto } from './dto/create-link.dto';
-import { UpdateLinkDto } from './dto/update-link.dto';
+import { CreateFileDto } from './dto/create-file.dto';
+import { UpdateLinkDto } from './dto/update-file.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Link } from './entities/link.entity';
+import { File } from './entities/file.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class LinksService {
   constructor(
-    @InjectRepository(Link) private readonly link: Repository<Link>,
+    @InjectRepository(File) private readonly link: Repository<File>,
   ) {}
-  async create(createLinkDto: CreateLinkDto) {
+  async create(createLinkDto: CreateFileDto) {
     const linkS = this.link.create(createLinkDto);
     return await this.link.save(linkS);
   }

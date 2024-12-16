@@ -1,14 +1,22 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { LinksService } from './links.service';
-import { CreateLinkDto } from './dto/create-link.dto';
-import { UpdateLinkDto } from './dto/update-link.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
+import { LinksService } from './files.service';
+import { CreateFileDto } from './dto/create-file.dto';
+import { UpdateLinkDto } from './dto/update-file.dto';
 
 @Controller('links')
 export class LinksController {
   constructor(private readonly linksService: LinksService) {}
 
   @Post()
-  create(@Body() createLinkDto: CreateLinkDto) {
+  create(@Body() createLinkDto: CreateFileDto) {
     return this.linksService.create(createLinkDto);
   }
 

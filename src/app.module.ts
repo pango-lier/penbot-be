@@ -15,7 +15,7 @@ import { AppGateway } from './app/app.gateway';
 import { ArticlesModule } from './articles/articles.module';
 import { SocialsModule } from './socials/socials.module';
 import { PuppeteersModule } from './puppeteers/puppeteers.module';
-import { LinksModule } from './links/links.module';
+import { FilesModule } from './files/files.module';
 import { SettingsModule } from './settings/settings.module';
 import { PaymentsModule } from './payments/payments.module';
 import { CrawlersModule } from './crawlers/crawlers.module';
@@ -30,6 +30,7 @@ import { InstagramModule } from './instagram/instagram.module';
 import { ThreadsModule } from './threads/threads.module';
 import { PinterestModule } from './pinterest/pinterest.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { SocialTargetArticlesModule } from './social-target-articles/social-target-articles.module';
 
 @Module({
   imports: [
@@ -57,7 +58,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     ArticlesModule,
     SocialsModule,
     PuppeteersModule,
-    LinksModule,
+    FilesModule,
     SettingsModule,
     PaymentsModule,
     CrawlersModule,
@@ -72,6 +73,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     InstagramModule,
     ThreadsModule,
     PinterestModule,
+    SocialTargetArticlesModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppGateway],

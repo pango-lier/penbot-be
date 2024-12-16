@@ -68,7 +68,7 @@ export class PuppeteersService {
       articles?.map((i) => i.id),
     );
     for (const article of articleFull) {
-      const imagePaths = article.links.map((i) => i.urlLocal);
+      const imagePaths = article.files.map((i) => i.urlLocal);
       for (const socialTarget of article.socialTargets) {
         const create: CreateFacebookPostArticleDto = {
           username: socialTarget.social.username,

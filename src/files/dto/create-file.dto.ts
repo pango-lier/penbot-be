@@ -1,8 +1,8 @@
+import { FileEnum } from '@files/entities/file.enum';
 import { Type } from 'class-transformer';
 import { IsString } from 'class-validator';
-import { LinkEnum } from '../entities/link.enum';
 
-export class CreateLinkDto {
+export class CreateFileDto {
   id?: number;
 
   @IsString()
@@ -11,7 +11,7 @@ export class CreateLinkDto {
   @IsString()
   urlLocal?: string;
 
-  typeLink?: LinkEnum;
+  typeLink?: FileEnum;
 
   size?: number;
 

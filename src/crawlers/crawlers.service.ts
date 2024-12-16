@@ -17,9 +17,9 @@ import { PuppeteersService } from '@puppeteers/puppeteers.service';
 import { SocialTarget } from '../social-targets/entities/social-target.entity';
 import { ArticlesService } from '../articles/articles.service';
 import { CreateArticleDto } from '../articles/dto/create-article.dto';
-import { LinkEnum } from '../links/entities/link.enum';
 import { YoutubeService } from '../puppeteers/youtube/youtube.service';
 import { delay } from '../puppeteers/core/until/delay';
+import { FileEnum } from '@files/entities/file.enum';
 
 @Injectable()
 export class CrawlersService {
@@ -212,7 +212,7 @@ export class CrawlersService {
         {
           url: crawler.links,
           urlLocal: crawler.linkDownloaded,
-          typeLink: LinkEnum.VIDEO,
+          typeLink: FileEnum.VIDEO,
           size: crawler.size,
           thumbnail: crawler.thumbnail,
         },

@@ -6,9 +6,9 @@ import { Article } from './entities/article.entity';
 import { In, Repository } from 'typeorm';
 import { IPaginate } from '@paginate/interface/paginate.interface';
 import { PaginateService } from '@paginate/paginate.service';
-import { LinksService } from '../links/links.service';
-import { Link } from '../links/entities/link.entity';
+import { LinksService } from '../files/files.service';
 import { SocialTarget } from '../social-targets/entities/social-target.entity';
+import { File } from '@files/entities/file.entity';
 
 @Injectable()
 export class ArticlesService {
@@ -22,11 +22,11 @@ export class ArticlesService {
   async create(createArticleDto: CreateArticleDto, userId?: number) {
     const createArticle = this.article.create(createArticleDto);
     if (createArticleDto.createLinks) {
-      const links: Link[] = [];
+      const links: File[] = [];
       for (const link of createArticleDto.createLinks) {
         links.push(await this.linkService.create(link));
       }
-      createArticle.links = links;
+      createArticle.files = links;
     }
     createArticle.socialTargets = await this.socialTarget.findBy({
       id: In(createArticleDto.socialTargetIds),
@@ -56,7 +56,7 @@ export class ArticlesService {
         socialTargets: {
           social: true,
         },
-        links: true,
+        files: true,
       },
     });
   }
@@ -68,7 +68,7 @@ export class ArticlesService {
         socialTargets: {
           social: true,
         },
-        links: true,
+        files: true,
       },
     });
   }

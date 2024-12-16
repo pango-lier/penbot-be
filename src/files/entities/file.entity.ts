@@ -10,10 +10,10 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { LinkEnum } from './link.enum';
+import { FileEnum } from './file.enum';
 
 @Entity()
-export class Link {
+export class File {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
@@ -26,8 +26,8 @@ export class Link {
   @Column({ type: 'varchar', length: 2083, nullable: true })
   thumbnail?: string;
 
-  @Column({ type: 'enum', enum: LinkEnum, default: LinkEnum.NONE })
-  typeLink: LinkEnum;
+  @Column({ type: 'enum', enum: FileEnum, default: FileEnum.NONE })
+  typeLink: FileEnum;
 
   @Column({ type: 'bigint', default: 0, unsigned: true, nullable: true })
   size: number;
@@ -44,12 +44,12 @@ export class Link {
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 
-  @ManyToMany(() => Article, (s) => s.links, {
+  @ManyToMany(() => Article, (s) => s.files, {
     nullable: true,
     cascade: true,
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
-  @JoinTable({ name: 'link_article' })
+  @JoinTable({ name: 'file_article' })
   articles?: Article[];
 }

@@ -14,6 +14,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { CrawlerLink } from '../../crawlers/crawler-links/entities/crawler-link.entity';
+import { SocialTargetArticle } from '@social-target-articles/entities/social-target-article.entity';
 
 @Entity()
 export class SocialTarget {
@@ -67,4 +68,9 @@ export class SocialTarget {
 
   @ManyToOne(() => Social, (u) => u.socialTarget, { nullable: true })
   social?: Social;
+
+  @OneToMany(() => SocialTargetArticle, (u) => u.socialTarget, {
+    nullable: true,
+  })
+  socialTargetArticles?: SocialTargetArticle[];
 }

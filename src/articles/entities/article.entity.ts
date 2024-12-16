@@ -1,4 +1,4 @@
-import { Link } from '@links/entities/link.entity';
+import { File } from '@files/entities/file.entity';
 import {
   Column,
   CreateDateColumn,
@@ -66,6 +66,6 @@ export class Article {
   @ManyToOne(() => User, (s) => s.articles)
   user?: User;
 
-  @ManyToMany(() => Link, (s) => s.articles, { nullable: true })
-  links?: Link[];
+  @ManyToMany(() => File, (s) => s.articles, { nullable: true })
+  files?: File[];
 }

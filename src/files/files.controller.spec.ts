@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { LinksController } from './links.controller';
-import { LinksService } from './links.service';
+import { LinksController } from './files.controller';
+import { LinksService } from './files.service';
 
 describe('LinksController', () => {
   let controller: LinksController;
