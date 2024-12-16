@@ -48,14 +48,11 @@ export class SocialTarget {
   @JoinTable({ name: 'social_target_crawler' })
   crawlers: Crawler[];
 
-  @ManyToMany(() => Article, (s) => s.socialTargets, {
-    nullable: true,
-    cascade: true,
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
-  @JoinTable({ name: 'social_target_article' })
-  articles?: Article[];
+  // @ManyToMany(() => Article, (s) => s.socialTargets, {
+  //   nullable: true,
+  // })
+  // // @JoinTable({ name: 'social_target_article' })
+  // articles?: Article[];
 
   @ManyToMany(() => CrawlerLink, (s) => s.socialTargets, {
     nullable: true,

@@ -28,9 +28,9 @@ export class ArticlesService {
       }
       createArticle.files = links;
     }
-    createArticle.socialTargets = await this.socialTarget.findBy({
-      id: In(createArticleDto.socialTargetIds),
-    });
+    // createArticle.socialTargets = await this.socialTarget.findBy({
+    //   id: In(createArticleDto.socialTargetIds),
+    // });
     createArticle.userId = userId;
     return await this.article.save(createArticle);
   }
@@ -53,8 +53,8 @@ export class ArticlesService {
     return await this.article.findOne({
       where: { id },
       relations: {
-        socialTargets: {
-          social: true,
+        socialTargetArticles: {
+          socialTarget: { social: true },
         },
         files: true,
       },
@@ -65,8 +65,8 @@ export class ArticlesService {
     return await this.article.find({
       where: { id: In(ids) },
       relations: {
-        socialTargets: {
-          social: true,
+        socialTargetArticles: {
+          socialTarget: { social: true },
         },
         files: true,
       },

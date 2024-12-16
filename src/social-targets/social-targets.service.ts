@@ -25,7 +25,6 @@ export class SocialTargetsService {
         social: true,
       },
       select: {
-        articles: true,
         social: {
           name: true,
           socialType: true,

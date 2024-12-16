@@ -4,6 +4,8 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  JoinTable,
   ManyToMany,
   ManyToOne,
   OneToMany,
@@ -14,6 +16,7 @@ import { ArticleStatusEnum } from './article-status.enum';
 import { SocialTarget } from '@social-targets/entities/social-target.entity';
 import { Crawler } from '../../crawlers/entities/crawler.entity';
 import { User } from '../../users/entities/user.entity';
+import { SocialTargetArticle } from '@social-target-articles/entities/social-target-article.entity';
 
 @Entity()
 export class Article {
@@ -54,8 +57,22 @@ export class Article {
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 
-  @ManyToMany(() => SocialTarget, (s) => s.articles, { nullable: true })
-  socialTargets?: SocialTarget[];
+  // @ManyToMany(() => SocialTarget, (s) => s.articles, { nullable: true })
+  // @JoinTable({
+  //   name: 'social_target_article',
+  //   joinColumn: {
+  //     name: 'articleId', // Column name for the current entity
+  //     referencedColumnName: 'id', // The column on the Article entity to join
+  //   },
+  //   inverseJoinColumn: {
+  //     name: 'socialTargetId', // Column name for the other entity (SocialTarget)
+  //     referencedColumnName: 'id', // The column on the SocialTarget entity to join
+  //   },
+  // })
+  // socialTargets?: SocialTarget[];
+
+  @OneToMany(() => SocialTargetArticle, (s) => s.article, { nullable: true })
+  socialTargetArticles?: SocialTargetArticle[];
 
   @ManyToOne(() => Crawler, (s) => s.articles, { nullable: true })
   crawler?: Crawler;

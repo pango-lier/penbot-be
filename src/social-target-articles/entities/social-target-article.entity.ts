@@ -9,6 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { SocialTargetArticleStatusEnum } from './social-target-article.enum';
+import { Article } from '@articles/entities/article.entity';
 import { SocialTarget } from '@social-targets/entities/social-target.entity';
 
 @Entity()
@@ -37,6 +38,15 @@ export class SocialTargetArticle {
   updatedAt: Date;
 
   @Column({ type: 'bigint', nullable: true })
+  articleId?: number;
+
+  @ManyToOne(() => Article, (s) => s.socialTargetArticles, {
+    nullable: true,
+  })
+  @JoinColumn({ name: 'articleId' })
+  article?: Article;
+
+  @Column({ type: 'bigint', nullable: true, unsigned: true })
   socialTargetId?: number;
 
   @ManyToOne(() => SocialTarget, (s) => s.socialTargetArticles, {
