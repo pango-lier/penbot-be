@@ -6,7 +6,7 @@ import { Article } from './entities/article.entity';
 import { In, Repository } from 'typeorm';
 import { IPaginate } from '@paginate/interface/paginate.interface';
 import { PaginateService } from '@paginate/paginate.service';
-import { LinksService } from '../files/files.service';
+import { FilesService } from '../files/files.service';
 import { SocialTarget } from '../social-targets/entities/social-target.entity';
 import { File } from '@files/entities/file.entity';
 
@@ -15,7 +15,7 @@ export class ArticlesService {
   constructor(
     @InjectRepository(Article) private readonly article: Repository<Article>,
     private readonly paginateService: PaginateService,
-    private readonly linkService: LinksService,
+    private readonly linkService: FilesService,
     @InjectRepository(SocialTarget)
     private readonly socialTarget: Repository<SocialTarget>,
   ) {}

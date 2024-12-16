@@ -7,13 +7,14 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { LinksService } from './files.service';
+
 import { CreateFileDto } from './dto/create-file.dto';
 import { UpdateLinkDto } from './dto/update-file.dto';
+import { FilesService } from './files.service';
 
-@Controller('links')
-export class LinksController {
-  constructor(private readonly linksService: LinksService) {}
+@Controller('files')
+export class FilesController {
+  constructor(private readonly linksService: FilesService) {}
 
   @Post()
   create(@Body() createLinkDto: CreateFileDto) {

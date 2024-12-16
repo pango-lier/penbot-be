@@ -6,7 +6,7 @@ import { File } from './entities/file.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
-export class LinksService {
+export class FilesService {
   constructor(
     @InjectRepository(File) private readonly link: Repository<File>,
   ) {}

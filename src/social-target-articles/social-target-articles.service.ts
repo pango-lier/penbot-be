@@ -16,7 +16,10 @@ export class SocialTargetArticlesService {
     return `This action returns a #${id} socialTargetArticle`;
   }
 
-  update(id: number, updateSocialTargetArticleDto: UpdateSocialTargetArticleDto) {
+  update(
+    id: number,
+    updateSocialTargetArticleDto: UpdateSocialTargetArticleDto,
+  ) {
     return `This action updates a #${id} socialTargetArticle`;
   }
 
