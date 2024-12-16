@@ -55,25 +55,26 @@ export class PuppeteersService {
     });
   }
 
-  // async createPostArticle(articles: Article[]) {
-  //   console.log('createPostArticle');
-  //   const articleFull = await this.articleService.findIds(
-  //     articles?.map((i) => i.id),
-  //   );
-  //   for (const article of articleFull) {
-  //     const imagePaths = article.files.map((i) => i.urlLocal);
-  //     for (const socialTarget of article.socialTargets) {
-  //       const create: CreateFacebookPostArticleDto = {
-  //         username: socialTarget.social.username,
-  //         password: socialTarget.social.password,
-  //         imagePaths,
-  //         content: addTagsToString(article.title, article.tags),
-  //         target: socialTarget.link,
-  //       };
-  //       if (SocialEnum.FACEBOOK === socialTarget.social.socialType) {
-  //         const response = await this.facebookService.createPostArticle(create);
-  //       }
-  //     }
-  //   }
-  // }
+  async createPostArticle(articles: Article[]) {
+    console.log('createPostArticle');
+    const articleFull = await this.articleService.findIds(
+      articles?.map((i) => i.id),
+    );
+    for (const article of articleFull) {
+      const imagePaths = article.files.map((i) => i.urlLocal);
+      for (const socialTargetArticle of article.socialTargetArticles) {
+        const socialTarget = socialTargetArticle.socialTarget;
+        const create: CreateFacebookPostArticleDto = {
+          username: socialTarget.social.username,
+          password: socialTarget.social.password,
+          imagePaths,
+          content: addTagsToString(article.title, article.tags),
+          target: socialTarget.link,
+        };
+        if (SocialEnum.FACEBOOK === socialTarget.social.socialType) {
+          const response = await this.facebookService.createPostArticle(create);
+        }
+      }
+    }
+  }
 }
