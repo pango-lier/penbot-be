@@ -118,7 +118,7 @@ export class CrawlersService {
       await this.youtubeService.init();
       await this.youtubeService.youtube.login.goto();
       await this.youtubeService.youtube.login.gotoShort();
-      let article;
+
       for (let i = 0; i < 100; i++) {
         try {
           await delay(15);
@@ -132,9 +132,9 @@ export class CrawlersService {
           }
           crawlerLink.target = dataShort.href;
           try {
-            article = await this.crawlerExcute(crawlerLink, userIds);
-            crawlerLink.name = article.title;
-            crawlerLink.thumbnail = article.thumbnail;
+            const crawl = await this.crawl(crawlerLink);
+            crawlerLink.name = crawl.name;
+            crawlerLink.thumbnail = crawl.thumbnail;
             crawlerLink.status = CrawlerLinkStatusEnum.Success;
           } catch (error) {
             console.log('Warning : Ignore error ' + error.message);
@@ -162,9 +162,10 @@ export class CrawlersService {
     try {
       crawlerLink.status = CrawlerLinkStatusEnum.Processing;
       await this.crawlerLinkService.updateEntity(crawlerLink);
-      const article = await this.crawlerExcute(crawlerLink, userIds);
-      crawlerLink.name = article.title;
-      crawlerLink.thumbnail = article.thumbnail;
+      const crawl = await this.crawl(crawlerLink);
+
+      crawlerLink.name = crawl.name;
+      crawlerLink.thumbnail = crawl.thumbnail;
       crawlerLink.status = CrawlerLinkStatusEnum.Success;
       await this.crawlerLinkService.updateEntity(crawlerLink);
     } catch (error) {
@@ -177,7 +178,7 @@ export class CrawlersService {
     return 1;
   }
 
-  async crawlerExcute(crawlerLink: CrawlerLink, userIds) {
+  async crawl(crawlerLink: CrawlerLink) {
     const file = await this.youtubeDlService.downloadFile(crawlerLink.target, {
       quality: crawlerLink.quality,
       typeFile: crawlerLink.typeFile,
@@ -195,28 +196,32 @@ export class CrawlersService {
       thumbnail: file.thumbnail,
     };
 
-    await this.create(createCrawler, crawlerLink.userId);
+    const crawler = await this.create(createCrawler, crawlerLink.userId);
+    // const article = await this.crawlerArticle(crawler, crawlerLink.userId);
+    return crawler;
+  }
+
+  async createArticle(crawler: Crawler, userIds) {
     const createArticle: CreateArticleDto = {
-      title: file.title,
-      tags: JSON.stringify(file.tags),
-      description: file.description,
-      thumbnail: file.thumbnail,
-      socialTargetIds: crawlerLink.socialTargets.map((i) => i.id),
+      title: crawler.name,
+      tags: crawler.tags,
+      description: crawler.description,
+      thumbnail: crawler.thumbnail,
+      socialTargetIds: crawler.socialTargets.map((i) => i.id),
       createLinks: [
         {
-          url: crawlerLink.target,
-          urlLocal: file.linkDownloaded,
+          url: crawler.links,
+          urlLocal: crawler.linkDownloaded,
           typeLink: LinkEnum.VIDEO,
-          size: file.size,
-          thumbnail: file.thumbnail,
+          size: crawler.size,
+          thumbnail: crawler.thumbnail,
         },
       ],
     };
     const article = await this.articleService.create(
       createArticle,
-      crawlerLink.userId,
+      crawler.userId,
     );
     await this.puppeteerService.posArticle([article], userIds);
-    return article;
   }
 }
