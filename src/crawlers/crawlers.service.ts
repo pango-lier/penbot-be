@@ -103,7 +103,7 @@ export class CrawlersService {
   }
 
   async queueHandle(
-    jobName = 'crawlerYoutubeNormal', //
+    jobName = 'crawlerYoutubeFromUrl', //
     data,
   ) {
     await this[jobName](data);
@@ -156,8 +156,8 @@ export class CrawlersService {
     return 1;
   }
 
-  async crawlerYoutubeNormal({ crawlerLinkId, userIds }) {
-    console.log('crawlerYoutubeNormal');
+  async crawlerYoutubeFromUrl({ crawlerLinkId, userIds }) {
+    console.log('crawlerYoutubeFromUrl');
     const crawlerLink = await this.crawlerLinkService.findOne(crawlerLinkId);
     try {
       crawlerLink.status = CrawlerLinkStatusEnum.Processing;

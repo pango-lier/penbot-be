@@ -2,6 +2,6 @@ import { CreateCrawlerLinkDto } from '../crawler-links/dto/create-crawler-link.d
 
 export class RunCrawlerQueueDto {
   crawlerLinks?: CreateCrawlerLinkDto[];
-  commands: 'crawlerYoutubeNormal' | 'crawlerYoutubeAuto';
+  commands: 'crawlerYoutubeFromUrl' | 'crawlerYoutubeAuto';
   crawlerLinkIds?: number[];
 }
