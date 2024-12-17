@@ -30,8 +30,8 @@ export class File {
   @Column({ type: 'bigint', default: 0, unsigned: true, nullable: true })
   size: number;
 
-  @Column({ type: 'tinytext', nullable: true })
-  description?: string;
+  @Column({ type: 'varchar', nullable: true })
+  name?: string;
 
   @DeleteDateColumn({ type: 'timestamp' })
   deletedAt?: Date;
