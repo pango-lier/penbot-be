@@ -1,4 +1,4 @@
-import { FileEnum } from '@files/entities/file.enum';
+
 import { Type } from 'class-transformer';
 import { IsString } from 'class-validator';
 
@@ -11,7 +11,8 @@ export class CreateFileDto {
   @IsString()
   urlLocal?: string;
 
-  typeLink?: FileEnum;
+  @IsString()
+  type?: string;
 
   size?: number;
 

@@ -6,28 +6,26 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
-  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { FileEnum } from './file.enum';
 
 @Entity()
 export class File {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
-  @Column({ type: 'varchar', length: 2083 })
+  @Column({ type: 'varchar', length: 1024 })
   url: string;
 
-  @Column({ type: 'varchar', length: 2083, nullable: true })
-  urlLocal?: string;
+  @Column({ type: 'varchar', length: 1024, nullable: true })
+  local?: string;
 
-  @Column({ type: 'varchar', length: 2083, nullable: true })
+  @Column({ type: 'varchar', length: 1024, nullable: true })
   thumbnail?: string;
 
-  @Column({ type: 'enum', enum: FileEnum, default: FileEnum.NONE })
-  typeLink: FileEnum;
+  @Column({ type: 'varchar', length: 64, nullable: true })
+  type?: string;
 
   @Column({ type: 'bigint', default: 0, unsigned: true, nullable: true })
   size: number;

@@ -35,7 +35,7 @@ export class Article {
   @Column({ type: 'text', nullable: true })
   description?: string;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ type: 'varchar', length: 512, nullable: true })
   tags: string;
 
   @Column({

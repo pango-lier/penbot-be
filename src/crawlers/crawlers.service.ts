@@ -189,6 +189,7 @@ export class CrawlersService {
       tags: JSON.stringify(file.tags),
       description: file.description,
       size: file.size,
+      type: file?.type,
       linkDownloaded: file.linkDownloaded,
       links: crawlerLink.target,
       // meta: JSON.stringify(file.source),
@@ -212,7 +213,7 @@ export class CrawlersService {
         {
           url: crawler.links,
           urlLocal: crawler.linkDownloaded,
-          typeLink: FileEnum.VIDEO,
+          type: crawler.type,
           size: crawler.size,
           thumbnail: crawler.thumbnail,
         },
