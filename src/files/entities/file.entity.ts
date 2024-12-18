@@ -44,7 +44,6 @@ export class File {
 
   @ManyToMany(() => Article, (s) => s.files, {
     nullable: true,
-    cascade: true,
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })

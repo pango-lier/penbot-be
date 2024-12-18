@@ -21,27 +21,18 @@ export class ArticlesService {
   ) {}
   async create(createArticleDto: CreateArticleDto, userId?: number) {
     const createArticle = this.article.create(createArticleDto);
-    if (createArticleDto.createLinks) {
-      const links: File[] = [];
-      for (const link of createArticleDto.createLinks) {
-        links.push(await this.linkService.create(link));
-      }
-      createArticle.files = links;
-    }
-    // createArticle.socialTargets = await this.socialTarget.findBy({
-    //   id: In(createArticleDto.socialTargetIds),
-    // });
     createArticle.userId = userId;
     return await this.article.save(createArticle);
   }
 
   async findAll(paginate: IPaginate, userId: number) {
     const q = this.article.createQueryBuilder('article');
+    q.leftJoinAndSelect('article.files', 'files');
     q.where('userId = :id', { id: userId });
     return await this.paginateService.queryFilter(
       q,
       paginate,
-      ['title', 'id', 'tags', 'url'],
+      ['title', 'id', 'url'],
       {
         defaultTable: 'article',
         getQuery: 'getMany',
@@ -73,8 +64,10 @@ export class ArticlesService {
     });
   }
 
-  update(id: number, updateArticleDto: UpdateArticleDto) {
-    return `This action updates a #${id} article`;
+  async update(id: number, updateArticleDto: UpdateArticleDto) {
+    const ar = await this.article.findOne({ where: { id } });
+    const merge = this.article.merge(ar, updateArticleDto);
+    return await this.article.save(merge);
   }
 
   remove(id: number) {

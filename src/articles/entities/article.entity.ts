@@ -83,6 +83,6 @@ export class Article {
   @ManyToOne(() => User, (s) => s.articles)
   user?: User;
 
-  @ManyToMany(() => File, (s) => s.articles, { nullable: true })
+  @ManyToMany(() => File, (s) => s.articles, { nullable: true, cascade: true })
   files?: File[];
 }
