@@ -28,6 +28,7 @@ export class ArticlesService {
   async findAll(paginate: IPaginate, userId: number) {
     const q = this.article.createQueryBuilder('article');
     q.leftJoinAndSelect('article.files', 'files');
+    q.leftJoinAndSelect('article.socialTargetArticles', 'socialTargetArticles');
     q.where('userId = :id', { id: userId });
     return await this.paginateService.queryFilter(
       q,
