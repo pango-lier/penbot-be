@@ -48,14 +48,14 @@ export class FacebookService {
   }
 
   async createPostArticle(create: CreateFacebookPostArticleDto, proxy?: Proxy) {
-    const dirProfile = createLocalFile(
-      'facebook_' + create.username,
-      `/home/profiles/facebook`,
+    const dirProfile = createLocalFile('profile' + proxy.id, `/home/profiles`);
+    const { core } = await this.browser.StartUp(
+      {
+        profile: proxy.name,
+        userDataDir: dirProfile,
+      },
+      proxy,
     );
-    const { core } = await this.browser.StartUp({
-      profile: create.username,
-      userDataDir: dirProfile,
-    });
     const facebook = new Facebook(core);
     this.intervalClosePopup = setInterval(() => closePopup(core), 1000);
     await facebook.Login.login(create.username, create.password);

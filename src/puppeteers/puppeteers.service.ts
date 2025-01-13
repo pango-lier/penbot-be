@@ -39,6 +39,7 @@ export class PuppeteersService {
         6,
       )}`,
     });
+    return true;
   }
 
   async syncArticle(articles: Article[], userId: Array<number>) {

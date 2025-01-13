@@ -15,13 +15,11 @@ export class PublishSocialsService {
   ) {}
 
   async create(createPublishSocialDto: CreatePublishSocialDto, userId: any) {
-    for (const article of createPublishSocialDto.articles) {
-      await this.puppeteerService.posArticle(
-        [article],
-        createPublishSocialDto.socialTargets,
-        userId,
-      );
-    }
+    return await this.puppeteerService.posArticle(
+      createPublishSocialDto.articles,
+      createPublishSocialDto.socialTargets,
+      userId,
+    );
   }
 
   findAll() {

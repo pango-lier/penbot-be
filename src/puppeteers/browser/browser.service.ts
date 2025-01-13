@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import puppeteer, { Browser, Page } from 'puppeteer';
 import { CoreService } from '../core/core.service';
+import { Proxy } from '@users/proxies/entities/proxy.entity';
 export interface IBrowserArgs {
   userDataDir?: string;
   executablePath?: string;
@@ -17,9 +18,16 @@ interface IBrowserStart {
 @Injectable()
 export class BrowserService {
   private browser: Browser;
-  async StartUp(argObs?: IBrowserArgs): Promise<IBrowserStart> {
-    const browser = await this.start(argObs);
+  async StartUp(argObs?: IBrowserArgs, proxy?: Proxy): Promise<IBrowserStart> {
+    const browser = await this.start(argObs, proxy);
     const page = await browser.newPage();
+
+    if (proxy && proxy.host && proxy.username && proxy.password) {
+      await page.authenticate({
+        username: proxy.username,
+        password: proxy.password,
+      });
+    }
 
     const core = new CoreService(page, 0.3, 0.02);
     await core.page.setViewport({ width: 1920, height: 937 });
@@ -27,10 +35,20 @@ export class BrowserService {
     return { browser, core, page };
   }
 
-  async start(argObs: IBrowserArgs = {}): Promise<Browser> {
+  async start(argObs: IBrowserArgs = {}, proxy?: Proxy): Promise<Browser> {
     const args = [];
     if (argObs.userDataDir) {
       args.push(`--user-data-dir=${argObs.userDataDir}`);
+    }
+    if (proxy && proxy.host) {
+      let host = `${proxy.host}`;
+      const regex = /:\d+$/;
+      const hasPort = regex.test(`${host}`);
+      if (!hasPort && proxy.port) {
+        host = `${host}:${proxy.port}`;
+      }
+
+      args.push(`--proxy-server=${host}`);
     }
     return await puppeteer.launch({
       executablePath: argObs.executablePath

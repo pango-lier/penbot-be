@@ -20,7 +20,7 @@ import { ICurrentUser } from '@auth/interface/authenticated-user.interface';
 export class PublishSocialsController {
   constructor(private readonly publishSocialsService: PublishSocialsService) {}
 
-  @Post()
+  @Post('articles')
   create(
     @Body() createPublishSocialDto: CreatePublishSocialDto,
     @CurrentUser() user: ICurrentUser,
