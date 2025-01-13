@@ -17,7 +17,7 @@ export class SocialTargetArticle {
   @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
   id: number;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   message?: string;
 
   @Column({

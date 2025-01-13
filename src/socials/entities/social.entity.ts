@@ -30,6 +30,9 @@ export class Social {
   name: string;
 
   @Column({ type: 'varchar', nullable: true })
+  avatar: string;
+
+  @Column({ type: 'varchar', nullable: true })
   username: string;
 
   @Column({ type: 'varchar', nullable: true })
