@@ -8,7 +8,6 @@ import { IPaginate } from '@paginate/interface/paginate.interface';
 import { PaginateService } from '@paginate/paginate.service';
 import { FilesService } from '../files/files.service';
 import { SocialTarget } from '../social-targets/entities/social-target.entity';
-import { File } from '@files/entities/file.entity';
 
 @Injectable()
 export class ArticlesService {

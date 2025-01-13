@@ -2,6 +2,7 @@ import { IsString } from 'class-validator';
 import { ArticleStatusEnum } from '../entities/article-status.enum';
 import { Type } from 'class-transformer';
 import { CreateFileDto } from '../../files/dto/create-file.dto';
+import { SocialTarget } from '@social-targets/entities/social-target.entity';
 
 export class CreateArticleDto {
   @IsString()
@@ -29,7 +30,7 @@ export class CreateArticleDto {
   @Type(() => Date)
   updatedAt?: Date;
 
-  socialTargetIds?: number[];
+  socialTargets?: SocialTarget[];
 
   createLinks?: CreateFileDto[];
 }

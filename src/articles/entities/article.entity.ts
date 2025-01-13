@@ -71,7 +71,10 @@ export class Article {
   // })
   // socialTargets?: SocialTarget[];
 
-  @OneToMany(() => SocialTargetArticle, (s) => s.article, { nullable: true })
+  @OneToMany(() => SocialTargetArticle, (s) => s.article, {
+    nullable: true,
+    cascade: true,
+  })
   socialTargetArticles?: SocialTargetArticle[];
 
   @ManyToOne(() => Crawler, (s) => s.articles, { nullable: true })

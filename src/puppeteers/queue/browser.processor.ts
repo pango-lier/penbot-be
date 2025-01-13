@@ -31,10 +31,8 @@ export class BrowserQueue extends WorkerHost {
 
   async process(job: Job<any, any, string>, token?: string) {
     switch (job.name) {
-      case 'facebook-service':
-        await this.puppeteer.runMethodQueue(job.data);
-        break;
-      case 'google-service':
+      case 'createPostArticle':
+        await this.puppeteer.createPostArticle(job.data);
         break;
       default:
         this.logger.debug(`Job name is not founded`);

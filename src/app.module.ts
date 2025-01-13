@@ -31,6 +31,7 @@ import { ThreadsModule } from './threads/threads.module';
 import { PinterestModule } from './pinterest/pinterest.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { SocialTargetArticlesModule } from './social-target-articles/social-target-articles.module';
+import { PublishSocialsModule } from './publish-socials/publish-socials.module';
 
 @Module({
   imports: [
@@ -74,6 +75,7 @@ import { SocialTargetArticlesModule } from './social-target-articles/social-targ
     ThreadsModule,
     PinterestModule,
     SocialTargetArticlesModule,
+    PublishSocialsModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppGateway],

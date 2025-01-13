@@ -4,13 +4,13 @@ import { UpdatePuppeteerDto } from './dto/update-puppeteer.dto';
 import { FacebookService } from './facebook/facebook.service';
 import { CreateFacebookPostArticleDto } from './facebook/dto/create-facebook-post-article.dto';
 import { addTagsToString } from '../utils/addTagsToString';
-import { QueueDataFacebookDto } from './facebook/dto/create-facebook.dto';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import { ArticlesService } from '../articles/articles.service';
 import { YoutubeService } from './youtube/youtube.service';
 import { Article } from '@articles/entities/article.entity';
 import { SocialEnum } from '@socials/entities/social.enum';
+import { SocialTarget } from '@social-targets/entities/social-target.entity';
 const randomstring = require('randomstring');
 
 @Injectable()
@@ -23,35 +23,23 @@ export class PuppeteersService {
     @InjectQueue('browser') private readonly browserQueue: Queue,
   ) {}
 
-  create(createPuppeteerDto: CreatePuppeteerDto) {
-    return 'This action adds a new puppeteer';
+  async posArticle(
+    articles: Article[],
+    socialTargets: SocialTarget[],
+    userId: number,
+  ) {
+    await this.browserQueue.add('createPostArticle', articles, {
+      jobId: `profile_${userId}_${new Date().getTime()}_${randomstring.generate(
+        6,
+      )}`,
+    });
   }
 
-  findAll() {
-    return `This action returns all puppeteers`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} puppeteer`;
-  }
-
-  update(id: number, updatePuppeteerDto: UpdatePuppeteerDto) {
-    return `This action updates a #${id} puppeteer`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} puppeteer`;
-  }
-
-  async runMethodQueue(data: QueueDataFacebookDto) {
-    await this[data.actionMethod](data);
-  }
-
-  async posArticle(articles: Article[], userIds: Array<number>) {
-    await this.browserQueue.add('post-article-service', articles, {
-      jobId: `profile_${
-        userIds[0]
-      }_${new Date().getTime()}_${randomstring.generate(6)}`,
+  async syncArticle(articles: Article[], userId: Array<number>) {
+    await this.browserQueue.add('createPostArticle', articles, {
+      jobId: `profile_${userId}_${new Date().getTime()}_${randomstring.generate(
+        6,
+      )}`,
     });
   }
 

@@ -202,13 +202,12 @@ export class CrawlersService {
     return crawler;
   }
 
-  async createArticle(crawler: Crawler, userIds) {
+  async createArticle(crawler: Crawler, userId) {
     const createArticle: CreateArticleDto = {
       title: crawler.name,
       tags: crawler.tags,
       description: crawler.description,
       thumbnail: crawler.thumbnail,
-      socialTargetIds: crawler.socialTargets.map((i) => i.id),
       createLinks: [
         {
           url: crawler.links,
@@ -223,6 +222,10 @@ export class CrawlersService {
       createArticle,
       crawler.userId,
     );
-    await this.puppeteerService.posArticle([article], userIds);
+    await this.puppeteerService.posArticle(
+      [article],
+      crawler?.socialTargets,
+      userId,
+    );
   }
 }
