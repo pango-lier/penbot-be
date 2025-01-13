@@ -9,6 +9,7 @@ import { createLocalFile } from '../../utils/file/fetchVideo';
 import { SocialResponse } from '../type/response-puppeteer.interface';
 import { CreateFacebookPostArticleDto } from './dto/create-facebook-post-article.dto';
 import { closePopup } from './service/lib/Fanpage/post/postContent';
+import { Proxy } from '@users/proxies/entities/proxy.entity';
 
 @Injectable()
 export class FacebookService {
@@ -46,39 +47,29 @@ export class FacebookService {
     return `This action removes a #${id} facebook`;
   }
 
-  async createPostArticle(create: CreateFacebookPostArticleDto) {
-    const result: SocialResponse = {
-      status: 'success',
-      message: null,
-    };
-    try {
-      const dirProfile = createLocalFile(
-        'facebook_' + create.username,
-        `/home/profiles/facebook`,
-      );
-      const { core } = await this.browser.StartUp({
-        profile: create.username,
-        userDataDir: dirProfile,
-      });
-      const facebook = new Facebook(core);
-      this.intervalClosePopup = setInterval(() => closePopup(core), 1000);
-      await facebook.Login.login(create.username, create.password);
-      await core.delay(2);
-      await facebook.FanPage.goto(create.target);
-      await facebook.FanPage.publishContent({
-        content: create.content,
-        imagePaths: create.imagePaths,
-      });
-    } catch (error) {
-      result.status = 'error';
-      result.message = error.message;
-      console.log(error.message);
-      this.writeLog.add('CreateFacebookPostArticleDto', result);
-    }
+  async createPostArticle(create: CreateFacebookPostArticleDto, proxy?: Proxy) {
+    const dirProfile = createLocalFile(
+      'facebook_' + create.username,
+      `/home/profiles/facebook`,
+    );
+    const { core } = await this.browser.StartUp({
+      profile: create.username,
+      userDataDir: dirProfile,
+    });
+    const facebook = new Facebook(core);
+    this.intervalClosePopup = setInterval(() => closePopup(core), 1000);
+    await facebook.Login.login(create.username, create.password);
+    await core.delay(2);
+    await facebook.FanPage.goto(create.target);
+    await facebook.FanPage.publishContent({
+      content: create.content,
+      imagePaths: create.imagePaths,
+    });
+
     try {
       clearInterval(this.intervalClosePopup);
       await this.browser.stop();
     } catch (error) {}
-    return result;
+    return true;
   }
 }

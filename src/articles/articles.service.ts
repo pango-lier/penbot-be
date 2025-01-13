@@ -57,7 +57,27 @@ export class ArticlesService {
       where: { id: In(ids) },
       relations: {
         socialTargetArticles: {
-          socialTarget: { social: true },
+          socialTarget: {
+            social: {
+              proxy: true,
+            },
+          },
+        },
+        files: true,
+      },
+    });
+  }
+
+  async findFullData(id: number) {
+    return await this.article.findOne({
+      where: { id },
+      relations: {
+        socialTargetArticles: {
+          socialTarget: {
+            social: {
+              proxy: true,
+            },
+          },
         },
         files: true,
       },

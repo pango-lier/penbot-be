@@ -33,6 +33,17 @@ export class SocialTargetsService {
     });
   }
 
+  async findProxy(id: number) {
+    return await this.socialTarget.findOne({
+      where: {
+        id,
+      },
+      relations: {
+        social: { proxy: true },
+      },
+    });
+  }
+
   async findSocialId(socialId: number, userId: number) {
     return await this.socialTarget.find({
       where: {

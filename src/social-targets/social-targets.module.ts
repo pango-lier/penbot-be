@@ -8,5 +8,6 @@ import { SocialTarget } from './entities/social-target.entity';
   imports: [TypeOrmModule.forFeature([SocialTarget])],
   controllers: [SocialTargetsController],
   providers: [SocialTargetsService],
+  exports: [SocialTargetsService, TypeOrmModule.forFeature([SocialTarget])],
 })
 export class SocialTargetsModule {}

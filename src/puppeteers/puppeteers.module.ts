@@ -8,11 +8,20 @@ import { BrowserQueue } from './queue/browser.processor';
 import { ArticlesModule } from '../articles/articles.module';
 import { YoutubeModule } from './youtube/youtube.module';
 import { YoutubeService } from './youtube/youtube.service';
+import { SocialTargetsModule } from '@social-targets/social-targets.module';
+import { SocialTargetArticlesModule } from '@social-target-articles/social-target-articles.module';
 
 @Module({
   controllers: [PuppeteersController],
   providers: [PuppeteersService, CoreService, BrowserQueue],
-  imports: [FacebookModule, BrowserModule, ArticlesModule, YoutubeModule],
+  imports: [
+    FacebookModule,
+    BrowserModule,
+    ArticlesModule,
+    YoutubeModule,
+    SocialTargetsModule,
+    SocialTargetArticlesModule,
+  ],
   exports: [PuppeteersModule, BrowserQueue, PuppeteersService, CoreService],
 })
 export class PuppeteersModule {}
