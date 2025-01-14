@@ -34,20 +34,28 @@ export class PuppeteersService {
     socialTargets: SocialTarget[],
     userId: number,
   ) {
-    await this.browserQueue.add('createPostArticle', articles, {
-      jobId: `profile_${userId}_${new Date().getTime()}_${randomstring.generate(
-        6,
-      )}`,
-    });
+    await this.browserQueue.add(
+      'createPostArticle',
+      { articles, socialTargets, userId },
+      {
+        jobId: `profile_${userId}_${new Date().getTime()}_${randomstring.generate(
+          6,
+        )}`,
+      },
+    );
     return true;
   }
 
   async syncArticle(articles: Article[], userId: Array<number>) {
-    await this.browserQueue.add('createPostArticle', articles, {
-      jobId: `profile_${userId}_${new Date().getTime()}_${randomstring.generate(
-        6,
-      )}`,
-    });
+    await this.browserQueue.add(
+      'createPostArticle',
+      { articles, userId },
+      {
+        jobId: `profile_${userId}_${new Date().getTime()}_${randomstring.generate(
+          6,
+        )}`,
+      },
+    );
   }
 
   async createPostArticle({
@@ -57,22 +65,23 @@ export class PuppeteersService {
     articles: Article[];
     socialTargets: SocialTarget[];
   }) {
-    console.log('createPostArticle');
-
     for (const article of articles) {
       const articleFull = await this.articleService.findFullData(article.id);
       const imagePaths = articleFull.files.map((i) => i.local);
 
-      for (const socialTarget of socialTargets) {
-        await this.socialTargetArticleService.startArticle(
-          socialTarget,
-          articleFull,
-        );
+      for (const socialTargetValue of socialTargets) {
+        const socialTargetArticle =
+          await this.socialTargetArticleService.startArticle(
+            socialTargetValue,
+            articleFull,
+          );
+
         try {
-          if (SocialEnum.FACEBOOK === socialTarget.social.socialType) {
-            const socialTargetFull = await this.socialTargetService.findProxy(
-              socialTarget.id,
-            );
+          const socialTargetFull = await this.socialTargetService.findProxy(
+            socialTargetValue.id,
+          );
+          if (SocialEnum.FACEBOOK === socialTargetFull.social.socialType) {
+            console.log('1');
             await this.facebookService.createPostArticle(
               {
                 username: socialTargetFull.social.username,
@@ -83,16 +92,25 @@ export class PuppeteersService {
               },
               socialTargetFull.social.proxy,
             );
+            console.log('2');
           }
-          await this.socialTargetArticleService.endArticle(socialTarget, {
-            message: null,
-            status: SocialTargetArticleStatusEnum.Error,
-          });
+          console.log('3');
+          await this.socialTargetArticleService.endArticle(
+            socialTargetArticle,
+            {
+              message: null,
+              status: SocialTargetArticleStatusEnum.Success,
+            },
+          );
         } catch (error) {
-          await this.socialTargetArticleService.endArticle(socialTarget, {
-            message: error?.message || null,
-            status: SocialTargetArticleStatusEnum.Success,
-          });
+          console.log(error);
+          await this.socialTargetArticleService.endArticle(
+            socialTargetArticle,
+            {
+              message: error?.message || null,
+              status: SocialTargetArticleStatusEnum.Error,
+            },
+          );
         }
       }
     }

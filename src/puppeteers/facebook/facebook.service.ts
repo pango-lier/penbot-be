@@ -48,10 +48,15 @@ export class FacebookService {
   }
 
   async createPostArticle(create: CreateFacebookPostArticleDto, proxy?: Proxy) {
-    const dirProfile = createLocalFile('profile' + proxy.id, `/home/profiles`);
+    const dirProfile = createLocalFile(
+      `profile_${proxy?.id || '0'}`,
+      `/home/trong/profiles/private`,
+    );
     const { core } = await this.browser.StartUp(
       {
-        profile: proxy.name,
+        profile: proxy?.name
+          ? `Profile_${proxy?.id}:${proxy?.name}`
+          : 'Profile_0',
         userDataDir: dirProfile,
       },
       proxy,
