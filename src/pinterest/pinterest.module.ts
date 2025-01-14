@@ -4,6 +4,7 @@ import { PinterestController } from './pinterest.controller';
 
 @Module({
   controllers: [PinterestController],
-  providers: [PinterestService]
+  providers: [PinterestService],
+  exports: [PinterestService],
 })
 export class PinterestModule {}

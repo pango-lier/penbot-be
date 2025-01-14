@@ -13,6 +13,8 @@ export class CreateArticleDto {
 
   url?: string;
 
+  pin?: string;
+
   tags: string;
 
   status?: ArticleStatusEnum;

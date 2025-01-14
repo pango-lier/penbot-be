@@ -10,6 +10,7 @@ import { YoutubeModule } from './youtube/youtube.module';
 import { YoutubeService } from './youtube/youtube.service';
 import { SocialTargetsModule } from '@social-targets/social-targets.module';
 import { SocialTargetArticlesModule } from '@social-target-articles/social-target-articles.module';
+import { InstagramModule } from '@instagram/instagram.module';
 
 @Module({
   controllers: [PuppeteersController],
@@ -21,6 +22,7 @@ import { SocialTargetArticlesModule } from '@social-target-articles/social-targe
     YoutubeModule,
     SocialTargetsModule,
     SocialTargetArticlesModule,
+    InstagramModule,
   ],
   exports: [PuppeteersModule, BrowserQueue, PuppeteersService, CoreService],
 })

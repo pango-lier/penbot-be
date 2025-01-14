@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreatePuppeteerDto } from './dto/create-puppeteer.dto';
 import { UpdatePuppeteerDto } from './dto/update-puppeteer.dto';
 import { FacebookService } from './facebook/facebook.service';
@@ -16,12 +16,14 @@ import { SocialTargetArticlesModule } from '@social-target-articles/social-targe
 import { SocialTargetArticlesService } from '@social-target-articles/social-target-articles.service';
 import { UpdateSocialTargetArticleDto } from '@social-target-articles/dto/update-social-target-article.dto';
 import { SocialTargetArticleStatusEnum } from '@social-target-articles/entities/social-target-article.enum';
+import { InstagramService } from '@instagram/instagram.service';
 const randomstring = require('randomstring');
 
 @Injectable()
 export class PuppeteersService {
   constructor(
     private readonly facebookService: FacebookService,
+    private readonly instagramService: InstagramService,
     private readonly socialTargetService: SocialTargetsService,
     private readonly articleService: ArticlesService,
     private readonly socialTargetArticleService: SocialTargetArticlesService,
@@ -67,7 +69,6 @@ export class PuppeteersService {
   }) {
     for (const article of articles) {
       const articleFull = await this.articleService.findFullData(article.id);
-      const imagePaths = articleFull.files.map((i) => i.local);
 
       for (const socialTargetValue of socialTargets) {
         const socialTargetArticle =
@@ -80,18 +81,36 @@ export class PuppeteersService {
           const socialTargetFull = await this.socialTargetService.findProxy(
             socialTargetValue.id,
           );
-          if (SocialEnum.FACEBOOK === socialTargetFull.social.socialType) {
-            await this.facebookService.createPostArticle(
-              {
-                username: socialTargetFull.social.username,
-                password: socialTargetFull.social.password,
-                imagePaths,
-                content: addTagsToString(article.title, article.tags),
-                target: socialTargetFull.link,
-              },
-              socialTargetFull.social.proxy,
-            );
+
+          switch (socialTargetFull.social.socialType) {
+            case SocialEnum.FACEBOOK:
+              await this.facebookService.createPostArticle(
+                articleFull,
+                socialTargetFull,
+              );
+              break;
+            case SocialEnum.INSTAGRAM:
+              await this.instagramService.createPostArticle(
+                articleFull,
+                socialTargetFull,
+              );
+
+              break;
+            case SocialEnum.PINTEREST:
+              await this.instagramService.createPostArticle(
+                articleFull,
+                socialTargetFull,
+              );
+
+              break;
+            default:
+              throw new HttpException(
+                `Create article is not support for ${socialTargetFull.social.socialType}`,
+                HttpStatus.BAD_REQUEST,
+              );
+              break;
           }
+
           await this.socialTargetArticleService.endArticle(
             socialTargetArticle,
             {

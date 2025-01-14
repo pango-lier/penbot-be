@@ -38,6 +38,9 @@ export class Article {
   @Column({ type: 'varchar', length: 512, nullable: true })
   tags: string;
 
+  @Column({ type: 'varchar', nullable: true })
+  pin: string;
+
   @Column({
     type: 'enum',
     enum: ArticleStatusEnum,

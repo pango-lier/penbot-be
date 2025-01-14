@@ -13,6 +13,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { ProxyStatusEnum } from '../dto/proxy-status.enum';
 
 export enum ProxyType {
   HTTP = 'http',
@@ -34,6 +35,9 @@ export class Proxy {
 
   @Column({ type: 'enum', enum: ProxyType, nullable: true })
   proxyType: ProxyType;
+
+  @Column({ type: 'enum', enum: ProxyStatusEnum, nullable: true })
+  status?: ProxyStatusEnum;
 
   @Column({ type: 'varchar', nullable: true })
   host: string;

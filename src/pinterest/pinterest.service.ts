@@ -3,6 +3,9 @@ import { CreatePinterestDto } from './dto/create-pinterest.dto';
 import { UpdatePinterestDto } from './dto/update-pinterest.dto';
 import { BrowserService } from '@puppeteers/browser/browser.service';
 import { Timeout } from '@nestjs/schedule';
+import { Article } from '@articles/entities/article.entity';
+import { SocialTarget } from '@social-targets/entities/social-target.entity';
+import { addTagsToString } from '@utils/addTagsToString';
 
 @Injectable()
 export class PinterestService {
@@ -26,6 +29,60 @@ export class PinterestService {
 
   remove(id: number) {
     return `This action removes a #${id} pinterest`;
+  }
+
+  async createPinArticle(article: Article, socialTarget: SocialTarget) {
+    const page = await this.browser.launch(socialTarget?.social?.proxy);
+    const imagePaths = article?.files?.map((f) => f.local);
+    //'div:nth-child(7) > .x1n2onr6 > .x4k7w5x > .x1n2onr6 > .x1i10hfl > .x9f619'
+    await page.core.goto('https://www.pinterest.com/pin-builder');
+    await page.core.delay(2);
+    await page.core.uploadImageTrigger(
+      imagePaths,
+      page.core.click('input[aria-label="File upload"]'),
+    );
+    console.log('click title');
+    await page.core.delay(1);
+    await page.core.click('textarea[placeholder="Add your title"]');
+    await page.core.delay(1);
+    await page.core.input(article.title, '', 1000);
+
+    console.log('add description');
+    await page.core.delay(1);
+    await page.core.click('#dweb-comment-editor-container');
+    await page.core.delay(1);
+    await page.core.input(
+      addTagsToString(article.description, article.tags),
+      '',
+      1000,
+    );
+
+    console.log('Add link');
+    // link share
+    await page.core.delay(1);
+    await page.core.click('textarea[placeholder="Add a destination link"]');
+    await page.core.delay(1);
+    await page.core.input(article.url, '', 1000);
+    // console.log('click post');
+
+    // pin
+    if (article.pin) {
+      await page.core.delay(2);
+      console.log('Select Pin');
+      await page.core.clickContentSelectorMatch(`div[title="${article.pin}"]`, [
+        `${article.pin}`,
+      ]);
+    }
+
+    await page.core.delay(2);
+    console.log('Publish');
+    await page.core.clickContentSelectorMatch('button', ['Publish']);
+    await page.core.delay(5);
+    try {
+      await page.core.click('button[aria-label="dismiss"]');
+    } catch (error) {}
+
+    await page.core.delay(5);
   }
 
   // @Timeout(3)

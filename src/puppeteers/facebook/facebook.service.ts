@@ -10,6 +10,9 @@ import { SocialResponse } from '../type/response-puppeteer.interface';
 import { CreateFacebookPostArticleDto } from './dto/create-facebook-post-article.dto';
 import { closePopup } from './service/lib/Fanpage/post/postContent';
 import { Proxy } from '@users/proxies/entities/proxy.entity';
+import { Article } from '@articles/entities/article.entity';
+import { SocialTarget } from '@social-targets/entities/social-target.entity';
+import { addTagsToString } from '@utils/addTagsToString';
 
 @Injectable()
 export class FacebookService {
@@ -47,28 +50,21 @@ export class FacebookService {
     return `This action removes a #${id} facebook`;
   }
 
-  async createPostArticle(create: CreateFacebookPostArticleDto, proxy?: Proxy) {
-    const dirProfile = createLocalFile(
-      `profile_${proxy?.id || '0'}`,
-      `/home/trong/profiles/private`,
-    );
-    const { core } = await this.browser.StartUp(
-      {
-        profile: proxy?.name
-          ? `Profile_${proxy?.id}:${proxy?.name}`
-          : 'Profile_0',
-        userDataDir: dirProfile,
-      },
-      proxy,
-    );
+  async createPostArticle(article: Article, socialTarget: SocialTarget) {
+    const imagePaths = article.files.map((i) => i.local);
+    const { core } = await this.browser.launch(socialTarget?.social?.proxy);
+
     const facebook = new Facebook(core);
     this.intervalClosePopup = setInterval(() => closePopup(core), 1000);
-    await facebook.Login.login(create.username, create.password);
+    await facebook.Login.login(
+      socialTarget.social.username,
+      socialTarget.social.password,
+    );
     await core.delay(2);
-    await facebook.FanPage.goto(create.target);
+    await facebook.FanPage.goto(socialTarget.link);
     await facebook.FanPage.publishContent({
-      content: create.content,
-      imagePaths: create.imagePaths,
+      content: addTagsToString(article.title, article.tags),
+      imagePaths: imagePaths,
     });
 
     try {

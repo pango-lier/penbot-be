@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import puppeteer, { Browser, Page } from 'puppeteer';
 import { CoreService } from '../core/core.service';
 import { Proxy } from '@users/proxies/entities/proxy.entity';
+import { createLocalFile } from '@utils/file/fetchVideo';
 export interface IBrowserArgs {
   userDataDir?: string;
   executablePath?: string;
@@ -18,6 +19,25 @@ interface IBrowserStart {
 @Injectable()
 export class BrowserService {
   private browser: Browser;
+
+  async launch(proxy?: Proxy, argObs?: IBrowserArgs): Promise<IBrowserStart> {
+    const profile = proxy?.name
+      ? `Profile_${proxy?.id}:${proxy?.name}`
+      : 'Profile_0';
+    const dirProfile = createLocalFile(
+      profile,
+      process.env?.BROWSER_DIR_PROFILES || `/home/trong/profiles/private`,
+    );
+    return await this.StartUp(
+      {
+        profile,
+        userDataDir: dirProfile,
+        ...(argObs ? argObs : {}),
+      },
+      proxy,
+    );
+  }
+
   async StartUp(argObs?: IBrowserArgs, proxy?: Proxy): Promise<IBrowserStart> {
     const browser = await this.start(argObs, proxy);
     const page = await browser.newPage();
