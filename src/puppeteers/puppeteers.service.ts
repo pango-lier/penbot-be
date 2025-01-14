@@ -81,7 +81,6 @@ export class PuppeteersService {
             socialTargetValue.id,
           );
           if (SocialEnum.FACEBOOK === socialTargetFull.social.socialType) {
-            console.log('1');
             await this.facebookService.createPostArticle(
               {
                 username: socialTargetFull.social.username,
