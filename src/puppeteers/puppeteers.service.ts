@@ -92,9 +92,7 @@ export class PuppeteersService {
               },
               socialTargetFull.social.proxy,
             );
-            console.log('2');
           }
-          console.log('3');
           await this.socialTargetArticleService.endArticle(
             socialTargetArticle,
             {
@@ -103,11 +101,10 @@ export class PuppeteersService {
             },
           );
         } catch (error) {
-          console.log(error);
           await this.socialTargetArticleService.endArticle(
             socialTargetArticle,
             {
-              message: error?.message || null,
+              message: error?.message || error || null,
               status: SocialTargetArticleStatusEnum.Error,
             },
           );
