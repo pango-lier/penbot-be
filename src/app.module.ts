@@ -32,6 +32,9 @@ import { PinterestModule } from './pinterest/pinterest.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { SocialTargetArticlesModule } from './social-target-articles/social-target-articles.module';
 import { PublishSocialsModule } from './publish-socials/publish-socials.module';
+import { XModule } from './x/x.module';
+import { TiktokModule } from './tiktok/tiktok.module';
+import { GoogleModule } from './google/google.module';
 
 @Module({
   imports: [
@@ -76,6 +79,9 @@ import { PublishSocialsModule } from './publish-socials/publish-socials.module';
     PinterestModule,
     SocialTargetArticlesModule,
     PublishSocialsModule,
+    XModule,
+    TiktokModule,
+    GoogleModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppGateway],
