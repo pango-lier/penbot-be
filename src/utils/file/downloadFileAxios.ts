@@ -9,7 +9,7 @@ import axios from 'axios';
 export const downloadFileAxios = async (fileUrl, fileName) => {
   // Get the file name
   // The path of the downloaded file on our machine
-  const localFilePath = path.resolve(__dirname, fileName);
+  const localFilePath = path.resolve(__dirname, `tmp_files/${fileName}`);
   const finished = promisify(stream.finished);
   const writer = fs.createWriteStream(localFilePath);
   await axios({

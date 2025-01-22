@@ -1,3 +1,4 @@
+const { downloadFileAxios } = require('@utils/file/downloadFileAxios');
 const randomScore = require('./helper/randomScore');
 const { delay, random, delayMs } = require('./until');
 
@@ -88,19 +89,38 @@ class PuppeteerActionFunc {
     await fileChooser?.accept(pathFiles);
   }
 
-  async uploadImageFix2(pathFiles, se1, se2) {
+  async uploadImageCheckSelector(pathFiles, selectors) {
+    const listFile = [];
+    for (let index = 0; index < pathFiles.length; index++) {
+      const pathFile = pathFiles[index];
+      if (/^https?:\/\//.test(pathFile)) {
+        const file = await downloadFileAxios(
+          pathFile,
+          `${new Date().getTime()}_${random(1000000, 9000000)}${
+            path?.extname(pathFile) ? `.${path?.extname(pathFile)}` : ''
+          }`,
+        );
+
+        listFile.push(file);
+      } else {
+        listFile.push(pathFile);
+      }
+    }
+
     const [fileChooser] = await Promise.all([
       this.page.waitForFileChooser(),
-      this.check2(se1, se2),
+      this.clickSelectorList(selectors),
     ]);
     await fileChooser?.accept(pathFiles);
   }
 
-  async check2(se1, se2) {
-    await this.click(se1);
-    await this.delay(3);
-    if (await this.checkSelector(se2)) {
-      await this.click(se2);
+  async clickSelectorList(selectors) {
+    for (let index = 0; index < selectors.length; index++) {
+      const selector = selectors[index];
+      if (await this.checkSelector(selector)) {
+        await this.click(selector);
+        await this.delay(3);
+      }
     }
   }
 

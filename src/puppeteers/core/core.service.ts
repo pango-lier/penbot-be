@@ -3,6 +3,8 @@ import { HTTPResponse, KeyInput, Page, Puppeteer } from 'puppeteer';
 import { delay, delayMs } from './until/delay';
 import fs = require('fs');
 import { random } from './until/random';
+import { downloadFileAxios } from '@utils/file/downloadFileAxios';
+import path = require('path');
 
 export class CoreService {
   page: Page;
@@ -121,7 +123,7 @@ export class CoreService {
     return imagePaths;
   }
 
-  async uploadImageTrigger(
+  async uploadImageTriggerOld(
     imagePaths: string[],
     callback: Promise<void | boolean>,
   ): Promise<string[]> {
@@ -130,6 +132,35 @@ export class CoreService {
       callback,
     ]);
     await fileChooser?.accept(imagePaths);
+    return imagePaths;
+  }
+
+  async uploadImageTrigger(
+    imagePaths: string[],
+    callback: Promise<void | boolean>,
+  ) {
+    const listFile = [];
+    for (let index = 0; index < imagePaths.length; index++) {
+      const pathFile = imagePaths[index];
+      if (/^https?:\/\//.test(pathFile)) {
+        const file = await downloadFileAxios(
+          pathFile,
+          `${new Date().getTime()}_${random(1000000, 9000000)}${
+            path?.extname(pathFile) ? `.${path?.extname(pathFile)}` : ''
+          }`,
+        );
+
+        listFile.push(file);
+      } else {
+        listFile.push(pathFile);
+      }
+    }
+
+    const [fileChooser] = await Promise.all([
+      this.page.waitForFileChooser(),
+      callback,
+    ]);
+    await fileChooser?.accept(listFile);
     return imagePaths;
   }
 

@@ -86,7 +86,7 @@ export class YoutubeDlService {
         'vi' +
           d.getTime() +
           '_' +
-          random(1000, 1000000000) +
+          random(1000000000, 9000000000) +
           '.' +
           fileDownload.ext,
       );
