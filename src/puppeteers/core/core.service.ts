@@ -146,7 +146,7 @@ export class CoreService {
         const file = await downloadFileAxios(
           pathFile,
           `${new Date().getTime()}_${random(1000000, 9000000)}${
-            path?.extname(pathFile) ? `.${path?.extname(pathFile)}` : ''
+            path?.extname(pathFile) ? `${path?.extname(pathFile)}` : ''
           }`,
         );
 

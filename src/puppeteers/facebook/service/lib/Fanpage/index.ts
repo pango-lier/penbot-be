@@ -27,13 +27,6 @@ class FanPage {
     type?: undefined | 'video' | 'image';
   }) {
     try {
-      // await this.goto('https://www.facebook.com/watch/?v=1360543028045142');
-      // await this.core.delay(2);
-      // await this.commentPost([
-      //   {
-      //     title: 'làm thế ai mà dám làm . Nam mô A di đà phật @@',
-      //   },
-      // ]);
       await this.clickSwitchPage();
       await postContent(this.core, fanPage.content, fanPage.imagePaths);
     } catch (error) {

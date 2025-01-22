@@ -51,7 +51,7 @@ export class FacebookService {
   }
 
   async createPostArticle(article: Article, socialTarget: SocialTarget) {
-    const imagePaths = article.files.map((i) => i.local);
+    const imagePaths = article.files.map((i) => i.url);
     const { core } = await this.browser.launch(socialTarget?.social?.proxy);
 
     const facebook = new Facebook(core);

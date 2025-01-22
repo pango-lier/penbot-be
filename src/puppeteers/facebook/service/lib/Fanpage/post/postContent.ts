@@ -18,8 +18,8 @@ export const postContent = async (
     async () => {
       return await core.clickContentSelectorMatch('span', ['Ảnh/video']);
     },
-    10,
-    1000,
+    6,
+    500,
   );
   await core.delay(3);
   const selector = await core.try(
@@ -40,7 +40,7 @@ export const postContent = async (
   await core.delay(3);
   await core.uploadImageTrigger(
     imagePaths,
-    core.click('.x1i10hfl > .x78zum5 > .x9f619 > .x1n2onr6 > .x9f619'),
+    core.clickContentSelectorMatch('span', ['Thêm ảnh/video']),
   );
 
   await core.delay(13);
