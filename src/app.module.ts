@@ -35,6 +35,7 @@ import { PublishSocialsModule } from './publish-socials/publish-socials.module';
 import { XModule } from './x/x.module';
 import { TiktokModule } from './tiktok/tiktok.module';
 import { GoogleModule } from './google/google.module';
+import { EtsyModule } from './etsy/etsy.module';
 
 @Module({
   imports: [
@@ -82,6 +83,7 @@ import { GoogleModule } from './google/google.module';
     XModule,
     TiktokModule,
     GoogleModule,
+    EtsyModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppGateway],

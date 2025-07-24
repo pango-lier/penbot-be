@@ -9,4 +9,5 @@ export enum SocialEnum {
   INSTAGRAM = 'instagram',
   PINTEREST = 'pinterest',
   THREADS = 'threads',
+  ETSY = 'etsy',
 }

@@ -34,6 +34,10 @@ export class BrowserQueue extends WorkerHost {
       case 'createPostArticle':
         await this.puppeteer.createPostArticle(job.data);
         break;
+      case 'spamAds':
+        await this.puppeteer.createPostArticle(job.data);
+        break;
+
       default:
         this.logger.debug(`Job name is not founded`);
         break;

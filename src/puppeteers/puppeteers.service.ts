@@ -17,12 +17,14 @@ import { SocialTargetArticlesService } from '@social-target-articles/social-targ
 import { UpdateSocialTargetArticleDto } from '@social-target-articles/dto/update-social-target-article.dto';
 import { SocialTargetArticleStatusEnum } from '@social-target-articles/entities/social-target-article.enum';
 import { InstagramService } from '@instagram/instagram.service';
+import { EtsyService } from '@etsy/etsy.service';
 const randomstring = require('randomstring');
 
 @Injectable()
 export class PuppeteersService {
   constructor(
     private readonly facebookService: FacebookService,
+    private readonly etsyService: EtsyService,
     private readonly instagramService: InstagramService,
     private readonly socialTargetService: SocialTargetsService,
     private readonly articleService: ArticlesService,
@@ -58,6 +60,60 @@ export class PuppeteersService {
         )}`,
       },
     );
+  }
+
+  async spamAds({
+    articles,
+    socialTargets,
+  }: {
+    articles: Article[];
+    socialTargets: SocialTarget[];
+  }) {
+    for (const article of articles) {
+      const articleFull = await this.articleService.findFullData(article.id);
+
+      for (const socialTargetValue of socialTargets) {
+        const socialTargetArticle =
+          await this.socialTargetArticleService.startArticle(
+            socialTargetValue,
+            articleFull,
+          );
+
+        try {
+          const socialTargetFull = await this.socialTargetService.findProxy(
+            socialTargetValue.id,
+          );
+
+          switch (socialTargetFull.social.socialType) {
+            case SocialEnum.ETSY:
+              await this.etsyService.spamAds(articleFull, socialTargetFull);
+              break;
+            default:
+              throw new HttpException(
+                `Create article is not support for ${socialTargetFull.social.socialType}`,
+                HttpStatus.BAD_REQUEST,
+              );
+              break;
+          }
+
+          await this.socialTargetArticleService.endArticle(
+            socialTargetArticle,
+            {
+              message: null,
+              status: SocialTargetArticleStatusEnum.Success,
+            },
+          );
+        } catch (error) {
+          await this.socialTargetArticleService.endArticle(
+            socialTargetArticle,
+            {
+              message: error?.message || error || null,
+              status: SocialTargetArticleStatusEnum.Error,
+            },
+          );
+        }
+      }
+    }
   }
 
   async createPostArticle({
